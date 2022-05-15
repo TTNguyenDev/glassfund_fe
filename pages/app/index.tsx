@@ -50,7 +50,7 @@ export default function Home() {
                             (!authLoading && !logged)) && (
                             <>
                                 <h1 className={classes.title}>
-                                    Get Started with dWork
+                                    Get Started with Glass Fund
                                 </h1>
                                 <FlexboxGrid
                                     justify="center"

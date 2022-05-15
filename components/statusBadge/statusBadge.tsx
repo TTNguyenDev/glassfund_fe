@@ -14,7 +14,7 @@ export const StatusBadge: React.FunctionComponent<StatusBadgeProps> = ({
             // color={
             //     status === TaskStatus.READY_FOR_APPLY
             //         ? 'green'
-            //         : status === TaskStatus.FOUND_WORKER
+            //         : status === TaskStatus.FOUNglass_fundER
             //         ? 'cyan'
             //         : status === TaskStatus.WORKER_SUBMITTED
             //         ? 'blue'

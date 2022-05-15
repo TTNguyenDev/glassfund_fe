@@ -11,5 +11,5 @@ export const NearConfig = Object.freeze({
     walletUrl:
         process.env.REACT_APP_NEAR_WALLET_URL ||
         'https://wallet.testnet.near.org',
-    appTitle: process.env.REACT_APP_NEAR_APP_TITLE || 'dWork',
+    appTitle: process.env.REACT_APP_NEAR_APP_TITLE || 'Glass Fund',
 });

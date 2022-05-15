@@ -21,7 +21,7 @@ export class MySubClassedDexie extends Dexie {
     accountCompletedTasks!: Table<Task>;
 
     constructor() {
-        super('d_work');
+        super('glass_fund');
         this.version(1).stores({
             tasks: 'id, price',
             accountTasks: 'id, price',

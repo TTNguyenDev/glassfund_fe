@@ -1,7 +1,5 @@
+import { Button } from '@chakra-ui/react';
 import React from 'react';
-import { Button } from 'rsuite';
-import { useLogin } from '../../hooks/useLogin';
-import classes from './brand.module.less';
 
 interface LoginButtonProps {
     loading: boolean;
@@ -13,7 +11,7 @@ export const LoginButton: React.FunctionComponent<LoginButtonProps> = ({
     requestLogin,
 }) => {
     return (
-        <Button appearance="primary" loading={loading} onClick={requestLogin}>
+        <Button colorScheme="purple" isLoading={loading} onClick={requestLogin}>
             Connect the wallet
         </Button>
     );

@@ -12,9 +12,14 @@ export const Brand: React.FunctionComponent<BrandProps> = () => {
         <Link href="/">
             <a>
                 <HStack align="center" spacing="10px">
-                    <Text className={classes.root}>dWork</Text>
-                    <Box h="24px" w="2px" bg="#c5ccdf" />
-                    <Image src={LNCBlackLogo} height="22px" />
+                    <Text
+                        background="var(--primary-gradient)"
+                        backgroundClip="text"
+                        fontSize="32px"
+                        fontWeight="700"
+                    >
+                        Glass Fund
+                    </Text>
                 </HStack>
             </a>
         </Link>

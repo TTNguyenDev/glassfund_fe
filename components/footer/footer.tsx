@@ -37,12 +37,12 @@ export const Footer: React.FunctionComponent<FooterProps> = () => {
                         <Center h="100%">
                             <VStack>
                                 <Text
-                                    background="linear-gradient(to right, #1371a9 0%, #7713db 100%)"
+                                    background="var(--primary-gradient)"
                                     backgroundClip="text"
                                     fontSize="32px"
                                     fontWeight="500"
                                 >
-                                    dWork
+                                    Glass Fund
                                 </Text>
                                 <HStack
                                     spacing="25px"
@@ -83,10 +83,10 @@ export const Footer: React.FunctionComponent<FooterProps> = () => {
                 </Grid>
                 <HStack justifyContent="center">
                     <Text fontSize="18px" fontWeight="800" textColor="#1d243c">
-                        dWork
+                        Glass Fund
                     </Text>
                     <Text fontSize="16px" fontWeight="500" textColor="#1d243c">
-                        | Project from LNC Barrel | Powered by NEAR
+                        | Powered by NEAR
                     </Text>
                 </HStack>
             </Box>

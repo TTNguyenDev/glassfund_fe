@@ -1,19 +1,16 @@
+import { Button, HStack, Text } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { BsPlusLg } from 'react-icons/bs';
-import { Navbar, Loader, Stack, Button, IconButton, FlexboxGrid } from 'rsuite';
 import { useHeader } from '../../hooks/useHeader';
-import { AccountTypes } from '../../models/types/accountType';
-import { ModalsController } from '../../utils/modalsController';
 import { Brand } from '../brand';
 import { HeaderAccount } from '../headerAccount';
 import { LoginButton } from '../loginButton';
 import classes from './header.module.less';
 
-interface HeaderProps {
-    activeKey?: string;
-}
+interface HeaderProps {}
 
-export const Header: React.FunctionComponent<HeaderProps> = ({ activeKey }) => {
+export const Header: React.FunctionComponent<HeaderProps> = () => {
     const {
         authLoading,
         logged,
@@ -25,45 +22,76 @@ export const Header: React.FunctionComponent<HeaderProps> = ({ activeKey }) => {
         requestLogout,
     } = useHeader();
 
+    const menu = React.useMemo(() => {
+        return [
+            {
+                href: '/',
+                title: 'Projects',
+                matchUrl: ['/'],
+            },
+            {
+                href: `/account/${userId}`,
+                title: 'My Projects',
+                matchUrl: ['/account/[accountId]'],
+            },
+        ];
+    }, [userId]);
+
+    const router = useRouter();
+
+    const menuComp = React.useMemo(() => {
+        return menu.map(({ href, title, matchUrl }) => {
+            const isActive = matchUrl.includes(router.asPath);
+            console.log(router.asPath);
+            return (
+                <Link key={title} href={href}>
+                    <Button
+                        h="100%"
+                        borderRadius="none"
+                        bg="transparent"
+                        borderBottom="solid 3px rgba(231, 234, 246, 1)"
+                        _hover={{
+                            bg: 'rgba(255, 255, 255, 0.1)',
+                            borderImageSlice: 1,
+                            borderImageSource: 'var(--primary-gradient)',
+                        }}
+                        _active={{
+                            bg: 'rgba(255, 255, 255, 0.1)',
+                            borderImageSlice: 1,
+                            borderImageSource: 'var(--primary-gradient)',
+                        }}
+                        isActive={isActive}
+                    >
+                        <Text
+                            background="var(--primary-gradient)"
+                            backgroundClip="text"
+                            fontSize="16px"
+                            fontWeight="600"
+                        >
+                            {title}
+                        </Text>
+                    </Button>
+                </Link>
+            );
+        });
+    }, [menu, router.asPath]);
+
     return (
         <div className={classes.root}>
             <div className={classes.navbar}>
                 <div className={classes.navbar_header}>
                     <Brand />
                 </div>
-                {authLoading ? (
-                    <Loader />
-                ) : logged ? (
-                    <Stack>
-                        {accountType === AccountTypes.REQUESTER && (
-                            <Button
-                                appearance="primary"
-                                style={{ marginRight: 20 }}
-                                onClick={
-                                    ModalsController.controller
-                                        .openCreateTaskModal
-                                }
-                            >
-                                <Stack spacing="8px" alignItems="center">
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <BsPlusLg />
-                                    </div>
-                                    <div>NEW TASK</div>
-                                </Stack>
-                            </Button>
-                        )}
+                {authLoading ? null : logged ? (
+                    <HStack h="100%">
+                        {menuComp}
                         <HeaderAccount
                             accountType={accountType}
                             logoutLoading={logoutLoading}
                             requestLogout={requestLogout}
                             accountName={userId!}
                         />
-                    </Stack>
+                    </HStack>
                 ) : (
                     <LoginButton
                         loading={loginLoading}
