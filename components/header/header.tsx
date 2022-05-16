@@ -41,8 +41,7 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
 
     const menuComp = React.useMemo(() => {
         return menu.map(({ href, title, matchUrl }) => {
-            const isActive = matchUrl.includes(router.asPath);
-            console.log(router.asPath);
+            const isActive = matchUrl.includes(router.pathname);
             return (
                 <Link key={title} href={href}>
                     <Button

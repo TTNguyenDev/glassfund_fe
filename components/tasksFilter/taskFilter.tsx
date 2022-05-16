@@ -53,7 +53,6 @@ export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
     };
 
     const handleSortSelectChange = useCallback(({ value }) => {
-        console.log(value);
         setTaskFilter({ sort: value });
         applyTaskFilter();
     }, []);

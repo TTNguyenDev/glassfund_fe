@@ -82,7 +82,7 @@ const asyncActions: {
         dispatch(topics.actions.logOutStart());
         await AuthService.logOut();
         await Promise.all([
-            db.tasks.clear(),
+            db.projects.clear(),
             db.accountTasks.clear(),
             db.accountCompletedTasks.clear(),
         ]);

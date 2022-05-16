@@ -6,9 +6,10 @@ import { JobCard } from '../jobCard';
 import { Loader } from '../loader';
 import { Optional } from '../../common';
 import { CardCreateTask } from '../cardCreateTask';
+import { Project } from '../../services/projectService';
 
 type ListTasksProps = {
-    tasks: Optional<Task[]>;
+    tasks: Optional<Project[]>;
     isLoading: boolean;
     isCreatable?: boolean;
     gridBreakpoints?: Record<string, number>;
@@ -55,13 +56,13 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                         )}
                         {tasks &&
                             !!tasks.length &&
-                            tasks.map((task: Task) => (
+                            tasks.map((task: Project) => (
                                 <FlexboxGrid.Item
                                     key={task.id}
                                     as={Col}
-                                    lg={gridBreakpoints?.lg ?? 6}
-                                    md={gridBreakpoints?.md ?? 8}
-                                    sm={gridBreakpoints?.sm ?? 12}
+                                    lg={gridBreakpoints?.lg ?? 12}
+                                    md={gridBreakpoints?.md ?? 12}
+                                    sm={gridBreakpoints?.sm ?? 24}
                                     xs={gridBreakpoints?.xs ?? 24}
                                     colspan={24}
                                     style={{
@@ -69,7 +70,7 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                         marginBottom: 20,
                                     }}
                                 >
-                                    <JobCard task={task} key={task.taskId} />
+                                    <JobCard task={task} key={task.id} />
                                 </FlexboxGrid.Item>
                             ))}
                     </FlexboxGrid>

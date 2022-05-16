@@ -9,6 +9,9 @@ export type ModalsControllerType = {
         reason: string;
         action: any;
     }) => any;
+
+    openCreateProjectModal: () => void;
+    closeCreateProjectModal: () => void;
 };
 
 export class ModalsController {

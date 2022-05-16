@@ -5,7 +5,6 @@ import classes from './index.module.less';
 import { useHomePage } from '../hooks/useHomePage';
 import { Loader } from '../components/loader';
 import { ListTasks } from '../components/listTasks';
-import { TaskFilter } from '../components/tasksFilter';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Box, Heading } from '@chakra-ui/react';
@@ -14,24 +13,15 @@ export default function Home() {
     const {
         authLoading,
         logged,
-        createTaskBtnLoading,
-        makeMoneyBtnLoading,
-        handleCreateTaskBtnClick,
-        handleMakeMoneyBtnClick,
         jobs,
         listJobsLoading,
-        profileLoading,
-        profileInfo,
         fetchNextPage,
         isFetchingNextPage,
         hasNextPage,
-        filter,
-        setTaskFilter,
-        applyTaskFilter,
     } = useHomePage();
 
     const app = useSelector((state: RootState) => state.app);
-
+    console.log(jobs);
     return (
         <>
             <Header>
@@ -54,18 +44,15 @@ export default function Home() {
                         >
                             All projects
                         </Heading>
-                        {(authLoading ||
-                            (!authLoading && logged && profileLoading)) && (
-                            <Loader />
-                        )}
+                        {authLoading && <Loader />}
                         <div className={classes.wrapper}>
-                            <div className={classes.top}>
+                            {/*<div className={classes.top}>
                                 <TaskFilter
                                     filter={filter}
                                     setTaskFilter={setTaskFilter}
                                     applyTaskFilter={applyTaskFilter}
                                 />
-                            </div>
+                            </div>*/}
                             <div className={classes.main}>
                                 <ListTasks
                                     tasks={jobs}

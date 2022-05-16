@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { StateWithLoading } from '../common';
 import { TaskService } from '../services/jobService';
+import { ProjectService } from '../services/projectService';
 import { AppThunk, Model } from '../store';
 import { BlockChainConnector } from '../utils/blockchain';
 
@@ -61,7 +62,7 @@ const asyncActions: {
         dispatch(appSlice.actions.initSuccess());
     },
     cache: () => async (dispatch) => {
-        await TaskService.fetchAndCacheTasks();
+        await ProjectService.fetchAndCacheProjects();
         dispatch(appSlice.actions.cacheSuccess());
     },
     accountTasksCache: () => async (dispatch) => {

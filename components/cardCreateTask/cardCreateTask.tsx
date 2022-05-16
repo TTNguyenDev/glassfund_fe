@@ -14,7 +14,7 @@ export const CardCreateTask: React.FunctionComponent<
         <>
             <Wrapper
                 className={classes.root}
-                onClick={ModalsController.controller.openCreateTaskModal}
+                onClick={ModalsController.controller.openCreateProjectModal}
             >
                 <Panel>
                     <div
@@ -39,7 +39,7 @@ export const CardCreateTask: React.FunctionComponent<
                                 color: '#333',
                             }}
                         >
-                            Create New Task
+                            Create New Project
                         </div>
                     </div>
                 </Panel>

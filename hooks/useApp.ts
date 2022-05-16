@@ -6,7 +6,6 @@ import { CONTRACT_NAME } from '../constants';
 import { db } from '../db';
 import { AppModel } from '../models/appModel';
 import { AuthModel } from '../models/authModel';
-import { ProfileModel } from '../models/profileModel';
 import { RootState } from '../store';
 
 export const useApp = () => {
@@ -24,12 +23,7 @@ export const useApp = () => {
             if (
                 NearConfig.contractName !== localStorage.getItem(CONTRACT_NAME)
             ) {
-                await Promise.all([
-                    db.tasks.clear(),
-                    db.accountTasks.clear(),
-                    db.accountCompletedTasks.clear(),
-                ]);
-                console.log('closed');
+                await Promise.all([db.projects.clear()]);
                 localStorage.clear();
                 localStorage.setItem(CONTRACT_NAME, NearConfig.contractName);
             }
@@ -52,9 +46,6 @@ export const useApp = () => {
 
     useEffect(() => {
         if (!auth.data.logged) return;
-
-        dispatch(AppModel.asyncActions.accountTasksCache());
-        dispatch(ProfileModel.asyncActions.fetchProfile());
     }, [auth.data.logged]);
 
     useEffect(() => {

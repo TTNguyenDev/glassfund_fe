@@ -158,7 +158,7 @@ export class TaskService {
                 }
                 break;
             default:
-                table = db.tasks;
+                table = db.projects;
                 break;
         }
 
@@ -389,7 +389,7 @@ export class TaskService {
             default:
                 fetchTasks =
                     BlockChainConnector.instance.contract.available_tasks;
-                table = db.tasks;
+                table = db.projects;
                 break;
         }
 

@@ -43,7 +43,7 @@ export default function AccountPage() {
             <Layout activeKey="one">
                 <Container className={classes.container}>
                     <Row gutter={30}>
-                        <Col
+                        {/*<Col
                             xs={24}
                             sm={24}
                             md={5}
@@ -78,33 +78,30 @@ export default function AccountPage() {
                                         >
                                             Tasks
                                         </Button>
-                                        {/*<Button
+                                        <Button
                                             style={{ width: '100%' }}
                                             appearance="subtle"
                                         >
                                             Settings
-                                        </Button>*/}
+                                        </Button>
                                     </Stack>
                                 </Wrapper>
                             </div>
-                        </Col>
-                        <Col xs={24} sm={24} md={19}>
+                        </Col>*/}
+                        <Col xs={24} sm={24} md={24}>
                             <div className={classes.wrapper}>
-                                <div className={classes.top}>
+                                {/*<div className={classes.top}>
                                     <AccountTasksFilter
                                         filterReady={filterReady}
                                         filter={filter}
                                         setTaskFilter={setTaskFilter}
                                         applyTaskFilter={applyTaskFilter}
                                     />
-                                </div>
+                                </div>*/}
                                 <div className={classes.main}>
                                     <ListTasks
-                                        isCreatable={
-                                            profile.data.info?.type ===
-                                            AccountTypes.REQUESTER
-                                        }
-                                        tasks={jobs}
+                                        isCreatable
+                                        tasks={[]}
                                         isLoading={listJobsLoading}
                                         gridBreakpoints={{
                                             lg: 8,
