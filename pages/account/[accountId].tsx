@@ -2,38 +2,59 @@ import React from 'react';
 import Header from 'next/head';
 import { Layout } from '../../components/layout';
 import classes from './account.module.less';
-import { Button, Col, Container, Divider, Row, Stack } from 'rsuite';
-import { AccountTypes } from '../../models/types/accountType';
+import { Col, Container, Row } from 'rsuite';
 import { ListTasks } from '../../components/listTasks';
-import { AccountInfoCard } from '../../components/accountInfoCard';
-import { Wrapper } from '../../components/wrapper';
-import { AccountTasksFilter } from '../../components/accountTasksFilter';
-import { useListJobs } from '../../hooks/useListJobs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { TaskStatus } from '../../models/types/jobType';
+import { useInfiniteQuery } from 'react-query';
+import { filter } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { Optional } from '../../common';
+import {
+    ProjectService,
+    FETCH_PROJECTS_LIMIT,
+} from '../../services/projectService';
 
 export default function AccountPage() {
-    const profile = useSelector((state: RootState) => state.profile);
+    const app = useSelector((state: RootState) => state.app);
+    const auth = useSelector((state: RootState) => state.auth);
+    const router = useRouter();
+    const accountId = router.query?.accountId as Optional<string>;
+    const isOwner = React.useMemo(() => {
+        return accountId === auth.data.userId;
+    }, [auth.data.userId, accountId]);
 
     const {
-        loading: listJobsLoading,
-        jobs,
+        data,
+        error,
         fetchNextPage,
         hasNextPage,
+        isLoading,
         isFetchingNextPage,
-        filterReady,
-        filter,
-        setTaskFilter,
-        applyTaskFilter,
-    } = useListJobs({
-        defaultFilter: {
-            type: 'account',
-            status: TaskStatus.AVAILABLE,
-            maxAvailableUntil: '',
-            minAvailableUntil: Date.now(),
-        },
-    });
+        status,
+    } = useInfiniteQuery(
+        ['acount_projects'],
+        ({ pageParam: { offset } = {} }) =>
+            ProjectService.getListProjects({
+                offset,
+                filter: {
+                    accountId,
+                },
+            }),
+        {
+            getNextPageParam: (lastPage, pages) => {
+                if (lastPage.length < FETCH_PROJECTS_LIMIT) return undefined;
+                return {
+                    offset: FETCH_PROJECTS_LIMIT * pages.length,
+                };
+            },
+            enabled: app.data.cacheReady && !!accountId,
+        }
+    );
+
+    const jobs = data
+        ? data.pages.reduce((prev, current) => [...prev, ...current], [])
+        : undefined;
 
     return (
         <>
@@ -100,13 +121,13 @@ export default function AccountPage() {
                                 </div>*/}
                                 <div className={classes.main}>
                                     <ListTasks
-                                        isCreatable
-                                        tasks={[]}
-                                        isLoading={listJobsLoading}
+                                        isCreatable={isOwner}
+                                        tasks={jobs}
+                                        isLoading={isLoading}
                                         gridBreakpoints={{
-                                            lg: 8,
-                                            md: 8,
-                                            sm: 12,
+                                            lg: 12,
+                                            md: 12,
+                                            sm: 24,
                                             xs: 24,
                                         }}
                                         fetchNextPage={fetchNextPage}

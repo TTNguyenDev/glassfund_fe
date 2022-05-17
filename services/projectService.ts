@@ -165,6 +165,7 @@ export class ProjectService {
         offset?: number;
         limit?: number;
         filter?: {
+            accountId?: string;
             title?: string;
         };
     } = {}): Promise<Project[]> {
@@ -178,7 +179,15 @@ export class ProjectService {
             .toArray();
 
         if (filter) {
-            const { title } = filter;
+            const { accountId, title } = filter;
+            if (accountId)
+                return table
+                    .orderBy('id')
+                    .reverse()
+                    .filter((item) => item.accountId === accountId)
+                    .offset(offset)
+                    .limit(limit)
+                    .toArray();
             if (title)
                 return table
                     .orderBy('id')
