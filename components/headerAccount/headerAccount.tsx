@@ -32,9 +32,9 @@ export const HeaderAccount: React.FunctionComponent<HeaderAccountProps> = ({
             )}
             placement="bottomEnd"
         >
-            <Dropdown.Item as={Link} href={`/account/${accountName}`}>
+            {/*<Dropdown.Item as={Link} href={`/account/${accountName}`}>
                 My account
-            </Dropdown.Item>
+            </Dropdown.Item>*/}
             <Dropdown.Item onSelect={requestLogout}>Sign out</Dropdown.Item>
         </Dropdown>
     );

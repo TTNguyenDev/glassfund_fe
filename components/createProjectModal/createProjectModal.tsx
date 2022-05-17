@@ -99,6 +99,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                 {...createProjectForm.register('title', {
                                     required: 'This is required',
                                 })}
+                                placeholder="Title"
                             />
                             {createProjectForm.formState.errors.title && (
                                 <FormErrorMessage>
@@ -519,6 +520,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                 !!createProjectForm.formState.errors.thumbnail
                             }
                         >
+                            <FormLabel>Thumbnail</FormLabel>
                             <Stack
                                 direction={{
                                     base: 'column',
