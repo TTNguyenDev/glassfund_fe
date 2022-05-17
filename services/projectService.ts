@@ -39,7 +39,7 @@ export type CreateProjectFinalInput = {
 };
 
 export type Project = {
-    id: string;
+    id: number;
     projectId: string;
     accountId: string;
     title: string;
@@ -58,9 +58,9 @@ export type Project = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
-        const [accountId, id] = raw.id;
+        const [accountId, id] = raw.id.split('#');
         return {
-            id,
+            id: Number.parseInt(id),
             accountId,
             projectId: raw.id,
             title: raw.title,
