@@ -15,29 +15,17 @@ import { NearConfig as config } from '../../config';
 const NUM_BLOCKS_NON_ARCHIVAL = 4 * 12 * 3600;
 
 const ViewMethods: string[] = [
-    'available_tasks',
-    'current_tasks',
-    'completed_tasks',
-    'user_info',
-    'task_by_id',
-    'categories',
-    'tasks_by_ids',
-    'maximum_participants_per_task',
+    'get_projects',
+    'get_project',
+    'get_my_projects',
+    'get_claimable_amount',
 ];
 
 const ChangeMethods: string[] = [
-    'storage_deposit',
-    'storage_balance_of',
-    'register',
-    'new_task',
-    'submit_proposal',
-    'select_proposal',
-    'submit_work',
-    'approve_work',
-    'reject_work',
-    'mark_task_as_completed',
-    'new_category',
-    'update_bio',
+    'new_project',
+    'claim_reward',
+    'support_project',
+    'force_stop',
 ];
 
 type ContractMethodType<K = any> = (...args: any) => K;
@@ -62,6 +50,15 @@ type ContractMethodsType = {
     tasks_by_ids: ContractMethodType;
     update_bio: ContractMethodType;
     maximum_participants_per_task: ContractMethodType;
+
+    get_projects: ContractMethodType;
+    get_project: ContractMethodType;
+    get_my_projects: ContractMethodType;
+    get_claimable_amount: ContractMethodType;
+    new_project: ContractMethodType;
+    claim_reward: ContractMethodType;
+    support_project: ContractMethodType;
+    force_stop: ContractMethodType;
 };
 
 export class NearConnector {

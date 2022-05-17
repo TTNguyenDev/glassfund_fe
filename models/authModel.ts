@@ -81,11 +81,7 @@ const asyncActions: {
     logOut: () => async (dispatch) => {
         dispatch(topics.actions.logOutStart());
         await AuthService.logOut();
-        await Promise.all([
-            db.tasks.clear(),
-            db.accountTasks.clear(),
-            db.accountCompletedTasks.clear(),
-        ]);
+        await Promise.all([db.projects.clear()]);
         window.location.replace('/');
     },
 };

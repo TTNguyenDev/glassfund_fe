@@ -1,27 +1,16 @@
 import { useEffect } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
-import { Optional } from '../common';
-import { Task } from '../models/types/jobType';
-import { FETCH_TASKS_LIMIT, TaskService } from '../services/jobService';
+import {
+    FETCH_PROJECTS_LIMIT,
+    ProjectService,
+} from '../services/projectService';
 import { RootState } from '../store';
 import { TaskFilterInput, useTaskFilter } from './useTaskFilter';
 
 export type UseListJobsInput = TaskFilterInput;
 
-export type UseListJobsOutput = {
-    loading: boolean;
-    jobs: Optional<Task[]>;
-    isFetchingNextPage: boolean;
-    hasNextPage: Optional<boolean>;
-    fetchNextPage: () => Promise<any>;
-    filterReady: boolean;
-    filter: any;
-    setTaskFilter: (payload: Record<string, any>) => void;
-    applyTaskFilter: () => void;
-};
-
-export const useListJobs = (payload?: UseListJobsInput): UseListJobsOutput => {
+export const useListJobs = (payload?: UseListJobsInput) => {
     const { filterReady, filter, setTaskFilter, applyTaskFilter } =
         useTaskFilter(payload);
 
@@ -36,28 +25,26 @@ export const useListJobs = (payload?: UseListJobsInput): UseListJobsOutput => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery(
-        ['jobs', filter],
-        ({ pageParam: { offset, fromBlockId } = {} }) =>
-            TaskService.fetchJobsInfinity({
+        ['projects', filter],
+        ({ pageParam: { offset } = {} }) =>
+            ProjectService.getListProjects({
                 offset,
-                fromBlockId,
                 filter,
             }),
         {
             getNextPageParam: (lastPage, pages) => {
-                if (lastPage.length < FETCH_TASKS_LIMIT) return undefined;
+                if (lastPage.length < FETCH_PROJECTS_LIMIT) return undefined;
                 return {
-                    offset: FETCH_TASKS_LIMIT * pages.length,
-                    fromBlockId: lastPage[lastPage.length - 1].id,
+                    offset: FETCH_PROJECTS_LIMIT * pages.length,
                 };
             },
-            enabled: app.data.cacheReady && app.data.accountTasksCacheReady,
+            enabled: app.data.cacheReady,
         }
     );
 
     const queryClient = useQueryClient();
     useEffect(() => {
-        queryClient.invalidateQueries('jobs');
+        queryClient.invalidateQueries('projects');
     }, [filter]);
 
     useEffect(() => {

@@ -1,31 +1,13 @@
 import Dexie, { Table } from 'dexie';
-import { Proposal } from './models/types/jobType';
-
-type Task = {
-    id: number;
-    taskId: string;
-    owner: string;
-    title: string;
-    description: string;
-    maxParticipants: number;
-    price: number;
-    availableUntil: number;
-    categoryId: string;
-    proposals: Proposal[];
-    createdAt: number;
-};
+import { Project } from './services/projectService';
 
 export class MySubClassedDexie extends Dexie {
-    tasks!: Table<Task>;
-    accountTasks!: Table<Task>;
-    accountCompletedTasks!: Table<Task>;
+    projects!: Table<Project>;
 
     constructor() {
         super('glass_fund');
         this.version(1).stores({
-            tasks: 'id, price',
-            accountTasks: 'id, price',
-            accountCompletedTasks: 'id, price',
+            projects: 'id, title',
         });
     }
 }
