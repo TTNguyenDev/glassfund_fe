@@ -7,7 +7,7 @@ export class MySubClassedDexie extends Dexie {
     constructor() {
         super('glass_fund');
         this.version(1).stores({
-            projects: 'id, title',
+            projects: 'id, projectId, accountId, title',
         });
     }
 }
