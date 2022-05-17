@@ -1,49 +1,51 @@
 import React from 'react';
-import { Grid, Row, Col, Panel, Stack } from 'rsuite';
-import classes from './jobCard.module.less';
 import { useRouter } from 'next/router';
-import moment from 'moment';
 import randomColor from 'randomcolor';
-import { BsClock, BsPeople } from 'react-icons/bs';
-import { Wrapper } from '../wrapper';
-import { TaskService } from '../../services/jobService';
 import { useQuery } from 'react-query';
-import { HtmlIPFS } from '../htmlIPFS';
-import { Project, ProjectService } from '../../services/projectService';
+import {
+    Project,
+    ProjectDescription,
+    ProjectService,
+} from '../../services/projectService';
 import { Box, Image, Text } from '@chakra-ui/react';
+import { IPFSUtils } from '../../utils/ipfsUtils';
+import { Nullable } from '../../common';
 
 interface JobCardProps {
     task: Project;
 }
 
 export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
-    const router = useRouter();
-
-    const handleViewDetails = () => {
-        router.push(`/project/${task.id}`);
-    };
-
-    const bgBadgeCategory = React.useMemo(
-        () =>
-            randomColor({
-                luminosity: 'dark',
-            }),
-        []
-    );
-
-    const taskQuery = useQuery(
-        task.id,
-        () => ProjectService.getProject(task.id),
+    const projectQuery = useQuery(
+        task.projectId,
+        () => ProjectService.getProject(task.projectId),
         {
-            enabled: !!task.id,
+            enabled: !!task.projectId,
         }
     );
 
+    const projectDescriptionQuery = useQuery<string>(
+        ['project_description', task.projectId],
+        () => IPFSUtils.getDataByCID(task.description) as any,
+        {
+            enabled: !!task.description,
+        }
+    );
+    const description: Nullable<ProjectDescription> = React.useMemo(
+        () =>
+            projectDescriptionQuery.data
+                ? JSON.parse(projectDescriptionQuery.data)
+                : null,
+        [projectDescriptionQuery.data]
+    );
     return (
         <Box borderRadius="2xl" overflow="hidden" bg="#1D365E">
             <Box h="200px">
                 <Image
-                    src="https://www.acerislaw.com/wp-content/uploads/2018/11/Investor-State-Arbitration.jpg"
+                    src={
+                        description?.thumbnail ??
+                        'https://previews.123rf.com/images/bridddy/bridddy1912/bridddy191200005/138386777-horizontal-vector-frosted-glass-blue-and-white-background-frozen-window-illustration-abstract-3d-bg-.jpg'
+                    }
                     objectFit="cover"
                     h="100%"
                     w="100%"
@@ -52,6 +54,9 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
             <Box p="15px">
                 <Text fontSize="24px" fontWeight="800" textColor="white">
                     {task.title}
+                </Text>
+                <Text fontSize="16px" textColor="white" noOfLines={2} w="100%">
+                    {description?.body.replace(/<(.|\n)*?>/g, ' ')}
                 </Text>
             </Box>
         </Box>

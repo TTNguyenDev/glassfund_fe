@@ -56,6 +56,11 @@ export type Project = {
     forceStop: string[];
 };
 
+export type ProjectDescription = {
+    thumbnail?: string;
+    body: string;
+};
+
 export class ProjectService {
     private static mapToProject(raw: any): Project {
         const [accountId, id] = raw.id.split('#');
@@ -165,12 +170,19 @@ export class ProjectService {
     } = {}): Promise<Project[]> {
         const table = db.projects;
 
-        let query = table.orderBy('id').offset(offset).limit(limit).toArray();
+        let query = table
+            .orderBy('id')
+            .reverse()
+            .offset(offset)
+            .limit(limit)
+            .toArray();
 
         if (filter) {
             const { title } = filter;
             if (title)
                 return table
+                    .orderBy('id')
+                    .reverse()
                     .filter((item) =>
                         item.title
                             .toLocaleLowerCase()
@@ -178,7 +190,7 @@ export class ProjectService {
                     )
                     .offset(offset)
                     .limit(limit)
-                    .sortBy('id');
+                    .toArray();
         }
         return query;
     }
