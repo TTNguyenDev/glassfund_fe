@@ -1,22 +1,30 @@
 import React, { useCallback, useEffect } from 'react';
-import { Modal, Button, DatePicker } from 'rsuite';
+import { Modal, DatePicker } from 'rsuite';
 import { useCreateProject } from '../../hooks/useCreateProject';
 import { ModalsController } from '../../utils/modalsController';
 import * as dateFns from 'date-fns';
 import {
+    AspectRatio,
     Box,
+    Button,
+    Center,
     FormControl,
     FormErrorMessage,
     FormLabel,
+    HStack,
+    Image,
     Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Stack,
     VStack,
 } from '@chakra-ui/react';
 import { Editor } from '../editor';
+import { IPFSUtils } from '../../utils/ipfsUtils';
+import { useMutation } from 'react-query';
 
 type createProjectModalProps = {};
 
@@ -49,6 +57,23 @@ export const CreateProjectModal: React.FunctionComponent<
         createProjectForm.trigger('body');
     }, []);
 
+    const fileInputRef = React.useRef<any>();
+
+    const uploadFileMutation = useMutation(async () => {
+        if (fileInputRef.current?.files) {
+            const file = fileInputRef.current.files[0];
+            await IPFSUtils.uploadFileToIPFS({
+                file,
+                onSuccess: async (url) => {
+                    return createProjectForm.setValue('thumbnail', url);
+                },
+            });
+        }
+    });
+
+    const openFileImport = useCallback(async () => {
+        fileInputRef.current?.click();
+    }, []);
     return (
         <Modal
             size="sm"
@@ -491,6 +516,77 @@ export const CreateProjectModal: React.FunctionComponent<
                         </FormControl>
                         <FormControl
                             isInvalid={
+                                !!createProjectForm.formState.errors.thumbnail
+                            }
+                        >
+                            <Stack
+                                direction={{
+                                    base: 'column',
+                                    md: 'row',
+                                }}
+                            >
+                                <Box flex={1}>
+                                    <Input
+                                        placeholder="Image url"
+                                        {...createProjectForm.register(
+                                            'thumbnail',
+                                            {
+                                                required:
+                                                    'Thumbnail is required field',
+                                            }
+                                        )}
+                                    />
+                                    {createProjectForm.formState.errors
+                                        .thumbnail && (
+                                        <FormErrorMessage>
+                                            {
+                                                createProjectForm.formState
+                                                    .errors.thumbnail.message
+                                            }
+                                        </FormErrorMessage>
+                                    )}
+                                </Box>
+                                <HStack align="flex-start">
+                                    <Button
+                                        colorScheme="purple"
+                                        borderColor="#FF4F5E"
+                                        fontSize="12px"
+                                        onClick={openFileImport}
+                                        isLoading={uploadFileMutation.isLoading}
+                                    >
+                                        Upload
+                                    </Button>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        hidden
+                                        onChange={async () => {
+                                            await uploadFileMutation.mutateAsync();
+                                            createProjectForm.trigger(
+                                                'thumbnail'
+                                            );
+                                        }}
+                                    />
+                                </HStack>
+                            </Stack>
+                            {!!createProjectForm.watch('thumbnail') && (
+                                <Center mt="15px">
+                                    <AspectRatio
+                                        ratio={16 / 9}
+                                        maxW="400px"
+                                        width="100%"
+                                    >
+                                        <Image
+                                            src={createProjectForm.watch(
+                                                'thumbnail'
+                                            )}
+                                        />
+                                    </AspectRatio>
+                                </Center>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            isInvalid={
                                 !!createProjectForm.formState.errors.body
                             }
                         >
@@ -520,16 +616,16 @@ export const CreateProjectModal: React.FunctionComponent<
                     </VStack>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        appearance="primary"
-                        type="submit"
-                        loading={createProjectLoading}
-                    >
-                        Create
-                    </Button>
-                    <Button onClick={handleClose} appearance="subtle">
-                        Cancel
-                    </Button>
+                    <HStack justifyContent="end">
+                        <Button
+                            colorScheme="purple"
+                            type="submit"
+                            isLoading={createProjectLoading}
+                        >
+                            Create
+                        </Button>
+                        <Button onClick={handleClose}>Cancel</Button>
+                    </HStack>
                 </Modal.Footer>
             </form>
         </Modal>
