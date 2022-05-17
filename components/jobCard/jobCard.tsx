@@ -36,7 +36,7 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
         [projectDescriptionQuery.data]
     );
     return (
-        <Link href={`/projects/${task.projectId}`}>
+        <Link href={`/project/${task.projectId}`}>
             <Box
                 borderRadius="2xl"
                 overflow="hidden"
