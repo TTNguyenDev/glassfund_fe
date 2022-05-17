@@ -40,6 +40,8 @@ export type CreateProjectFinalInput = {
 
 export type Project = {
     id: string;
+    projectId: string;
+    accountId: string;
     title: string;
     description: string;
     target: string;
@@ -56,13 +58,16 @@ export type Project = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
+        const [accountId, id] = raw.id;
         return {
-            id: raw.id,
+            id,
+            accountId,
+            projectId: raw.id,
             title: raw.title,
             description: raw.description,
             target: utils.format.formatNearAmount(raw.target),
             minimunDeposite: utils.format.formatNearAmount(
-                raw.minimun_deposite
+                raw.minimum_deposite
             ),
             startedAt: Math.floor(Number.parseInt(raw.started_at) / 1000000),
             endedAt: Math.floor(Number.parseInt(raw.ended_at) / 1000000),
@@ -87,20 +92,22 @@ export class ProjectService {
         const createProjectTrans = {
             methodName: 'new_project',
             body: {
-                title: payload.title,
-                description: payload.description,
-                target: utils.format.parseNearAmount(payload.target),
-                minimun_deposite: utils.format.parseNearAmount(
-                    payload.minimunDeposite
-                ),
-                started_at: payload.startedAt * 1000000,
-                ended_at: payload.endedAt * 1000000,
-                funded: utils.format.parseNearAmount(payload.funded),
-                vesting_start_time: payload.startedAt * 1000000,
-                vesting_end_time: payload.startedAt * 1000000,
-                vesting_interval: payload.vestingInterval * 1000000,
-                claimed: utils.format.parseNearAmount(payload.claimed),
-                force_stop: payload.forceStop,
+                metadata: {
+                    title: payload.title,
+                    description: payload.description,
+                    target: utils.format.parseNearAmount(payload.target),
+                    minimum_deposit: utils.format.parseNearAmount(
+                        payload.minimunDeposite
+                    ),
+                    started_at: payload.startedAt * 1000000,
+                    ended_at: payload.endedAt * 1000000,
+                    funded: '0',
+                    vesting_start_time: payload.startedAt * 1000000,
+                    vesting_end_time: payload.startedAt * 1000000,
+                    vesting_interval: payload.vestingInterval * 1000000,
+                    claimed: '0',
+                    force_stop: [],
+                },
             },
             deposit: utils.format.parseNearAmount(CREATE_PROJECT_FEE)!,
         };
