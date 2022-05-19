@@ -5,10 +5,7 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import { Box, Button, Flex, HStack, Image, Text } from '@chakra-ui/react';
-import {
-    ProjectDescription,
-    ProjectService,
-} from '../../services/projectService';
+import { ProjectDescription } from '../../services/projectService';
 import { BsClock } from 'react-icons/bs';
 import { MdOutlineDoubleArrow } from 'react-icons/md';
 import Avatar from 'react-avatar';
@@ -16,7 +13,7 @@ import { Nullable } from '../../common';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { db } from '../../db';
 import { ModalsController } from '../../utils/modalsController';
-import { utils } from 'near-api-js';
+import { BlockChainConnector } from '../../utils/blockchain';
 
 export default function ProjectDetailsPage() {
     const router = useRouter();
@@ -48,8 +45,6 @@ export default function ProjectDetailsPage() {
 
     if (!data) return null;
 
-    console.log(data);
-
     return (
         <>
             <Header>
@@ -78,7 +73,10 @@ export default function ProjectDetailsPage() {
                             >
                                 {data.title}
                             </Text>
-                            {Date.now() >= data.startedAt &&
+                            {data.accountId !==
+                                BlockChainConnector.instance.account
+                                    .accountId &&
+                                Date.now() >= data.startedAt &&
                                 Date.now() <= data.endedAt && (
                                     <Button
                                         onClick={() => {
@@ -97,21 +95,22 @@ export default function ProjectDetailsPage() {
                                         Suppport
                                     </Button>
                                 )}
-                            {Date.now() >= data.vestingStartTime &&
-                                Date.now() <= data.vestingEndTime && (
-                                    <Button
-                                        onClick={() => {
-                                            ModalsController.controller.setDataClaimRewardProjectModal(
-                                                {
-                                                    projectId,
-                                                }
-                                            );
-                                            ModalsController.controller.openClaimRewardProjectModal();
-                                        }}
-                                    >
-                                        Claim
-                                    </Button>
-                                )}
+                            {data.accountId ===
+                                BlockChainConnector.instance.account
+                                    .accountId && (
+                                <Button
+                                    onClick={() => {
+                                        ModalsController.controller.setDataClaimRewardProjectModal(
+                                            {
+                                                projectId,
+                                            }
+                                        );
+                                        ModalsController.controller.openClaimRewardProjectModal();
+                                    }}
+                                >
+                                    Claim
+                                </Button>
+                            )}
                         </HStack>
                         <HStack mb="15px">
                             <Avatar

@@ -146,27 +146,27 @@ export const CreateProjectModal: React.FunctionComponent<
                         <FormControl
                             isInvalid={
                                 !!createProjectForm.formState.errors
-                                    .minimunDeposite
+                                    .minimumDeposit
                             }
                         >
-                            <FormLabel>Minimum Deposite Ⓝ</FormLabel>
+                            <FormLabel>Minimum Deposit Ⓝ</FormLabel>
                             <NumberInput
                                 defaultValue={1}
                                 min={1}
                                 precision={0}
                                 onChange={(value) =>
                                     createProjectForm.setValue(
-                                        'minimunDeposite',
+                                        'minimumDeposit',
                                         value
                                     )
                                 }
                             >
                                 <NumberInputField
                                     {...createProjectForm.register(
-                                        'minimunDeposite',
+                                        'minimumDeposit',
                                         {
                                             required:
-                                                'Minimum deposite is a required field',
+                                                'Minimum deposit is a required field',
                                         }
                                     )}
                                 />
@@ -176,11 +176,11 @@ export const CreateProjectModal: React.FunctionComponent<
                                 </NumberInputStepper>
                             </NumberInput>
                             {createProjectForm.formState.errors
-                                .minimunDeposite && (
+                                .minimumDeposit && (
                                 <FormErrorMessage>
                                     {
                                         createProjectForm.formState.errors
-                                            .minimunDeposite.message
+                                            .minimumDeposit.message
                                     }
                                 </FormErrorMessage>
                             )}
@@ -258,7 +258,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                 !!createProjectForm.formState.errors.endedAt
                             }
                         >
-                            <FormLabel>Started At</FormLabel>
+                            <FormLabel>Ended At</FormLabel>
                             <Input
                                 hidden
                                 {...createProjectForm.register('endedAt', {

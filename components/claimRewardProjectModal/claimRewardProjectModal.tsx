@@ -97,7 +97,9 @@ export const ClaimRewardProjectModal = () => {
                     });
                 } catch (error) {
                     toast({
-                        title: 'An error occurred, please try again!',
+                        title:
+                            error.kind.ExecutionError ??
+                            'An error occurred, please try again!',
                         position: 'top',
                         status: 'error',
                         isClosable: true,
