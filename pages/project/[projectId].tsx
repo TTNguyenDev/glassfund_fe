@@ -78,23 +78,40 @@ export default function ProjectDetailsPage() {
                             >
                                 {data.title}
                             </Text>
-                            <Button
-                                onClick={() => {
-                                    console.log(data.minimunDeposit);
-                                    ModalsController.controller.setDataSupportProjectModal(
-                                        {
-                                            projectId,
-                                            projectMinimumDeposit:
-                                                Number.parseInt(
-                                                    data.minimunDeposit
-                                                ),
-                                        }
-                                    );
-                                    ModalsController.controller.openSupportProjectModal();
-                                }}
-                            >
-                                Suppport
-                            </Button>
+                            {Date.now() >= data.startedAt &&
+                                Date.now() <= data.endedAt && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataSupportProjectModal(
+                                                {
+                                                    projectId,
+                                                    projectMinimumDeposit:
+                                                        Number.parseInt(
+                                                            data.minimunDeposit
+                                                        ),
+                                                }
+                                            );
+                                            ModalsController.controller.openSupportProjectModal();
+                                        }}
+                                    >
+                                        Suppport
+                                    </Button>
+                                )}
+                            {Date.now() >= data.vestingStartTime &&
+                                Date.now() <= data.vestingEndTime && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataClaimRewardProjectModal(
+                                                {
+                                                    projectId,
+                                                }
+                                            );
+                                            ModalsController.controller.openClaimRewardProjectModal();
+                                        }}
+                                    >
+                                        Claim
+                                    </Button>
+                                )}
                         </HStack>
                         <HStack mb="15px">
                             <Avatar

@@ -4,6 +4,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { ClaimRewardProjectModal } from '../components/claimRewardProjectModal';
 import { ConnectWalletModal } from '../components/connectWalletModal';
 import { CreateProjectModal } from '../components/createProjectModal';
 import { SupportProjectModal } from '../components/supportProjectModal';
@@ -28,6 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <ConnectWalletModal />
                     <CreateProjectModal />
                     <SupportProjectModal />
+                    <ClaimRewardProjectModal />
                     <Component {...pageProps} />
                 </ChakraProvider>
             </Provider>

@@ -1,3 +1,4 @@
+import { ClaimRewardProjectModalDataType } from '../components/claimRewardProjectModal';
 import { SupportProjectModalDataType } from '../components/supportProjectModal';
 
 export type ModalsControllerType = {
@@ -17,6 +18,11 @@ export type ModalsControllerType = {
     openSupportProjectModal: () => void;
     closeSupportProjectModal: () => void;
     setDataSupportProjectModal: (payload: SupportProjectModalDataType) => void;
+    openClaimRewardProjectModal: () => void;
+    closeClaimRewardProjectModal: () => void;
+    setDataClaimRewardProjectModal: (
+        payload: ClaimRewardProjectModalDataType
+    ) => void;
 };
 
 export class ModalsController {
