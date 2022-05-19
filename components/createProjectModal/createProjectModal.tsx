@@ -118,8 +118,8 @@ export const CreateProjectModal: React.FunctionComponent<
                             <FormLabel>Target Ⓝ</FormLabel>
                             <NumberInput
                                 defaultValue={1}
-                                min={0.01}
-                                precision={2}
+                                min={1}
+                                precision={0}
                                 onChange={(value) =>
                                     createProjectForm.setValue('target', value)
                                 }
@@ -152,8 +152,8 @@ export const CreateProjectModal: React.FunctionComponent<
                             <FormLabel>Minimum Deposite Ⓝ</FormLabel>
                             <NumberInput
                                 defaultValue={1}
-                                min={0.01}
-                                precision={2}
+                                min={1}
+                                precision={0}
                                 onChange={(value) =>
                                     createProjectForm.setValue(
                                         'minimunDeposite',

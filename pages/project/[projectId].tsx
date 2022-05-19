@@ -4,7 +4,7 @@ import { Layout } from '../../components/layout';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import { Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image, Text } from '@chakra-ui/react';
 import {
     ProjectDescription,
     ProjectService,
@@ -15,27 +15,10 @@ import Avatar from 'react-avatar';
 import { Nullable } from '../../common';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { db } from '../../db';
+import { ModalsController } from '../../utils/modalsController';
+import { utils } from 'near-api-js';
 
-const PROPOSAL_STATUS_SELECT_OPTIONS = [
-    {
-        label: 'All',
-        value: 'all',
-    },
-    {
-        label: 'Pending',
-        value: 'pending',
-    },
-    {
-        label: 'Approved',
-        value: 'approved',
-    },
-    {
-        label: 'Rejected',
-        value: 'rejected',
-    },
-];
-
-export default function TaskDetailsPage() {
+export default function ProjectDetailsPage() {
     const router = useRouter();
     const projectId = router.query.projectId as string;
 
@@ -65,6 +48,8 @@ export default function TaskDetailsPage() {
 
     if (!data) return null;
 
+    console.log(data);
+
     return (
         <>
             <Header>
@@ -79,19 +64,55 @@ export default function TaskDetailsPage() {
                                 'https://previews.123rf.com/images/bridddy/bridddy1912/bridddy191200005/138386777-horizontal-vector-frosted-glass-blue-and-white-background-frozen-window-illustration-abstract-3d-bg-.jpg'
                             }
                             objectFit="cover"
-                            h="100%"
                             w="100%"
+                            h="400px"
                         />
                     </Box>
                     <Box p="15px">
-                        <Text
-                            fontSize="24px"
-                            fontWeight="800"
-                            textColor="white"
-                            mb="15px"
-                        >
-                            {data.title}
-                        </Text>
+                        <HStack justifyContent="space-between">
+                            <Text
+                                fontSize="24px"
+                                fontWeight="800"
+                                textColor="white"
+                                mb="15px"
+                            >
+                                {data.title}
+                            </Text>
+                            {Date.now() >= data.startedAt &&
+                                Date.now() <= data.endedAt && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataSupportProjectModal(
+                                                {
+                                                    projectId,
+                                                    projectMinimumDeposit:
+                                                        Number.parseInt(
+                                                            data.minimunDeposit
+                                                        ),
+                                                }
+                                            );
+                                            ModalsController.controller.openSupportProjectModal();
+                                        }}
+                                    >
+                                        Suppport
+                                    </Button>
+                                )}
+                            {Date.now() >= data.vestingStartTime &&
+                                Date.now() <= data.vestingEndTime && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataClaimRewardProjectModal(
+                                                {
+                                                    projectId,
+                                                }
+                                            );
+                                            ModalsController.controller.openClaimRewardProjectModal();
+                                        }}
+                                    >
+                                        Claim
+                                    </Button>
+                                )}
+                        </HStack>
                         <HStack mb="15px">
                             <Avatar
                                 name={data.accountId}
