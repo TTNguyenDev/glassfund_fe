@@ -12,7 +12,7 @@ export type CreateProjectInput = {
     target: string;
     thumbnail?: string;
     body: string;
-    minimunDeposite: string;
+    minimumDeposit: string;
     startedAt: number;
     endedAt: number;
     funded: string;
@@ -45,7 +45,7 @@ export type Project = {
     title: string;
     description: string;
     target: string;
-    minimunDeposit: string;
+    minimumDeposit: string;
     startedAt: number;
     endedAt: number;
     funded: string;
@@ -81,7 +81,7 @@ export class ProjectService {
             target: utils.format
                 .formatNearAmount(raw.target)
                 .replaceAll(',', ''),
-            minimunDeposit: utils.format
+            minimumDeposit: utils.format
                 .formatNearAmount(raw.minimum_deposit)
                 .replaceAll(',', ''),
             startedAt: Math.floor(Number.parseInt(raw.started_at) / 1000000),
