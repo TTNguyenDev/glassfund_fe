@@ -80,6 +80,7 @@ export default function ProjectDetailsPage() {
                             </Text>
                             <Button
                                 onClick={() => {
+                                    console.log(data.minimunDeposit);
                                     ModalsController.controller.setDataSupportProjectModal(
                                         {
                                             projectId,

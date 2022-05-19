@@ -119,7 +119,7 @@ export const SupportProjectModal = () => {
                 });
             }
         );
-    }, []);
+    }, [data]);
 
     useEffect(() => {
         if (data) {
