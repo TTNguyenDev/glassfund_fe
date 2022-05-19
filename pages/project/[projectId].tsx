@@ -47,8 +47,6 @@ export default function TaskDetailsPage() {
         }
     );
 
-    console.log(data);
-
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', projectId],
         () => IPFSUtils.getDataByCID(data!.description) as any,
@@ -73,17 +71,8 @@ export default function TaskDetailsPage() {
                 <title>{data ? data.title : projectId}</title>
             </Header>
             <Layout>
-                <Box
-                    borderRadius="2xl"
-                    overflow="hidden"
-                    bg="#1D365E"
-                    cursor="pointer"
-                    transition="all 0.2s"
-                    _hover={{
-                        transform: 'translateY(-5px)',
-                    }}
-                >
-                    <Box h="200px">
+                <Box maxW="1600px" margin="auto">
+                    <Box>
                         <Image
                             src={
                                 description?.thumbnail ??
