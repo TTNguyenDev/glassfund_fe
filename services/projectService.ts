@@ -63,7 +63,15 @@ export type ProjectDescription = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
-        const [accountId, id] = raw.id.split('#');
+        const index = raw.id.lastIndexOf('_');
+        let accountId = '';
+        let id = '';
+
+        if (index !== -1) {
+            accountId = raw.id.slice(0, index);
+            id = raw.id.slice(index + 1);
+        }
+
         return {
             id: Number.parseInt(id),
             accountId,
