@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { ConnectWalletModal } from '../components/connectWalletModal';
 import { CreateProjectModal } from '../components/createProjectModal';
+import { SupportProjectModal } from '../components/supportProjectModal';
 import { useApp } from '../hooks/useApp';
 import { store } from '../store';
 import '../styles/global.less';
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <ToastContainer />
                     <ConnectWalletModal />
                     <CreateProjectModal />
+                    <SupportProjectModal />
                     <Component {...pageProps} />
                 </ChakraProvider>
             </Provider>

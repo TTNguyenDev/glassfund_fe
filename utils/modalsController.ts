@@ -1,3 +1,5 @@
+import { SupportProjectModalDataType } from '../components/supportProjectModal';
+
 export type ModalsControllerType = {
     openConnectWalletModal: () => void;
     openCreateTaskModal: () => void;
@@ -12,6 +14,9 @@ export type ModalsControllerType = {
 
     openCreateProjectModal: () => void;
     closeCreateProjectModal: () => void;
+    openSupportProjectModal: () => void;
+    closeSupportProjectModal: () => void;
+    setDataSupportProjectModal: (payload: SupportProjectModalDataType) => void;
 };
 
 export class ModalsController {
@@ -22,7 +27,7 @@ export class ModalsController {
     }
 
     static setController(
-        controller: Partial<Record<keyof ModalsControllerType, () => void>>
+        controller: Partial<Record<keyof ModalsControllerType, any>>
     ) {
         this._controller = { ...this._controller, ...controller };
     }

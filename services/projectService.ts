@@ -27,7 +27,7 @@ export type CreateProjectFinalInput = {
     title: string;
     description: string;
     target: string;
-    minimunDeposite: string;
+    minimumDeposit: string;
     startedAt: number;
     endedAt: number;
     funded: string;
@@ -45,7 +45,7 @@ export type Project = {
     title: string;
     description: string;
     target: string;
-    minimunDeposite: string;
+    minimunDeposit: string;
     startedAt: number;
     endedAt: number;
     funded: string;
@@ -79,9 +79,7 @@ export class ProjectService {
             title: raw.title,
             description: raw.description,
             target: utils.format.formatNearAmount(raw.target),
-            minimunDeposite: utils.format.formatNearAmount(
-                raw.minimum_deposite
-            ),
+            minimunDeposit: utils.format.formatNearAmount(raw.minimum_deposit),
             startedAt: Math.floor(Number.parseInt(raw.started_at) / 1000000),
             endedAt: Math.floor(Number.parseInt(raw.ended_at) / 1000000),
             funded: utils.format.formatNearAmount(raw.funded),
@@ -110,13 +108,13 @@ export class ProjectService {
                     description: payload.description,
                     target: utils.format.parseNearAmount(payload.target),
                     minimum_deposit: utils.format.parseNearAmount(
-                        payload.minimunDeposite
+                        payload.minimumDeposit
                     ),
                     started_at: payload.startedAt * 1000000,
                     ended_at: payload.endedAt * 1000000,
                     funded: '0',
-                    vesting_start_time: payload.startedAt * 1000000,
-                    vesting_end_time: payload.startedAt * 1000000,
+                    vesting_start_time: payload.vestingStartTime * 1000000,
+                    vesting_end_time: payload.vestingEndTime * 1000000,
                     vesting_interval: payload.vestingInterval * 1000000,
                     claimed: '0',
                     force_stop: [],
