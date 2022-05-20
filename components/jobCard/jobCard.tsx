@@ -46,6 +46,7 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                 _hover={{
                     transform: 'translateY(-5px)',
                 }}
+                opacity={Date.now() > task.vestingEndTime ? 0.4 : 1}
             >
                 <Box h="200px">
                     <Image
@@ -78,14 +79,27 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             {task.accountId}
                         </Text>
                     </HStack>
-                    <Flex justifyContent="space-between">
-                        <Text
-                            fontSize="16px"
-                            fontWeight="800"
-                            textColor="#5D9DDB"
+                    <Flex justifyContent="space-between" mb="10px">
+                        <Flex
+                            bg={
+                                Date.now() >= task.startedAt &&
+                                Date.now() <= task.endedAt
+                                    ? 'white'
+                                    : undefined
+                            }
+                            alignItems="center"
+                            padding="0 10px"
+                            borderRadius="3xl"
                         >
-                            FUNDING TIME
-                        </Text>
+                            <Text
+                                fontSize="16px"
+                                fontWeight="800"
+                                lineHeight="16px"
+                                textColor="#5D9DDB"
+                            >
+                                FUNDING TIME
+                            </Text>
+                        </Flex>
                         <HStack mb="15px">
                             <HStack>
                                 <div
@@ -107,14 +121,26 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             ).format('DD/MM/YYYY hh:mm')}`}</Text>
                         </HStack>
                     </Flex>
-                    <Flex justifyContent="space-between">
-                        <Text
-                            fontSize="16px"
-                            fontWeight="800"
-                            textColor="#5D9DDB"
+                    <Flex justifyContent="space-between" mb="20px">
+                        <Flex
+                            bg={
+                                Date.now() >= task.vestingStartTime &&
+                                Date.now() <= task.vestingEndTime
+                                    ? 'white'
+                                    : undefined
+                            }
+                            alignItems="center"
+                            padding="0 10px"
+                            borderRadius="3xl"
                         >
-                            VESTING TIME
-                        </Text>
+                            <Text
+                                fontSize="16px"
+                                fontWeight="800"
+                                textColor="#5D9DDB"
+                            >
+                                VESTING TIME
+                            </Text>
+                        </Flex>
                         <HStack mb="15px">
                             <HStack>
                                 <div
