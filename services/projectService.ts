@@ -63,13 +63,14 @@ export type ProjectDescription = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
-        const index = raw.id.lastIndexOf('_');
+        console.log(raw);
+        const index = raw.id?.lastIndexOf('_');
         let accountId = '';
         let id = '';
 
         if (index !== -1) {
-            accountId = raw.id.slice(0, index);
-            id = raw.id.slice(index + 1);
+            accountId = raw.id?.slice(0, index);
+            id = raw.id?.slice(index + 1);
         }
 
         return {
@@ -218,7 +219,6 @@ export class ProjectService {
         const res = await BlockChainConnector.instance.contract.get_project({
             project_id: projectId,
         });
-
         return this.mapToProject(res);
     }
 

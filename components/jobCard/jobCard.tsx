@@ -1,13 +1,11 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import randomColor from 'randomcolor';
 import { useQuery } from 'react-query';
 import {
     Project,
     ProjectDescription,
     ProjectService,
 } from '../../services/projectService';
-import { Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Image, Progress, Text } from '@chakra-ui/react';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { Nullable } from '../../common';
 import Avatar from 'react-avatar';
@@ -21,6 +19,13 @@ interface JobCardProps {
 }
 
 export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
+    const projectInfoQuery = useQuery<Project>(
+        ['project_info', task.projectId],
+        () => ProjectService.getProject(task.projectId),
+        {
+            enabled: !!task.projectId,
+        }
+    );
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', task.projectId],
         () => IPFSUtils.getDataByCID(task.description) as any,
@@ -35,6 +40,7 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                 : null,
         [projectDescriptionQuery.data]
     );
+
     return (
         <Link href={`/project/${task.projectId}`}>
             <Box
@@ -68,16 +74,35 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                     >
                         {task.title}
                     </Text>
-                    <HStack mb="15px">
-                        <Avatar
-                            name={task.accountId}
-                            round
-                            size="30"
-                            textSizeRatio={1.75}
-                        />
-                        <Text fontSize="16px" textColor="#6ba5c1">
-                            {task.accountId}
-                        </Text>
+                    <HStack mb="15px" spacing="30px">
+                        <HStack>
+                            <Avatar
+                                name={task.accountId}
+                                round
+                                size="30"
+                                textSizeRatio={1.75}
+                            />
+                            <Text fontSize="16px" textColor="#6ba5c1">
+                                {task.accountId}
+                            </Text>
+                        </HStack>
+                        {!!projectInfoQuery.data && (
+                            <HStack w="100%">
+                                <Progress
+                                    value={Number(projectInfoQuery.data.funded)}
+                                    max={Number(task.target)}
+                                    size="sm"
+                                    borderRadius="3xl"
+                                    colorScheme="pink"
+                                    flex="1"
+                                />
+                                <Text
+                                    textColor="white"
+                                    fontSize="18px"
+                                    fontWeight="600"
+                                >{`${projectInfoQuery.data.funded}/${task.target} Ⓝ`}</Text>
+                            </HStack>
+                        )}
                     </HStack>
                     <Flex justifyContent="space-between" mb="10px">
                         <Flex
