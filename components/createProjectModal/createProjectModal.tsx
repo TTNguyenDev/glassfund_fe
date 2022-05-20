@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Modal, DatePicker } from 'rsuite';
+import { Modal, DatePicker, DateRangePicker } from 'rsuite';
 import { useCreateProject } from '../../hooks/useCreateProject';
 import { ModalsController } from '../../utils/modalsController';
 import * as dateFns from 'date-fns';
@@ -190,23 +190,25 @@ export const CreateProjectModal: React.FunctionComponent<
                                 !!createProjectForm.formState.errors.startedAt
                             }
                         >
-                            <FormLabel>Started At</FormLabel>
+                            <FormLabel>Funding Time</FormLabel>
                             <Input
                                 hidden
                                 {...createProjectForm.register('startedAt', {
-                                    required: 'Started at is a required field',
+                                    required:
+                                        'Funding time is a required field',
+                                })}
+                            />
+                            <Input
+                                hidden
+                                {...createProjectForm.register('endedAt', {
+                                    required:
+                                        'Funding time is a required field',
                                 })}
                             />
                             <Box h="40px">
-                                <DatePicker
-                                    onChange={(value) => {
-                                        createProjectForm.setValue(
-                                            'startedAt',
-                                            (value as Date).getTime()
-                                        );
-                                        createProjectForm.trigger('startedAt');
-                                    }}
-                                    format="yyyy-MM-dd HH:mm"
+                                <DateRangePicker
+                                    format="yyyy-MM-dd hh:mm aa"
+                                    showMeridian
                                     style={{ width: '100%', marginBottom: -15 }}
                                     disabledDate={(date) =>
                                         dateFns.isBefore(
@@ -214,33 +216,18 @@ export const CreateProjectModal: React.FunctionComponent<
                                             dateFns.subDays(new Date(), 1)
                                         )
                                     }
-                                    disabledHours={(hour, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                            dateFns.getDate(new Date())
-                                        ) {
-                                            return (
-                                                hour <
-                                                dateFns.getHours(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                    disabledMinutes={(minute, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                                dateFns.getDate(new Date()) &&
-                                            dateFns.getHours(date) ===
-                                                dateFns.getHours(new Date())
-                                        ) {
-                                            return (
-                                                minute <
-                                                dateFns.getMinutes(new Date())
-                                            );
-                                        }
-
-                                        return false;
+                                    onChange={(value) => {
+                                        if (!value) return;
+                                        createProjectForm.setValue(
+                                            'startedAt',
+                                            value[0].getTime()
+                                        );
+                                        createProjectForm.setValue(
+                                            'endedAt',
+                                            value[1].getTime()
+                                        );
+                                        createProjectForm.trigger('startedAt');
+                                        createProjectForm.trigger('endedAt');
                                     }}
                                 />
                             </Box>
@@ -255,101 +242,35 @@ export const CreateProjectModal: React.FunctionComponent<
                         </FormControl>
                         <FormControl
                             isInvalid={
-                                !!createProjectForm.formState.errors.endedAt
-                            }
-                        >
-                            <FormLabel>Ended At</FormLabel>
-                            <Input
-                                hidden
-                                {...createProjectForm.register('endedAt', {
-                                    required: 'Started at is a required field',
-                                })}
-                            />
-                            <Box h="40px">
-                                <DatePicker
-                                    onChange={(value) => {
-                                        createProjectForm.setValue(
-                                            'endedAt',
-                                            (value as Date).getTime()
-                                        );
-                                        createProjectForm.trigger('endedAt');
-                                    }}
-                                    format="yyyy-MM-dd HH:mm"
-                                    style={{ width: '100%', marginBottom: -15 }}
-                                    disabledDate={(date) =>
-                                        dateFns.isBefore(
-                                            date!,
-                                            dateFns.subDays(new Date(), 1)
-                                        )
-                                    }
-                                    disabledHours={(hour, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                            dateFns.getDate(new Date())
-                                        ) {
-                                            return (
-                                                hour <
-                                                dateFns.getHours(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                    disabledMinutes={(minute, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                                dateFns.getDate(new Date()) &&
-                                            dateFns.getHours(date) ===
-                                                dateFns.getHours(new Date())
-                                        ) {
-                                            return (
-                                                minute <
-                                                dateFns.getMinutes(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                />
-                            </Box>
-                            {createProjectForm.formState.errors.endedAt && (
-                                <FormErrorMessage>
-                                    {
-                                        createProjectForm.formState.errors
-                                            .endedAt.message
-                                    }
-                                </FormErrorMessage>
-                            )}
-                        </FormControl>
-                        <FormControl
-                            isInvalid={
                                 !!createProjectForm.formState.errors
                                     .vestingStartTime
                             }
                         >
-                            <FormLabel>Vesting Started Time</FormLabel>
+                            <FormLabel>Vesting Time</FormLabel>
                             <Input
                                 hidden
                                 {...createProjectForm.register(
                                     'vestingStartTime',
                                     {
                                         required:
-                                            'Vesting started time is a required field',
+                                            'Vesting time is a required field',
+                                    }
+                                )}
+                            />
+                            <Input
+                                hidden
+                                {...createProjectForm.register(
+                                    'vestingEndTime',
+                                    {
+                                        required:
+                                            'Vesting time is a required field',
                                     }
                                 )}
                             />
                             <Box h="40px">
-                                <DatePicker
-                                    onChange={(value) => {
-                                        createProjectForm.setValue(
-                                            'vestingStartTime',
-                                            (value as Date).getTime()
-                                        );
-                                        createProjectForm.trigger(
-                                            'vestingStartTime'
-                                        );
-                                    }}
-                                    format="yyyy-MM-dd HH:mm"
+                                <DateRangePicker
+                                    format="yyyy-MM-dd hh:mm aa"
+                                    showMeridian
                                     style={{ width: '100%', marginBottom: -15 }}
                                     disabledDate={(date) =>
                                         dateFns.isBefore(
@@ -357,33 +278,22 @@ export const CreateProjectModal: React.FunctionComponent<
                                             dateFns.subDays(new Date(), 1)
                                         )
                                     }
-                                    disabledHours={(hour, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                            dateFns.getDate(new Date())
-                                        ) {
-                                            return (
-                                                hour <
-                                                dateFns.getHours(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                    disabledMinutes={(minute, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                                dateFns.getDate(new Date()) &&
-                                            dateFns.getHours(date) ===
-                                                dateFns.getHours(new Date())
-                                        ) {
-                                            return (
-                                                minute <
-                                                dateFns.getMinutes(new Date())
-                                            );
-                                        }
-
-                                        return false;
+                                    onChange={(value) => {
+                                        if (!value) return;
+                                        createProjectForm.setValue(
+                                            'vestingStartTime',
+                                            value[0].getTime()
+                                        );
+                                        createProjectForm.setValue(
+                                            'vestingEndTime',
+                                            value[1].getTime()
+                                        );
+                                        createProjectForm.trigger(
+                                            'vestingStartTime'
+                                        );
+                                        createProjectForm.trigger(
+                                            'vestingEndTime'
+                                        );
                                     }}
                                 />
                             </Box>
@@ -400,86 +310,10 @@ export const CreateProjectModal: React.FunctionComponent<
                         <FormControl
                             isInvalid={
                                 !!createProjectForm.formState.errors
-                                    .vestingEndTime
-                            }
-                        >
-                            <FormLabel>Vesting Ended Time</FormLabel>
-                            <Input
-                                hidden
-                                {...createProjectForm.register(
-                                    'vestingEndTime',
-                                    {
-                                        required:
-                                            'Vesting ended time is a required field',
-                                    }
-                                )}
-                            />
-                            <Box h="40px">
-                                <DatePicker
-                                    onChange={(value) => {
-                                        createProjectForm.setValue(
-                                            'vestingEndTime',
-                                            (value as Date).getTime()
-                                        );
-                                        createProjectForm.trigger(
-                                            'vestingEndTime'
-                                        );
-                                    }}
-                                    format="yyyy-MM-dd HH:mm"
-                                    style={{ width: '100%', marginBottom: -15 }}
-                                    disabledDate={(date) =>
-                                        dateFns.isBefore(
-                                            date!,
-                                            dateFns.subDays(new Date(), 1)
-                                        )
-                                    }
-                                    disabledHours={(hour, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                            dateFns.getDate(new Date())
-                                        ) {
-                                            return (
-                                                hour <
-                                                dateFns.getHours(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                    disabledMinutes={(minute, date) => {
-                                        if (
-                                            dateFns.getDate(date) ===
-                                                dateFns.getDate(new Date()) &&
-                                            dateFns.getHours(date) ===
-                                                dateFns.getHours(new Date())
-                                        ) {
-                                            return (
-                                                minute <
-                                                dateFns.getMinutes(new Date())
-                                            );
-                                        }
-
-                                        return false;
-                                    }}
-                                />
-                            </Box>
-                            {createProjectForm.formState.errors
-                                .vestingEndTime && (
-                                <FormErrorMessage>
-                                    {
-                                        createProjectForm.formState.errors
-                                            .vestingEndTime.message
-                                    }
-                                </FormErrorMessage>
-                            )}
-                        </FormControl>
-                        <FormControl
-                            isInvalid={
-                                !!createProjectForm.formState.errors
                                     .vestingInterval
                             }
                         >
-                            <FormLabel>Vesting Interval (month)</FormLabel>
+                            <FormLabel>Vesting Interval (minute)</FormLabel>
                             <NumberInput
                                 defaultValue={1}
                                 min={1}

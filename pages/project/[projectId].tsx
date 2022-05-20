@@ -85,7 +85,7 @@ export default function ProjectDetailsPage() {
                                                     projectId,
                                                     projectMinimumDeposit:
                                                         Number.parseInt(
-                                                            data.minimunDeposit
+                                                            data.minimumDeposit
                                                         ),
                                                 }
                                             );
@@ -97,20 +97,22 @@ export default function ProjectDetailsPage() {
                                 )}
                             {data.accountId ===
                                 BlockChainConnector.instance.account
-                                    .accountId && (
-                                <Button
-                                    onClick={() => {
-                                        ModalsController.controller.setDataClaimRewardProjectModal(
-                                            {
-                                                projectId,
-                                            }
-                                        );
-                                        ModalsController.controller.openClaimRewardProjectModal();
-                                    }}
-                                >
-                                    Claim
-                                </Button>
-                            )}
+                                    .accountId &&
+                                Date.now() >= data.vestingStartTime &&
+                                Date.now() <= data.vestingEndTime && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataClaimRewardProjectModal(
+                                                {
+                                                    projectId,
+                                                }
+                                            );
+                                            ModalsController.controller.openClaimRewardProjectModal();
+                                        }}
+                                    >
+                                        Claim
+                                    </Button>
+                                )}
                         </HStack>
                         <HStack mb="15px">
                             <Avatar
