@@ -119,7 +119,7 @@ export class ProjectService {
                     funded: '0',
                     vesting_start_time: payload.vestingStartTime * 1000000,
                     vesting_end_time: payload.vestingEndTime * 1000000,
-                    vesting_interval: payload.vestingInterval * 1000000,
+                    vesting_interval: payload.vestingInterval * 60000000000,
                     claimed: '0',
                     force_stop: [],
                 },
