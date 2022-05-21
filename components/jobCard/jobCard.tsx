@@ -65,7 +65,7 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                         w="100%"
                     />
                 </Box>
-                <Box p="15px">
+                <Box p="15px" minH="280px">
                     <Text
                         fontSize="24px"
                         fontWeight="800"

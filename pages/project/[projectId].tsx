@@ -47,7 +47,15 @@ export default function ProjectDetailsPage() {
         }
     );
 
-    console.log(projectInfoQuery.data);
+    const projectClaimableAmountQuery = useQuery<number>(
+        ['project_claimable_amount', projectId],
+        () => ProjectService.getClaimableAmount(projectId),
+        {
+            enabled: !!projectId,
+        }
+    );
+    console.log('CLAIMABLE AMOUNT: ', projectClaimableAmountQuery.data);
+
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', projectId],
         () => IPFSUtils.getDataByCID(data!.description) as any,
@@ -119,20 +127,28 @@ export default function ProjectDetailsPage() {
                             {data.accountId ===
                                 BlockChainConnector.instance.account
                                     .accountId &&
-                                Date.now() >= data.vestingStartTime &&
-                                Date.now() <= data.vestingEndTime && (
-                                    <Button
-                                        onClick={() => {
-                                            ModalsController.controller.setDataClaimRewardProjectModal(
-                                                {
-                                                    projectId,
-                                                }
-                                            );
-                                            ModalsController.controller.openClaimRewardProjectModal();
-                                        }}
-                                    >
-                                        Claim
-                                    </Button>
+                                projectClaimableAmountQuery.data !==
+                                    undefined &&
+                                Date.now() >= data.vestingStartTime && (
+                                    <HStack>
+                                        <Text textColor="white" fontSize="18px">
+                                            {`Claimable Amount: ${projectClaimableAmountQuery.data} Ⓝ`}
+                                        </Text>
+                                        {!projectClaimableAmountQuery.data && (
+                                            <Button
+                                                onClick={() => {
+                                                    ModalsController.controller.setDataClaimRewardProjectModal(
+                                                        {
+                                                            projectId,
+                                                        }
+                                                    );
+                                                    ModalsController.controller.openClaimRewardProjectModal();
+                                                }}
+                                            >
+                                                Claim
+                                            </Button>
+                                        )}
+                                    </HStack>
                                 )}
                         </HStack>
                         <HStack
@@ -254,12 +270,7 @@ export default function ProjectDetailsPage() {
                                 ).format('DD/MM/YYYY hh:mm')}`}</Text>
                             </HStack>
                         </Flex>
-                        <Text
-                            fontSize="16px"
-                            textColor="white"
-                            noOfLines={2}
-                            w="100%"
-                        >
+                        <Text fontSize="16px" textColor="white" w="100%">
                             {description?.body.replace(/<(.|\n)*?>/g, ' ')}
                         </Text>
                     </Box>

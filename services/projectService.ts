@@ -228,7 +228,7 @@ export class ProjectService {
                 project_id: projectId,
             });
 
-        return res;
+        return Number(utils.format.formatNearAmount(res)).toFixed(2);
     }
 
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {

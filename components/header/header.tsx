@@ -49,6 +49,7 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                         borderRadius="none"
                         bg="transparent"
                         borderBottom="solid 3px rgba(231, 234, 246, 1)"
+                        color="white"
                         _hover={{
                             bg: 'rgba(255, 255, 255, 0.1)',
                             borderImageSlice: 1,
@@ -61,14 +62,24 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                         }}
                         isActive={isActive}
                     >
-                        <Text
-                            background="var(--primary-gradient)"
-                            backgroundClip="text"
-                            fontSize="16px"
-                            fontWeight="600"
-                        >
-                            {title}
-                        </Text>
+                        {isActive ? (
+                            <Text
+                                fontSize="16px"
+                                fontWeight="600"
+                                background="var(--primary-gradient)"
+                                backgroundClip="text"
+                            >
+                                {title}
+                            </Text>
+                        ) : (
+                            <Text
+                                fontSize="16px"
+                                fontWeight="600"
+                                textColor="white"
+                            >
+                                {title}
+                            </Text>
+                        )}
                     </Button>
                 </Link>
             );
