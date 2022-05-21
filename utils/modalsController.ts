@@ -1,4 +1,5 @@
 import { ClaimRewardProjectModalDataType } from '../components/claimRewardProjectModal';
+import { ForceStopProjectModalDataType } from '../components/forceStopProjectModal';
 import { SupportProjectModalDataType } from '../components/supportProjectModal';
 
 export type ModalsControllerType = {
@@ -22,6 +23,11 @@ export type ModalsControllerType = {
     closeClaimRewardProjectModal: () => void;
     setDataClaimRewardProjectModal: (
         payload: ClaimRewardProjectModalDataType
+    ) => void;
+    openForceStopProjectModal: () => void;
+    closeForceStopProjectModal: () => void;
+    setDataForceStopProjectModal: (
+        payload: ForceStopProjectModalDataType
     ) => void;
 };
 

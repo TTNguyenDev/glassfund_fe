@@ -46,6 +46,7 @@ export default function ProjectDetailsPage() {
             enabled: !!projectId,
         }
     );
+    console.log('INFO', projectInfoQuery.data);
 
     const projectClaimableAmountQuery = useQuery<number>(
         ['project_claimable_amount', projectId],
@@ -56,6 +57,22 @@ export default function ProjectDetailsPage() {
     );
     console.log('CLAIMABLE AMOUNT: ', projectClaimableAmountQuery.data);
 
+    const projectSupportersQuery = useQuery<any>(
+        ['project_supporters', projectId],
+        () => ProjectService.getSupporters(projectId),
+        {
+            enabled: !!projectId,
+        }
+    );
+    console.log('SUPPORTERS', projectSupportersQuery.data);
+    const projectForceStopAccountsQuery = useQuery<any>(
+        ['project_force_stop_accounts', projectId],
+        () => ProjectService.getForceStopAccounts(projectId),
+        {
+            enabled: !!projectId,
+        }
+    );
+    console.log('FORCE STOP ACCOUNT', projectForceStopAccountsQuery.data);
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', projectId],
         () => IPFSUtils.getDataByCID(data!.description) as any,
@@ -122,6 +139,37 @@ export default function ProjectDetailsPage() {
                                         }}
                                     >
                                         Suppport
+                                    </Button>
+                                )}
+                            {data.accountId !==
+                                BlockChainConnector.instance.account
+                                    .accountId &&
+                                Date.now() >= data.vestingStartTime &&
+                                Date.now() <= data.vestingEndTime &&
+                                projectSupportersQuery.data &&
+                                projectForceStopAccountsQuery.data &&
+                                !!projectSupportersQuery.data.find(
+                                    (i: any) =>
+                                        i[0] ===
+                                        BlockChainConnector.instance.account
+                                            .accountId
+                                ) &&
+                                !projectForceStopAccountsQuery.data.includes(
+                                    BlockChainConnector.instance.account
+                                        .accountId
+                                ) && (
+                                    <Button
+                                        onClick={() => {
+                                            ModalsController.controller.setDataForceStopProjectModal(
+                                                {
+                                                    projectId,
+                                                }
+                                            );
+                                            ModalsController.controller.openForceStopProjectModal();
+                                        }}
+                                        colorScheme="red"
+                                    >
+                                        Force Stop
                                     </Button>
                                 )}
                             {data.accountId ===
