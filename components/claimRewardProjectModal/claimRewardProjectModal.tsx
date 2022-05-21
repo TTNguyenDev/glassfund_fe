@@ -10,11 +10,6 @@ import {
     ModalContent,
     ModalFooter,
     ModalOverlay,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
     Text,
     useDisclosure,
     useToast,
@@ -22,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { BlockChainConnector } from '../../utils/blockchain';
 import { ModalsController } from '../../utils/modalsController';
 import { ProjectService } from '../../services/projectService';
@@ -43,7 +38,7 @@ export const ClaimRewardProjectModal = () => {
     );
 
     const toast = useToast();
-
+    const queryClient = useQueryClient();
     const claimRewardProjectForm = useForm<ClaimRewardProjectFormInput>();
 
     const setDataClaimRewardProjectModal = React.useCallback(
@@ -80,7 +75,10 @@ export const ClaimRewardProjectModal = () => {
 
     const claimRewardProjectMutation = useMutation(
         ({ projectId }: { projectId: string }) =>
-            ProjectService.claimReward(projectId)
+            ProjectService.claimReward(projectId),
+        {
+            onSuccess: () => {},
+        }
     );
 
     const handleBtnSentClick = useMemo(() => {
@@ -88,6 +86,10 @@ export const ClaimRewardProjectModal = () => {
             async (payload) => {
                 try {
                     await claimRewardProjectMutation.mutateAsync(payload);
+                    queryClient.invalidateQueries([
+                        'project_claimable_amount',
+                        payload.projectId,
+                    ]);
                     toast({
                         title: 'Claim reward project successfully',
                         position: 'top',
