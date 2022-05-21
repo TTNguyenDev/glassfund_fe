@@ -22,27 +22,27 @@ import { BlockChainConnector } from '../../utils/blockchain';
 import { ModalsController } from '../../utils/modalsController';
 import { ProjectService } from '../../services/projectService';
 
-export type ClaimRewardProjectFormInput = {
+export type ForceStopProjectFormInput = {
     projectId: string;
 };
 
-export type ClaimRewardProjectModalDataType = {
+export type ForceStopProjectModalDataType = {
     projectId: string;
 };
 
-export const ClaimRewardProjectModal = () => {
+export const ForceStopProjectModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [data, setData] = React.useState<ClaimRewardProjectModalDataType>(
+    const [data, setData] = React.useState<ForceStopProjectModalDataType>(
         {} as any
     );
 
     const toast = useToast();
     const queryClient = useQueryClient();
-    const claimRewardProjectForm = useForm<ClaimRewardProjectFormInput>();
+    const forceStopProjectForm = useForm<ForceStopProjectFormInput>();
 
-    const setDataClaimRewardProjectModal = React.useCallback(
-        (payload: ClaimRewardProjectModalDataType) => {
+    const setDataForceStopProjectModal = React.useCallback(
+        (payload: ForceStopProjectModalDataType) => {
             setData(payload);
         },
         [data]
@@ -63,35 +63,35 @@ export const ClaimRewardProjectModal = () => {
 
     React.useEffect(() => {
         ModalsController.setController({
-            openClaimRewardProjectModal: handleOpen,
-            closeClaimRewardProjectModal: handleClose,
-            setDataClaimRewardProjectModal,
+            openForceStopProjectModal: handleOpen,
+            closeForceStopProjectModal: handleClose,
+            setDataForceStopProjectModal,
         });
 
         return () => {
-            claimRewardProjectForm.reset();
+            forceStopProjectForm.reset();
         };
     }, []);
 
-    const claimRewardProjectMutation = useMutation(
+    const forceStopProjectMutation = useMutation(
         ({ projectId }: { projectId: string }) =>
-            ProjectService.claimReward(projectId),
+            ProjectService.forceStop(projectId),
         {
             onSuccess: () => {},
         }
     );
 
     const handleBtnSentClick = useMemo(() => {
-        return claimRewardProjectForm.handleSubmit(
+        return forceStopProjectForm.handleSubmit(
             async (payload) => {
                 try {
-                    await claimRewardProjectMutation.mutateAsync(payload);
+                    await forceStopProjectMutation.mutateAsync(payload);
                     queryClient.invalidateQueries([
-                        'project_claimable_amount',
+                        'project_supportes',
                         payload.projectId,
                     ]);
                     toast({
-                        title: 'Claim reward project successfully',
+                        title: 'Force stop project successfully',
                         position: 'top',
                         status: 'success',
                         isClosable: true,
@@ -124,9 +124,9 @@ export const ClaimRewardProjectModal = () => {
 
     useEffect(() => {
         if (data) {
-            claimRewardProjectForm.setValue('projectId', data.projectId);
+            forceStopProjectForm.setValue('projectId', data.projectId);
         } else {
-            claimRewardProjectForm.setValue('projectId', '');
+            forceStopProjectForm.setValue('projectId', '');
         }
     }, [data]);
 
@@ -144,7 +144,7 @@ export const ClaimRewardProjectModal = () => {
                                 fontWeight="700"
                                 mb="15px"
                             >
-                                Claim Reward Project
+                                Force Stop Project
                             </Text>
                             <Box
                                 h="2px"
@@ -157,7 +157,7 @@ export const ClaimRewardProjectModal = () => {
                                 <Input
                                     id="projectId"
                                     placeholder="Project ID"
-                                    {...claimRewardProjectForm.register(
+                                    {...forceStopProjectForm.register(
                                         'projectId',
                                         {
                                             required: true,
@@ -173,10 +173,10 @@ export const ClaimRewardProjectModal = () => {
                         <Button
                             w="150px"
                             type="submit"
-                            isLoading={claimRewardProjectMutation.isLoading}
+                            isLoading={forceStopProjectMutation.isLoading}
                             onClick={handleBtnSentClick}
                         >
-                            Claim reward
+                            OK
                         </Button>
                     </ModalFooter>
                 </ModalContent>

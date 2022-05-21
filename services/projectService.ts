@@ -231,6 +231,14 @@ export class ProjectService {
         return Number(utils.format.formatNearAmount(res)).toFixed(2);
     }
 
+    static async getSupporters(projectId: string): Promise<any> {
+        const res = await BlockChainConnector.instance.contract.get_supporters({
+            project_id: projectId,
+        });
+        console.log(res);
+        return res;
+    }
+
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {
         const fetchPosts = BlockChainConnector.instance.contract.get_projects;
         const table = db.projects;
