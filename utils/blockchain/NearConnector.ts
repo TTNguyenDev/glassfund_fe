@@ -20,6 +20,7 @@ const ViewMethods: string[] = [
     'get_my_projects',
     'get_claimable_amount',
     'get_supporters',
+    'get_force_stop_accounts',
 ];
 
 const ChangeMethods: string[] = [
@@ -57,6 +58,7 @@ type ContractMethodsType = {
     get_my_projects: ContractMethodType;
     get_claimable_amount: ContractMethodType;
     get_supporters: ContractMethodType;
+    get_force_stop_accounts: ContractMethodType;
     new_project: ContractMethodType;
     claim_reward: ContractMethodType;
     support_project: ContractMethodType;

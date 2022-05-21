@@ -65,6 +65,14 @@ export default function ProjectDetailsPage() {
         }
     );
     console.log('SUPPORTERS', projectSupportersQuery.data);
+    const projectForceStopAccountsQuery = useQuery<any>(
+        ['project_force_stop_accounts', projectId],
+        () => ProjectService.getForceStopAccounts(projectId),
+        {
+            enabled: !!projectId,
+        }
+    );
+    console.log('FORCE STOP ACCOUNT', projectForceStopAccountsQuery.data);
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', projectId],
         () => IPFSUtils.getDataByCID(data!.description) as any,
@@ -136,14 +144,19 @@ export default function ProjectDetailsPage() {
                             {data.accountId !==
                                 BlockChainConnector.instance.account
                                     .accountId &&
-                                //Date.now() >= data.vestingStartTime &&
-                                //Date.now() <= data.vestingEndTime &&
+                                Date.now() >= data.vestingStartTime &&
+                                Date.now() <= data.vestingEndTime &&
                                 projectSupportersQuery.data &&
+                                projectForceStopAccountsQuery.data &&
                                 !!projectSupportersQuery.data.find(
                                     (i: any) =>
                                         i[0] ===
                                         BlockChainConnector.instance.account
                                             .accountId
+                                ) &&
+                                !projectForceStopAccountsQuery.data.includes(
+                                    BlockChainConnector.instance.account
+                                        .accountId
                                 ) && (
                                     <Button
                                         onClick={() => {

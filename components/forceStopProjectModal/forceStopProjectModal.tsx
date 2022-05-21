@@ -87,7 +87,7 @@ export const ForceStopProjectModal = () => {
                 try {
                     await forceStopProjectMutation.mutateAsync(payload);
                     queryClient.invalidateQueries([
-                        'project_supportes',
+                        'project_force_stop_accounts',
                         payload.projectId,
                     ]);
                     toast({

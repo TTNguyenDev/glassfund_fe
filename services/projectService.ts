@@ -239,6 +239,16 @@ export class ProjectService {
         return res;
     }
 
+    static async getForceStopAccounts(projectId: string): Promise<any> {
+        const res =
+            await BlockChainConnector.instance.contract.get_force_stop_accounts(
+                {
+                    project_id: projectId,
+                }
+            );
+        console.log(res);
+        return res;
+    }
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {
         const fetchPosts = BlockChainConnector.instance.contract.get_projects;
         const table = db.projects;
