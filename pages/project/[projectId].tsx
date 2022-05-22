@@ -182,7 +182,9 @@ export default function ProjectDetailsPage() {
                                         <Text textColor="white" fontSize="18px">
                                             {`Claimable Amount: ${projectClaimableAmountQuery.data} Ⓝ`}
                                         </Text>
-                                        {!projectClaimableAmountQuery.data && (
+                                        {!!Number(
+                                            projectClaimableAmountQuery.data
+                                        ) && (
                                             <Button
                                                 onClick={() => {
                                                     ModalsController.controller.setDataClaimRewardProjectModal(

@@ -240,14 +240,19 @@ export class ProjectService {
     }
 
     static async getForceStopAccounts(projectId: string): Promise<any> {
-        const res =
-            await BlockChainConnector.instance.contract.get_force_stop_accounts(
-                {
-                    project_id: projectId,
-                }
-            );
-        console.log(res);
-        return res;
+        try {
+            const res =
+                await BlockChainConnector.instance.contract.get_force_stop_accounts(
+                    {
+                        project_id: projectId,
+                    }
+                );
+            return res;
+        } catch (err) {
+            console.error(err);
+        } finally {
+            return [];
+        }
     }
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {
         const fetchPosts = BlockChainConnector.instance.contract.get_projects;
