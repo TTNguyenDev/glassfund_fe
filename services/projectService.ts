@@ -54,6 +54,7 @@ export type Project = {
     vestingInterval: number;
     claimed: string;
     forceStop: string[];
+    forceStopTs?: number;
 };
 
 export type ProjectDescription = {
@@ -99,6 +100,7 @@ export class ProjectService {
             ),
             claimed: utils.format.formatNearAmount(raw.claimed),
             forceStop: raw.force_stop,
+            forceStopTs: raw.force_stop_ts,
         };
     }
 

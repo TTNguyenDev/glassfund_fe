@@ -90,6 +90,10 @@ export const ClaimRewardProjectModal = () => {
                         'project_claimable_amount',
                         payload.projectId,
                     ]);
+                    queryClient.invalidateQueries([
+                        'project_info',
+                        payload.projectId,
+                    ]);
                     toast({
                         title: 'Claim reward project successfully',
                         position: 'top',

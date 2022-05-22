@@ -90,6 +90,10 @@ export const ForceStopProjectModal = () => {
                         'project_force_stop_accounts',
                         payload.projectId,
                     ]);
+                    queryClient.invalidateQueries([
+                        'project_info',
+                        payload.projectId,
+                    ]);
                     toast({
                         title: 'Force stop project successfully',
                         position: 'top',

@@ -5,6 +5,8 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import {
+    Alert,
+    AlertIcon,
     Box,
     Button,
     Flex,
@@ -109,6 +111,14 @@ export default function ProjectDetailsPage() {
                             h="400px"
                         />
                     </Box>
+                    {data.forceStopTs && (
+                        <Box p="15px">
+                            <Alert status="error" fontWeight="600">
+                                <AlertIcon />
+                                This project forced stop by the community!
+                            </Alert>
+                        </Box>
+                    )}
                     <Box p="15px">
                         <HStack justifyContent="space-between">
                             <Text
@@ -320,6 +330,16 @@ export default function ProjectDetailsPage() {
                                 ).format('DD/MM/YYYY hh:mm')}`}</Text>
                             </HStack>
                         </Flex>
+                        <HStack
+                            fontSize="16px"
+                            textColor="#d385ee"
+                            justifyContent="flex-end"
+                            fontWeight="600"
+                            mb="15px"
+                        >
+                            <Text>Claimed: </Text>
+                            <Text>{projectInfoQuery.data?.claimed} Ⓝ</Text>
+                        </HStack>
                         <Text fontSize="16px" textColor="white" w="100%">
                             {description?.body.replace(/<(.|\n)*?>/g, ' ')}
                         </Text>
