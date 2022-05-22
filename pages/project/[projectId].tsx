@@ -330,6 +330,16 @@ export default function ProjectDetailsPage() {
                                 ).format('DD/MM/YYYY hh:mm')}`}</Text>
                             </HStack>
                         </Flex>
+                        <HStack
+                            fontSize="16px"
+                            textColor="#d385ee"
+                            justifyContent="flex-end"
+                            fontWeight="600"
+                            mb="15px"
+                        >
+                            <Text>Claimed: </Text>
+                            <Text>{projectInfoQuery.data?.claimed} Ⓝ</Text>
+                        </HStack>
                         <Text fontSize="16px" textColor="white" w="100%">
                             {description?.body.replace(/<(.|\n)*?>/g, ' ')}
                         </Text>
