@@ -246,7 +246,6 @@ export class ProjectService {
                     project_id: projectId,
                 }
             );
-        console.log(res);
         return res;
     }
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {
