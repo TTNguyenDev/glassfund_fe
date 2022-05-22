@@ -7,7 +7,7 @@ export const NearConfig = Object.freeze({
         'https://rpc.testnet.internal.near.org',
     contractName:
         process.env.REACT_APP_NEAR_CONTRACT_NAME ||
-        'dev-1653122329660-78315708304468',
+        'dev-1653214742254-44697301222194',
     walletUrl:
         process.env.REACT_APP_NEAR_WALLET_URL ||
         'https://wallet.testnet.near.org',
