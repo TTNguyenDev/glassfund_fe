@@ -45,6 +45,7 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
             return (
                 <Link key={title} href={href}>
                     <Button
+                        w='120px'
                         h="100%"
                         borderRadius="none"
                         bg="transparent"
@@ -53,12 +54,12 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                         _hover={{
                             bg: 'rgba(255, 255, 255, 0.1)',
                             borderImageSlice: 1,
-                            borderImageSource: 'var(--primary-gradient)',
                         }}
                         _active={{
                             bg: 'rgba(255, 255, 255, 0.1)',
                             borderImageSlice: 1,
                             borderImageSource: 'var(--primary-gradient)',
+                            borderBottom: "solid 4px rgba(231, 234, 246, 1)",
                         }}
                         isActive={isActive}
                     >
@@ -73,7 +74,7 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                             </Text>
                         ) : (
                             <Text
-                                fontSize="16px"
+                                fontSize="15px"
                                 fontWeight="600"
                                 textColor="white"
                             >

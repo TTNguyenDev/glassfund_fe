@@ -122,8 +122,8 @@ export default function ProjectDetailsPage() {
                     <Box p="15px">
                         <HStack justifyContent="space-between">
                             <Text
-                                fontSize="24px"
-                                fontWeight="800"
+                                fontSize="28px"
+                                fontWeight="700"
                                 textColor="white"
                                 mb="15px"
                             >
@@ -228,7 +228,12 @@ export default function ProjectDetailsPage() {
                                 </Text>
                             </HStack>
                             {!!projectInfoQuery.data && (
-                                <HStack w="100%" maxW="600px">
+                                <Flex w="100%" maxW="600px" flexDir="column" alignItems="end">
+                                    <Text
+                                        textColor="white"
+                                        fontSize="16px"
+                                        fontWeight="400"
+                                    >{`${projectInfoQuery.data.funded}/${data.target} Ⓝ`}</Text>
                                     <Progress
                                         value={Number(
                                             projectInfoQuery.data.funded
@@ -237,35 +242,36 @@ export default function ProjectDetailsPage() {
                                         size="sm"
                                         borderRadius="3xl"
                                         colorScheme="pink"
-                                        flex="1"
+                                        w="100%"
+                                        h="3px"
                                     />
-                                    <Text
-                                        textColor="white"
-                                        fontSize="18px"
-                                        fontWeight="600"
-                                    >{`${projectInfoQuery.data.funded}/${data.target} Ⓝ`}</Text>
-                                </HStack>
+                                </Flex>
                             )}
                         </HStack>
                         <Flex justifyContent="space-between" mb="10px">
-                            <Flex
-                                bg={
+                        <Flex
+                                border={
                                     Date.now() >= data.startedAt &&
                                     Date.now() <= data.endedAt
-                                        ? 'white'
-                                        : undefined
+                                        ? '1px solid var(--main-color)'
+                                        : '0'
                                 }
                                 alignItems="center"
-                                padding="0 10px"
-                                borderRadius="3xl"
+                                padding="7px 10px"
+                                borderRadius="7px"
                             >
                                 <Text
-                                    fontSize="16px"
-                                    fontWeight="800"
-                                    lineHeight="16px"
-                                    textColor="#5D9DDB"
+                                    fontSize="15px"
+                                    fontWeight="700"
+                                    lineHeight="15px"
+                                    textColor={
+                                      Date.now() >= data.startedAt &&
+                                      Date.now() <= data.endedAt
+                                      ? 'var(--main-color)'
+                                      : 'var(--text-color)'
+                                    }
                                 >
-                                    FUNDING TIME
+                                    FUNDING
                                 </Text>
                             </Flex>
                             <HStack mb="15px">
@@ -291,22 +297,29 @@ export default function ProjectDetailsPage() {
                         </Flex>
                         <Flex justifyContent="space-between" mb="20px">
                             <Flex
-                                bg={
+                                border={
                                     Date.now() >= data.vestingStartTime &&
                                     Date.now() <= data.vestingEndTime
-                                        ? 'white'
-                                        : undefined
+                                        ? '1px solid var(--main-color)'
+                                        : '0px'
                                 }
+                                borderWidth="1px"
                                 alignItems="center"
-                                padding="0 10px"
-                                borderRadius="3xl"
+                                padding="7px 10px"
+                                borderRadius="7px"
                             >
                                 <Text
-                                    fontSize="16px"
-                                    fontWeight="800"
-                                    textColor="#5D9DDB"
+                                    fontSize="15px"
+                                    fontWeight="700"
+                                    lineHeight="15px"
+                                    textColor={
+                                      Date.now() >= data.vestingStartTime &&
+                                      Date.now() <= data.vestingEndTime
+                                      ? 'var(--main-color)'
+                                      : 'var(--text-color)'
+                                    }
                                 >
-                                    VESTING TIME
+                                    VESTING
                                 </Text>
                             </Flex>
                             <HStack mb="15px">
@@ -340,7 +353,7 @@ export default function ProjectDetailsPage() {
                             <Text>Claimed: </Text>
                             <Text>{projectInfoQuery.data?.claimed} Ⓝ</Text>
                         </HStack>
-                        <Text fontSize="16px" textColor="white" w="100%">
+                        <Text fontSize="16px" textColor="var(--text-color)" w="100%">
                             {description?.body.replace(/<(.|\n)*?>/g, ' ')}
                         </Text>
                     </Box>

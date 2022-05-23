@@ -13,6 +13,7 @@ import moment from 'moment';
 import { BsClock } from 'react-icons/bs';
 import { MdOutlineDoubleArrow } from 'react-icons/md';
 import Link from 'next/link';
+import classes from './jobCard.module.less'
 
 interface JobCardProps {
     task: Project;
@@ -44,9 +45,10 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
     return (
         <Link href={`/project/${task.projectId}`}>
             <Box
+                className={classes.root}
                 borderRadius="2xl"
                 overflow="hidden"
-                bg="#1D365E"
+                bg="var(--sub-alt-color)"
                 cursor="pointer"
                 transition="all 0.2s"
                 _hover={{
@@ -54,7 +56,7 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                 }}
                 opacity={Date.now() > task.vestingEndTime ? 0.4 : 1}
             >
-                <Box h="200px">
+                <Box h="150px">
                     <Image
                         src={
                             description?.thumbnail ??
@@ -65,16 +67,16 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                         w="100%"
                     />
                 </Box>
-                <Box p="15px" minH="280px">
+                <Box p="12px 20px 10px" minH="260px">
                     <Text
-                        fontSize="24px"
-                        fontWeight="800"
+                        fontSize="28px"
+                        fontWeight="700"
                         textColor="white"
                         mb="15px"
                     >
                         {task.title}
                     </Text>
-                    <HStack mb="15px" spacing="30px">
+                    <HStack mb="15px" spacing="30px" justifyContent="space-between">
                         <HStack>
                             <Avatar
                                 name={task.accountId}
@@ -87,45 +89,51 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             </Text>
                         </HStack>
                         {!!projectInfoQuery.data && (
-                            <HStack w="100%">
+                            <Flex w="100%" alignItems="end" flexDir="column" maxW="500px"> 
+                                <Text
+                                    textColor="white"
+                                    fontSize="16px"
+                                    fontWeight="400"
+                                >{`${projectInfoQuery.data.funded}/${task.target} Ⓝ`}</Text>
                                 <Progress
                                     value={Number(projectInfoQuery.data.funded)}
                                     max={Number(task.target)}
                                     size="sm"
                                     borderRadius="3xl"
                                     colorScheme="pink"
-                                    flex="1"
+                                    height="3px"
+                                    width="100%"
                                 />
-                                <Text
-                                    textColor="white"
-                                    fontSize="18px"
-                                    fontWeight="600"
-                                >{`${projectInfoQuery.data.funded}/${task.target} Ⓝ`}</Text>
-                            </HStack>
+                            </Flex>
                         )}
                     </HStack>
                     <Flex justifyContent="space-between" mb="10px">
                         <Flex
-                            bg={
+                            border={
                                 Date.now() >= task.startedAt &&
                                 Date.now() <= task.endedAt
-                                    ? 'white'
-                                    : undefined
+                                    ? '1px solid var(--main-color)'
+                                    : '0'
                             }
                             alignItems="center"
-                            padding="0 10px"
-                            borderRadius="3xl"
+                            padding="7px 10px"
+                            borderRadius="7px"
                         >
                             <Text
-                                fontSize="16px"
-                                fontWeight="800"
-                                lineHeight="16px"
-                                textColor="#5D9DDB"
+                                fontSize="15px"
+                                fontWeight="700"
+                                lineHeight="15px"
+                                textColor={
+                                  Date.now() >= task.startedAt &&
+                                  Date.now() <= task.endedAt
+                                  ? 'var(--main-color)'
+                                  : 'var(--text-color)'
+                                }
                             >
-                                FUNDING TIME
+                                FUNDING
                             </Text>
                         </Flex>
-                        <HStack mb="15px">
+                        <HStack alignItems="center">
                             <HStack>
                                 <div
                                     style={{
@@ -148,25 +156,32 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                     </Flex>
                     <Flex justifyContent="space-between" mb="20px">
                         <Flex
-                            bg={
+                            border={
                                 Date.now() >= task.vestingStartTime &&
                                 Date.now() <= task.vestingEndTime
-                                    ? 'white'
-                                    : undefined
+                                    ? '1px solid var(--main-color)'
+                                    : '0px'
                             }
+                            borderWidth="1px"
                             alignItems="center"
-                            padding="0 10px"
-                            borderRadius="3xl"
+                            padding="7px 10px"
+                            borderRadius="7px"
                         >
                             <Text
-                                fontSize="16px"
-                                fontWeight="800"
-                                textColor="#5D9DDB"
+                                fontSize="15px"
+                                fontWeight="700"
+                                lineHeight="15px"
+                                textColor={
+                                  Date.now() >= task.vestingStartTime &&
+                                  Date.now() <= task.vestingEndTime
+                                  ? 'var(--main-color)'
+                                  : 'var(--text-color)'
+                                }
                             >
-                                VESTING TIME
+                                VESTING
                             </Text>
                         </Flex>
-                        <HStack mb="15px">
+                        <HStack alignItems="center">
                             <HStack>
                                 <div
                                     style={{
@@ -188,8 +203,8 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                         </HStack>
                     </Flex>
                     <Text
-                        fontSize="16px"
-                        textColor="white"
+                        fontSize="15px"
+                        textColor="var(--text-color)"
                         noOfLines={2}
                         w="100%"
                     >

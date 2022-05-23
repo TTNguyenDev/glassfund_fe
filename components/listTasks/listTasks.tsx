@@ -41,8 +41,8 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                         {isCreatable && (
                             <FlexboxGrid.Item
                                 as={Col}
-                                lg={gridBreakpoints?.lg ?? 6}
-                                md={gridBreakpoints?.md ?? 8}
+                                lg={gridBreakpoints?.lg ?? 1}
+                                md={gridBreakpoints?.md ?? 1}
                                 sm={gridBreakpoints?.sm ?? 12}
                                 xs={gridBreakpoints?.xs ?? 24}
                                 colspan={24}

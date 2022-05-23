@@ -27,7 +27,7 @@ export const CardCreateTask: React.FunctionComponent<
                         <div
                             style={{
                                 marginBottom: 10,
-                                color: '#8e54e9',
+                                color: 'var(--text-color)',
                             }}
                         >
                             <BsPlusSquareDotted size={45} />
@@ -36,7 +36,7 @@ export const CardCreateTask: React.FunctionComponent<
                             style={{
                                 fontWeight: 600,
                                 fontSize: '1.15em',
-                                color: '#333',
+                                color: 'var(--text-color)',
                             }}
                         >
                             Create New Project
