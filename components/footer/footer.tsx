@@ -39,7 +39,7 @@ export const Footer: React.FunctionComponent<FooterProps> = () => {
                                 <Text
                                     background="var(--primary-gradient)"
                                     backgroundClip="text"
-                                    fontSize="32px"
+                                    fontSize="28px"
                                     fontWeight="500"
                                 >
                                     Glass Fund

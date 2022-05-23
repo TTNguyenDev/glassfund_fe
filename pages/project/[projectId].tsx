@@ -99,7 +99,7 @@ export default function ProjectDetailsPage() {
                 <title>{data ? data.title : projectId}</title>
             </Header>
             <Layout>
-                <Box maxW="1600px" margin="auto">
+                <Box maxW="var(--max-width)" margin="auto" padding="0 94px 60px">
                     <Box>
                         <Image
                             src={
@@ -108,7 +108,9 @@ export default function ProjectDetailsPage() {
                             }
                             objectFit="cover"
                             w="100%"
-                            h="400px"
+                            h="134px"
+                            marginTop="24px"
+                            borderRadius="8px"
                         />
                     </Box>
                     {data.forceStopTs && (
