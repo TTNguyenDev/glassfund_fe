@@ -12,7 +12,6 @@ import { Box, Heading } from '@chakra-ui/react';
 export default function Home() {
     const {
         authLoading,
-        logged,
         jobs,
         listJobsLoading,
         fetchNextPage,
