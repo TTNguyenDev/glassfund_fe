@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { Modal, DatePicker, DateRangePicker } from 'rsuite';
+import { Modal } from 'rsuite';
 import { useCreateProject } from '../../hooks/useCreateProject';
 import { ModalsController } from '../../utils/modalsController';
-import * as dateFns from 'date-fns';
+import DatePicker from 'react-datepicker';
 import {
     AspectRatio,
     Box,
@@ -25,6 +25,7 @@ import {
 import { Editor } from '../editor';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { useMutation } from 'react-query';
+import moment from 'moment';
 
 type createProjectModalProps = {};
 
@@ -74,6 +75,7 @@ export const CreateProjectModal: React.FunctionComponent<
     const openFileImport = useCallback(async () => {
         fileInputRef.current?.click();
     }, []);
+    const [startDate, setStartDate] = React.useState(new Date());
     return (
         <Modal
             size="sm"
@@ -190,47 +192,47 @@ export const CreateProjectModal: React.FunctionComponent<
                                 !!createProjectForm.formState.errors.startedAt
                             }
                         >
-                            <FormLabel>Funding Time</FormLabel>
-                            <Input
-                                hidden
-                                {...createProjectForm.register('startedAt', {
-                                    required:
-                                        'Funding time is a required field',
-                                })}
-                            />
-                            <Input
-                                hidden
-                                {...createProjectForm.register('endedAt', {
-                                    required:
-                                        'Funding time is a required field',
-                                })}
-                            />
-                            <Box h="40px">
-                                <DateRangePicker
-                                    format="yyyy-MM-dd hh:mm aa"
-                                    showMeridian
-                                    style={{ width: '100%', marginBottom: -15 }}
-                                    disabledDate={(date) =>
-                                        dateFns.isBefore(
-                                            date!,
-                                            dateFns.subDays(new Date(), 1)
-                                        )
-                                    }
-                                    onChange={(value) => {
-                                        if (!value) return;
-                                        createProjectForm.setValue(
+                            <FormLabel>Started At</FormLabel>
+                            <DatePicker
+                                selected={
+                                    createProjectForm.watch('startedAt')
+                                        ? new Date(
+                                              createProjectForm.watch(
+                                                  'startedAt'
+                                              )
+                                          )
+                                        : null
+                                }
+                                onChange={(date: Date) => {
+                                    createProjectForm.setValue(
+                                        'startedAt',
+                                        date.getTime()
+                                    );
+                                    createProjectForm.trigger('startedAt');
+                                }}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeIntervals={5}
+                                filterDate={(date) => {
+                                    return moment(new Date())
+                                        .subtract(1, 'd')
+                                        .isBefore(moment(date));
+                                }}
+                                filterTime={(time) => {
+                                    return Date.now() < time.getTime();
+                                }}
+                                customInput={
+                                    <Input
+                                        {...createProjectForm.register(
                                             'startedAt',
-                                            value[0].getTime()
-                                        );
-                                        createProjectForm.setValue(
-                                            'endedAt',
-                                            value[1].getTime()
-                                        );
-                                        createProjectForm.trigger('startedAt');
-                                        createProjectForm.trigger('endedAt');
-                                    }}
-                                />
-                            </Box>
+                                            {
+                                                required:
+                                                    'Started at is a required field',
+                                            }
+                                        )}
+                                    />
+                                }
+                            />
                             {createProjectForm.formState.errors.startedAt && (
                                 <FormErrorMessage>
                                     {
@@ -242,67 +244,194 @@ export const CreateProjectModal: React.FunctionComponent<
                         </FormControl>
                         <FormControl
                             isInvalid={
+                                !!createProjectForm.formState.errors.endedAt
+                            }
+                        >
+                            <FormLabel>Ended At</FormLabel>
+                            <DatePicker
+                                selected={
+                                    createProjectForm.watch('endedAt')
+                                        ? new Date(
+                                              createProjectForm.watch('endedAt')
+                                          )
+                                        : null
+                                }
+                                onChange={(date: Date) => {
+                                    createProjectForm.setValue(
+                                        'endedAt',
+                                        date.getTime()
+                                    );
+                                    createProjectForm.trigger('endedAt');
+                                }}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeIntervals={5}
+                                filterDate={(date) => {
+                                    return moment(
+                                        createProjectForm.watch('startedAt')
+                                    )
+                                        .subtract(1, 'd')
+                                        .isBefore(moment(date));
+                                }}
+                                filterTime={(time) => {
+                                    return (
+                                        createProjectForm.watch('startedAt') <
+                                        time.getTime()
+                                    );
+                                }}
+                                customInput={
+                                    <Input
+                                        {...createProjectForm.register(
+                                            'endedAt',
+                                            {
+                                                required:
+                                                    'Ended at is a required field',
+                                            }
+                                        )}
+                                        placeholder="Ended At"
+                                    />
+                                }
+                            />
+                            {createProjectForm.formState.errors.endedAt && (
+                                <FormErrorMessage>
+                                    {
+                                        createProjectForm.formState.errors
+                                            .endedAt.message
+                                    }
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            isInvalid={
                                 !!createProjectForm.formState.errors
                                     .vestingStartTime
                             }
                         >
-                            <FormLabel>Vesting Time</FormLabel>
-                            <Input
-                                hidden
-                                {...createProjectForm.register(
-                                    'vestingStartTime',
-                                    {
-                                        required:
-                                            'Vesting time is a required field',
-                                    }
-                                )}
-                            />
-                            <Input
-                                hidden
-                                {...createProjectForm.register(
-                                    'vestingEndTime',
-                                    {
-                                        required:
-                                            'Vesting time is a required field',
-                                    }
-                                )}
-                            />
-                            <Box h="40px">
-                                <DateRangePicker
-                                    format="yyyy-MM-dd hh:mm aa"
-                                    showMeridian
-                                    style={{ width: '100%', marginBottom: -15 }}
-                                    disabledDate={(date) =>
-                                        dateFns.isBefore(
-                                            date!,
-                                            dateFns.subDays(new Date(), 1)
+                            <FormLabel>Vesting Start Time</FormLabel>
+                            <DatePicker
+                                selected={
+                                    createProjectForm.watch('vestingStartTime')
+                                        ? new Date(
+                                              createProjectForm.watch(
+                                                  'vestingStartTime'
+                                              )
+                                          )
+                                        : null
+                                }
+                                onChange={(date: Date) => {
+                                    createProjectForm.setValue(
+                                        'vestingStartTime',
+                                        date.getTime()
+                                    );
+                                    createProjectForm.trigger(
+                                        'vestingStartTime'
+                                    );
+                                }}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeIntervals={5}
+                                filterDate={(date) => {
+                                    return moment(
+                                        createProjectForm.watch('endedAt')
+                                    )
+                                        .subtract(1, 'd')
+                                        .isBefore(moment(date));
+                                }}
+                                filterTime={(time) => {
+                                    return (
+                                        moment(
+                                            createProjectForm.watch('endedAt')
                                         )
-                                    }
-                                    onChange={(value) => {
-                                        if (!value) return;
-                                        createProjectForm.setValue(
+                                            .seconds(0)
+                                            .milliseconds(0)
+                                            .valueOf() <= time.getTime()
+                                    );
+                                }}
+                                customInput={
+                                    <Input
+                                        {...createProjectForm.register(
                                             'vestingStartTime',
-                                            value[0].getTime()
-                                        );
-                                        createProjectForm.setValue(
-                                            'vestingEndTime',
-                                            value[1].getTime()
-                                        );
-                                        createProjectForm.trigger(
-                                            'vestingStartTime'
-                                        );
-                                        createProjectForm.trigger(
-                                            'vestingEndTime'
-                                        );
-                                    }}
-                                />
-                            </Box>
+                                            {
+                                                required:
+                                                    'Vesting start time is a required field',
+                                            }
+                                        )}
+                                        placeholder="Vesting Start Time"
+                                    />
+                                }
+                            />
                             {createProjectForm.formState.errors
                                 .vestingStartTime && (
                                 <FormErrorMessage>
                                     {
                                         createProjectForm.formState.errors
                                             .vestingStartTime.message
+                                    }
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            isInvalid={
+                                !!createProjectForm.formState.errors
+                                    .vestingEndTime
+                            }
+                        >
+                            <FormLabel>Vesting End Time</FormLabel>
+                            <DatePicker
+                                selected={
+                                    createProjectForm.watch('vestingEndTime')
+                                        ? new Date(
+                                              createProjectForm.watch(
+                                                  'vestingEndTime'
+                                              )
+                                          )
+                                        : null
+                                }
+                                onChange={(date: Date) => {
+                                    createProjectForm.setValue(
+                                        'vestingEndTime',
+                                        date.getTime()
+                                    );
+                                    createProjectForm.trigger('vestingEndTime');
+                                }}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeIntervals={5}
+                                filterDate={(date) => {
+                                    return moment(
+                                        createProjectForm.watch(
+                                            'vestingStartTime'
+                                        )
+                                    )
+                                        .subtract(1, 'd')
+                                        .isBefore(moment(date));
+                                }}
+                                filterTime={(time) => {
+                                    return (
+                                        createProjectForm.watch(
+                                            'vestingStartTime'
+                                        ) < time.getTime()
+                                    );
+                                }}
+                                customInput={
+                                    <Input
+                                        {...createProjectForm.register(
+                                            'vestingEndTime',
+                                            {
+                                                required:
+                                                    'Vesting ended time is a required field',
+                                            }
+                                        )}
+                                        placeholder="Vesting End Time"
+                                    />
+                                }
+                            />
+                            {createProjectForm.formState.errors
+                                .vestingEndTime && (
+                                <FormErrorMessage>
+                                    {
+                                        createProjectForm.formState.errors
+                                            .vestingEndTime.message
                                     }
                                 </FormErrorMessage>
                             )}
