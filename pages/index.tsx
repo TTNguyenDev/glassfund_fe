@@ -46,13 +46,6 @@ export default function Home() {
                         </Heading>
                         {authLoading && <Loader />}
                         <div className={classes.wrapper}>
-                            {/*<div className={classes.top}>
-                                <TaskFilter
-                                    filter={filter}
-                                    setTaskFilter={setTaskFilter}
-                                    applyTaskFilter={applyTaskFilter}
-                                />
-                            </div>*/}
                             <div className={classes.main}>
                                 <ListTasks
                                     tasks={jobs}
