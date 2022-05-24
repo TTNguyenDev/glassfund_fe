@@ -211,7 +211,8 @@ export const CreateProjectModal: React.FunctionComponent<
                                     createProjectForm.trigger('startedAt');
                                 }}
                                 showTimeSelect
-                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeFormat="HH:mm"
+                                dateFormat="MMMM d, yyyy HH:mm"
                                 timeIntervals={5}
                                 filterDate={(date) => {
                                     return moment(new Date())
@@ -264,7 +265,8 @@ export const CreateProjectModal: React.FunctionComponent<
                                     createProjectForm.trigger('endedAt');
                                 }}
                                 showTimeSelect
-                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeFormat="HH:mm"
+                                dateFormat="MMMM d, yyyy HH:mm"
                                 timeIntervals={5}
                                 filterDate={(date) => {
                                     return moment(
@@ -328,7 +330,8 @@ export const CreateProjectModal: React.FunctionComponent<
                                     );
                                 }}
                                 showTimeSelect
-                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeFormat="HH:mm"
+                                dateFormat="MMMM d, yyyy HH:mm"
                                 timeIntervals={5}
                                 filterDate={(date) => {
                                     return moment(
@@ -395,7 +398,8 @@ export const CreateProjectModal: React.FunctionComponent<
                                     createProjectForm.trigger('vestingEndTime');
                                 }}
                                 showTimeSelect
-                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeFormat="HH:mm"
+                                dateFormat="MMMM d, yyyy HH:mm"
                                 timeIntervals={5}
                                 filterDate={(date) => {
                                     return moment(
