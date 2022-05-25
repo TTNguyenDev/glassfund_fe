@@ -203,12 +203,12 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                                 </div>
                                 <Text textColor="#d385ee">{`${moment(
                                     task.vestingStartTime
-                                ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                ).format('DD/MM/YYYY HH:mm')}`}</Text>
                             </HStack>
                             <MdOutlineDoubleArrow color="#fff" size="20" />
                             <Text textColor="#d385ee">{`${moment(
                                 task.vestingEndTime
-                            ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                            ).format('DD/MM/YYYY HH:mm')}`}</Text>
                         </HStack>
                     </Flex>
                     <Text

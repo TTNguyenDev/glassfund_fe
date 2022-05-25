@@ -298,12 +298,12 @@ export default function ProjectDetailsPage() {
                                     </div>
                                     <Text textColor="#d385ee">{`${moment(
                                         data.startedAt
-                                    ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                    ).format('DD/MM/YYYY HH:mm')}`}</Text>
                                 </HStack>
                                 <MdOutlineDoubleArrow color="#fff" size="20" />
                                 <Text textColor="#d385ee">{`${moment(
                                     data.endedAt
-                                ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                ).format('DD/MM/YYYY HH:mm')}`}</Text>
                             </HStack>
                         </Flex>
                         <Flex justifyContent="space-between" mb="20px">
