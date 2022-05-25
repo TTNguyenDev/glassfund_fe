@@ -99,7 +99,11 @@ export default function ProjectDetailsPage() {
                 <title>{data ? data.title : projectId}</title>
             </Header>
             <Layout>
-                <Box maxW="var(--max-width)" margin="auto" padding="0 94px 60px">
+                <Box
+                    maxW="var(--max-width)"
+                    margin="auto"
+                    padding="0 94px 60px"
+                >
                     <Box>
                         <Image
                             src={
@@ -230,7 +234,12 @@ export default function ProjectDetailsPage() {
                                 </Text>
                             </HStack>
                             {!!projectInfoQuery.data && (
-                                <Flex w="100%" maxW="600px" flexDir="column" alignItems="end">
+                                <Flex
+                                    w="100%"
+                                    maxW="600px"
+                                    flexDir="column"
+                                    alignItems="end"
+                                >
                                     <Text
                                         textColor="white"
                                         fontSize="16px"
@@ -251,7 +260,7 @@ export default function ProjectDetailsPage() {
                             )}
                         </HStack>
                         <Flex justifyContent="space-between" mb="10px">
-                        <Flex
+                            <Flex
                                 border={
                                     Date.now() >= data.startedAt &&
                                     Date.now() <= data.endedAt
@@ -267,10 +276,10 @@ export default function ProjectDetailsPage() {
                                     fontWeight="700"
                                     lineHeight="15px"
                                     textColor={
-                                      Date.now() >= data.startedAt &&
-                                      Date.now() <= data.endedAt
-                                      ? 'var(--main-color)'
-                                      : 'var(--text-color)'
+                                        Date.now() >= data.startedAt &&
+                                        Date.now() <= data.endedAt
+                                            ? 'var(--main-color)'
+                                            : 'var(--text-color)'
                                     }
                                 >
                                     FUNDING
@@ -315,10 +324,10 @@ export default function ProjectDetailsPage() {
                                     fontWeight="700"
                                     lineHeight="15px"
                                     textColor={
-                                      Date.now() >= data.vestingStartTime &&
-                                      Date.now() <= data.vestingEndTime
-                                      ? 'var(--main-color)'
-                                      : 'var(--text-color)'
+                                        Date.now() >= data.vestingStartTime &&
+                                        Date.now() <= data.vestingEndTime
+                                            ? 'var(--main-color)'
+                                            : 'var(--text-color)'
                                     }
                                 >
                                     VESTING
@@ -337,12 +346,12 @@ export default function ProjectDetailsPage() {
                                     </div>
                                     <Text textColor="#d385ee">{`${moment(
                                         data.vestingStartTime
-                                    ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                    ).format('DD/MM/YYYY HH:mm')}`}</Text>
                                 </HStack>
                                 <MdOutlineDoubleArrow color="#fff" size="20" />
                                 <Text textColor="#d385ee">{`${moment(
                                     data.vestingEndTime
-                                ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                ).format('DD/MM/YYYY HH:mm')}`}</Text>
                             </HStack>
                         </Flex>
                         <HStack
@@ -355,9 +364,14 @@ export default function ProjectDetailsPage() {
                             <Text>Claimed: </Text>
                             <Text>{projectInfoQuery.data?.claimed} Ⓝ</Text>
                         </HStack>
-                        <Text fontSize="16px" textColor="var(--text-color)" w="100%">
-                            {description?.body.replace(/<(.|\n)*?>/g, ' ')}
-                        </Text>
+                        <Box
+                            fontSize="16px"
+                            textColor="var(--text-color)"
+                            w="100%"
+                            dangerouslySetInnerHTML={{
+                                __html: description?.body ?? '',
+                            }}
+                        ></Box>
                     </Box>
                 </Box>
             </Layout>

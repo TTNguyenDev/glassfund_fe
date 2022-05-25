@@ -13,7 +13,7 @@ import moment from 'moment';
 import { BsClock } from 'react-icons/bs';
 import { MdOutlineDoubleArrow } from 'react-icons/md';
 import Link from 'next/link';
-import classes from './jobCard.module.less'
+import classes from './jobCard.module.less';
 
 interface JobCardProps {
     task: Project;
@@ -76,7 +76,11 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                     >
                         {task.title}
                     </Text>
-                    <HStack mb="15px" spacing="30px" justifyContent="space-between">
+                    <HStack
+                        mb="15px"
+                        spacing="30px"
+                        justifyContent="space-between"
+                    >
                         <HStack>
                             <Avatar
                                 name={task.accountId}
@@ -89,7 +93,12 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             </Text>
                         </HStack>
                         {!!projectInfoQuery.data && (
-                            <Flex w="100%" alignItems="end" flexDir="column" maxW="500px"> 
+                            <Flex
+                                w="100%"
+                                alignItems="end"
+                                flexDir="column"
+                                maxW="500px"
+                            >
                                 <Text
                                     textColor="white"
                                     fontSize="16px"
@@ -124,10 +133,10 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                                 fontWeight="700"
                                 lineHeight="15px"
                                 textColor={
-                                  Date.now() >= task.startedAt &&
-                                  Date.now() <= task.endedAt
-                                  ? 'var(--main-color)'
-                                  : 'var(--text-color)'
+                                    Date.now() >= task.startedAt &&
+                                    Date.now() <= task.endedAt
+                                        ? 'var(--main-color)'
+                                        : 'var(--text-color)'
                                 }
                             >
                                 FUNDING
@@ -146,12 +155,12 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                                 </div>
                                 <Text textColor="#d385ee">{`${moment(
                                     task.startedAt
-                                ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                                ).format('DD/MM/YYYY HH:mm')}`}</Text>
                             </HStack>
                             <MdOutlineDoubleArrow color="#fff" size="20" />
                             <Text textColor="#d385ee">{`${moment(
                                 task.endedAt
-                            ).format('DD/MM/YYYY hh:mm')}`}</Text>
+                            ).format('DD/MM/YYYY HH:mm')}`}</Text>
                         </HStack>
                     </Flex>
                     <Flex justifyContent="space-between" mb="20px">
@@ -172,10 +181,10 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                                 fontWeight="700"
                                 lineHeight="15px"
                                 textColor={
-                                  Date.now() >= task.vestingStartTime &&
-                                  Date.now() <= task.vestingEndTime
-                                  ? 'var(--main-color)'
-                                  : 'var(--text-color)'
+                                    Date.now() >= task.vestingStartTime &&
+                                    Date.now() <= task.vestingEndTime
+                                        ? 'var(--main-color)'
+                                        : 'var(--text-color)'
                                 }
                             >
                                 VESTING
