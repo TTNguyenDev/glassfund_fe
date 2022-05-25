@@ -117,7 +117,7 @@ export default function ProjectDetailsPage() {
                             borderRadius="8px"
                         />
                     </Box>
-                    {data.forceStopTs && (
+                    {projectInfoQuery.data?.forceStopTs && (
                         <Box p="15px">
                             <Alert status="error" fontWeight="600">
                                 <AlertIcon />

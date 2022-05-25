@@ -155,7 +155,7 @@ export const CreateProjectModal: React.FunctionComponent<
                             <NumberInput
                                 defaultValue={1}
                                 min={1}
-                                precision={0}
+                                precision={0.01}
                                 onChange={(value) =>
                                     createProjectForm.setValue(
                                         'minimumDeposit',
