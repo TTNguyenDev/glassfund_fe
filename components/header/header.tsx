@@ -26,12 +26,12 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
         return [
             {
                 href: '/',
-                title: 'Projects',
+                title: 'All Projects',
                 matchUrl: ['/'],
             },
             {
                 href: `/account/${userId}`,
-                title: 'My Projects',
+                title: 'My Profile',
                 matchUrl: ['/account/[accountId]'],
             },
         ];
@@ -45,28 +45,30 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
             return (
                 <Link key={title} href={href}>
                     <Button
-                        w='120px'
+                        maxW='200px'
                         h="100%"
+                        flex='1'
                         borderRadius="none"
                         bg="transparent"
-                        borderBottom="solid 3px rgba(231, 234, 246, 1)"
+                        borderBottom="solid 3px var(--text-color)"
                         color="white"
                         _hover={{
-                            bg: 'rgba(255, 255, 255, 0.1)',
+                            bg: 'rgba(255, 255, 255, 0.06)',
                             borderImageSlice: 1,
                         }}
                         _active={{
-                            bg: 'rgba(255, 255, 255, 0.1)',
+                            bg: 'rgba(255, 255, 255, 0.06)',
                             borderImageSlice: 1,
                             borderImageSource: 'var(--primary-gradient)',
-                            borderBottom: "solid 4px rgba(231, 234, 246, 1)",
+                            borderBottom: "solid 5.5px rgba(231, 234, 246, 1)",
+                            backdropFilter: 'blur(16px)',
                         }}
                         isActive={isActive}
                     >
                         {isActive ? (
                             <Text
-                                fontSize="16px"
-                                fontWeight="600"
+                                fontSize="19px"
+                                fontWeight="650"
                                 background="var(--primary-gradient)"
                                 backgroundClip="text"
                             >
@@ -74,9 +76,9 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                             </Text>
                         ) : (
                             <Text
-                                fontSize="15px"
+                                fontSize="17px"
                                 fontWeight="600"
-                                textColor="white"
+                                textColor="var(--ballloon-text-color)"
                             >
                                 {title}
                             </Text>
@@ -88,13 +90,20 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
     }, [menu, router.asPath]);
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} 
+            style={{
+                position: 'sticky', 
+                top: 0, 
+                width: '100%',
+                zIndex: 100,
+                background: 'rgba(32, 34, 37, 0.4)'
+            }}>
             <div className={classes.navbar}>
                 <div className={classes.navbar_header}>
                     <Brand />
                 </div>
                 {authLoading ? null : logged ? (
-                    <HStack h="100%">
+                    <HStack h="100%" flex='1' justifyContent='end'>
                         {menuComp}
                         <HeaderAccount
                             accountType={accountType}

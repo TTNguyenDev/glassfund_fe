@@ -15,8 +15,9 @@ export const Brand: React.FunctionComponent<BrandProps> = () => {
                     <Text
                         background="var(--primary-gradient)"
                         backgroundClip="text"
-                        fontSize="32px"
-                        fontWeight="700"
+                        fontSize="40px"
+                        fontWeight="600"
+                        letterSpacing="0.05em"
                     >
                         Glass Fund
                     </Text>

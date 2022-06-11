@@ -17,6 +17,7 @@ import {
     BsYoutube,
 } from 'react-icons/bs';
 import classes from './footer.module.less';
+import Link from 'next/link'
 
 interface FooterProps {}
 
@@ -52,7 +53,9 @@ export const Footer: React.FunctionComponent<FooterProps> = () => {
                                 >
                                     <BsDiscord size={25} />
                                     <BsTelegram size={25} />
-                                    <BsTwitter size={25} />
+                                    <Link href={"https://twitter.com/glassfundisnear"}>
+                                        <BsTwitter size={25} href={"https://twitter.com/glassfundisnear"}/>
+                                    </Link>
                                     <BsYoutube size={25} />
                                 </HStack>
                             </VStack>
@@ -75,8 +78,13 @@ export const Footer: React.FunctionComponent<FooterProps> = () => {
                                 <Heading as="h5" fontSize="20px" mb="15px">
                                     Community
                                 </Heading>
+                                <Link href={"https://twitter.com/glassfundisnear"}>
+                                    Join Twitter
+                                </Link>
+                                {/*
                                 <Text>Join Discord</Text>
                                 <Text>Join Telegram</Text>
+                                */}
                             </Box>
                         </Center>
                     </GridItem>

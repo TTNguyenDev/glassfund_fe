@@ -7,7 +7,10 @@ import { Loader } from '../components/loader';
 import { ListTasks } from '../components/listTasks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { Box, Heading } from '@chakra-ui/react';
+import { background, Box, Heading } from '@chakra-ui/react';
+import {TaskFilter} from '../components/tasksFilter';
+import { filter } from 'lodash';
+import Image from 'next/image';
 
 export default function Home() {
     const {
@@ -29,30 +32,30 @@ export default function Home() {
             <Layout>
                 {app.data.cacheReady ? (
                     <Box
-                        maxW="1600px"
+                        maxW="1240px"
                         margin="auto"
                         marginTop="30px"
                         padding="0 15px"
                     >
                         <Heading
                             display="inline-block"
-                            fontSize="28px"
-                            fontWeight="500"
+                            fontSize="54px"
+                            fontWeight="600"
                             background="var(--balloon-text-color)"
                             backgroundClip="text"
-                            mb="25px"
+                            mb="20px"
                         >
                             All projects
                         </Heading>
                         {authLoading && <Loader />}
                         <div className={classes.wrapper}>
-                            {/*<div className={classes.top}>
+                            <div className={classes.top}>
                                 <TaskFilter
-                                    filter={filter}
-                                    setTaskFilter={setTaskFilter}
-                                    applyTaskFilter={applyTaskFilter}
+                                    filter={'All'}
+                                    setTaskFilter={filter}
+                                    applyTaskFilter={filter}
                                 />
-                            </div>*/}
+                            </div>
                             <div className={classes.main}>
                                 <ListTasks
                                     tasks={jobs}

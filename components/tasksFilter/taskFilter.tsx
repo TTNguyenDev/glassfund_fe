@@ -13,6 +13,7 @@ import classes from './taskFilter.module.less';
 import Select from 'react-select';
 import { CategoriesListBadge } from '../categoriesListBadge';
 import { Wrapper } from '../wrapper';
+import { getFontDefinitionFromNetwork } from 'next/dist/server/font-utils';
 
 type TaskFilterProps = {
     filter: any;
@@ -22,20 +23,24 @@ type TaskFilterProps = {
 
 export const SORT_SELECT_OPTIONS = [
     {
-        label: 'Newest',
-        value: 'newest',
+        label: 'All',
+        value: 'all',
     },
     {
-        label: 'Oldest',
-        value: 'oldest',
+        label: 'Pending',
+        value: 'pending',
     },
     {
-        label: 'High price',
-        value: 'high_price',
+        label: 'Funding',
+        value: 'funding',
     },
     {
-        label: 'Low price',
-        value: 'low_price',
+        label: 'Vesting',
+        value: 'vesting',
+    },
+    {
+        label: 'Done',
+        value: 'done',
     },
 ];
 
@@ -58,167 +63,109 @@ export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
     }, []);
 
     return (
-        <Wrapper className={classes.root}>
-            <div className={classes.top}>
-                <div>
-                    <Select
-                        options={SORT_SELECT_OPTIONS}
-                        isSearchable={false}
-                        defaultValue={
-                            filter?.sort
-                                ? SORT_SELECT_OPTIONS.find(
-                                      (o) => o.value === filter.sort
-                                  )
-                                : SORT_SELECT_OPTIONS[0]
-                        }
-                        components={{
-                            IndicatorSeparator: () => null,
-                        }}
-                        styles={{
-                            control: (base) => ({
-                                ...base,
-                                minWidth: 120,
-                                fontWeight: 600,
-                                border: 'none',
-                                background: '#f7f7fa',
-                                color: '#575757',
-                                borderRadius: 6,
-                                cursor: 'pointer',
-                            }),
-                        }}
-                        onChange={handleSortSelectChange}
-                    />
-                </div>
-                <div className={classes.list_category}>
-                    <CategoriesListBadge
-                        categoryActive={
-                            filter.categories ? filter.categories : undefined
-                        }
-                        setCategoryActive={setCategoryActive}
-                    />
-                </div>
-                <div>
-                    <Button
-                        style={{ fontWeight: 600, fontSize: 14 }}
-                        onClick={handleToggle}
-                    >
-                        <Stack spacing={10}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <BsFilter size={20} />
-                            </div>
-                            <div>Filter</div>
-                        </Stack>
-                    </Button>
-                </div>
+        <div className={classes.root}>
+            <div style={{height: '100%', margin: 0}}>
+                <Select
+                    className={classes.sellect}
+                    options={SORT_SELECT_OPTIONS}
+                    isSearchable={false}
+                    defaultValue={
+                        filter?.sort
+                            ? SORT_SELECT_OPTIONS.find(
+                                  (o) => o.value === filter.sort
+                              )
+                            : SORT_SELECT_OPTIONS[0]
+                    }
+                    components={{
+                        IndicatorSeparator: () => null,
+                    }}
+                    styles={{
+                        container: (base) => ({
+                        ...base,
+                        height: '100%',
+                        }),
+                        singleValue: (base) => ({
+                            ...base,
+                            color: 'var(--text-color)',
+                            fontWeight: '400',
+                            fontSize: 18,
+                        }),
+                        control: (base, state) => ({
+                            ...base,
+                            minWidth: 140,
+                            fontWeight: 400,
+                            fontSize: 18,
+                            border: 'none',
+                            background: 'var(--sub-alt-color)',
+                            borderRadius: 6,
+                            cursor: 'pointer',
+                            boxShadow: 'var(--primary-box-shadow-color)',
+                            height: '100%',
+                            padding: 0,
+                            gap: 5,
+                        }),
+                        valueContainer: (base) => ({
+                            ...base,
+                            padding: '0 0 0 20px'
+                        }),
+                        menu: (base) => ({
+                            ...base,
+                            background: 'var(--sub-alt-color)',
+                            color: 'var(text-color)',
+                            padding: 0,
+                            width: 120,
+                        }),
+                        option: (base, state) => ({
+                            ...base,
+                            background: state.isSelected 
+                                ? 'var(--sub-color)' 
+                                : (state.isFocused 
+                                    ? 'var(--background-color)' 
+                                    : 'var(--sub-alt-color)'),
+                            color: 'var(--text-color)',
+                            fontWeight: state.isSelected ? 600 : 500,
+                            fontSize: '16px',
+                        }),
+                        menuList: (base) => ({
+                            ...base,
+                            padding: 0
+                        })
+                    }}
+                    onChange={handleSortSelectChange}
+                />
             </div>
-            <Animation.Collapse className={classes.bottom} in={show}>
-                {(props, ref) => (
-                    <Panel
-                        {...props}
-                        ref={ref}
-                        filter={filter}
-                        setTaskFilter={setTaskFilter}
-                        applyTaskFilter={applyTaskFilter}
-                    />
-                )}
-            </Animation.Collapse>
-        </Wrapper>
-    );
-};
-
-const Panel = React.forwardRef(
-    ({ style, filter, setTaskFilter, applyTaskFilter, ...props }: any, ref) => {
-        const filterRef = useRef({});
-
-        const handleSearchInputChange = useCallback(
-            (value) => {
-                filterRef.current = {
-                    ...filterRef.current,
-                    title: value,
-                };
-            },
-            [filterRef.current]
-        );
-
-        const handleApplyButtonClick = useCallback(() => {
-            setTaskFilter(filterRef.current);
-            applyTaskFilter();
-        }, [filterRef.current]);
-
-        const handleClearButtonClick = useCallback(() => {
-            setTaskFilter({
-                ...filterRef.current,
-                title: '',
-            });
-            applyTaskFilter();
-        }, [filterRef.current]);
-
-        return (
-            <form
-                {...props}
-                ref={ref as any}
-                style={{
-                    paddingTop: 15,
-                    ...style,
-                }}
-            >
-                <FlexboxGrid align="bottom">
-                    <FlexboxGrid.Item as={Col} colspan={24} md={6}>
-                        <div className={classes.item_filter}>
-                            <div className={classes.item_filter_label}>
-                                Search
-                            </div>
-                            <InputGroup inside style={{ zIndex: 0 }}>
-                                <InputGroup.Addon>
-                                    <BsSearch />
-                                </InputGroup.Addon>
-                                <Input
-                                    onChange={handleSearchInputChange}
-                                    defaultValue={filter.title}
-                                />
-                            </InputGroup>
-                        </div>
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item
-                        as={Col}
-                        colspan={24}
-                        md={6}
-                    ></FlexboxGrid.Item>
-                    <FlexboxGrid.Item
-                        as={Col}
-                        colspan={24}
-                        md={6}
-                    ></FlexboxGrid.Item>
-                    <FlexboxGrid.Item as={Col} colspan={24} md={6}>
+            <Input
+                placeholder="Search..."
+                className={classes.search_text_field}
+            />
+            <div style={{ height: '100%' }}>
+                <Button
+                    style={{ 
+                        padding: '0 20px',
+                        height: '100%',
+                        fontWeight: 500, 
+                        fontSize: 18,
+                        background: 'var(--sub-alt-color)', 
+                        boxShadow: 'var(--primary-box-shadow-color)',
+                        color: 'var(--text-color)',
+                    }}
+                    onClick={handleToggle}
+                >
+                    <Stack spacing={10}>
+                        {/*
                         <div
-                            className={classes.item_filter}
                             style={{
                                 display: 'flex',
+                                alignItems: 'center',
                             }}
                         >
-                            <Button
-                                type="reset"
-                                style={{ width: '100%', marginRight: 5 }}
-                                onClick={handleClearButtonClick}
-                            >
-                                Clear
-                            </Button>
-                            <Button
-                                appearance="primary"
-                                style={{ width: '100%' }}
-                                onClick={handleApplyButtonClick}
-                            >
-                                Apply
-                            </Button>
+                            <BsFilter size={20} />
                         </div>
-                    </FlexboxGrid.Item>
-                </FlexboxGrid>
-            </form>
-        );
-    }
-);
+                        */}
+                        <div>Search</div>
+                    </Stack>
+                </Button>
+            </div>
+        </div>
+    );
+};
