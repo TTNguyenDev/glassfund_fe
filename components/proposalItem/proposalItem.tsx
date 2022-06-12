@@ -119,7 +119,7 @@ export const ProposalItem = ({ data, task }: ProposalItemProps) => {
                                         placement="top"
                                         trigger="click"
                                         controlId={`approve-${data.accountId}`}
-                                        ref={popoverConfirmRef}
+                                        ref={popoverConfirmRef as any}
                                         speaker={popoverConfirm(() => {
                                             handleApproveWork({
                                                 taskId: task.taskId,
@@ -139,7 +139,7 @@ export const ProposalItem = ({ data, task }: ProposalItemProps) => {
                                         placement="top"
                                         trigger="click"
                                         controlId={`reject-${data.accountId}`}
-                                        ref={popoverConfirmRef}
+                                        ref={popoverConfirmRef as any}
                                         speaker={popoverConfirm(() => {
                                             handleRejectWork({
                                                 taskId: task.taskId,
