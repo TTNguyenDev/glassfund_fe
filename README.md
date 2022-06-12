@@ -1,5 +1,5 @@
 # Nextjs-Typescript example
-
+ 
 ## How to use
 
 Download the example:
