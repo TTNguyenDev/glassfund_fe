@@ -1,8 +1,16 @@
 .root {
-    background: #fff;
-    border-radius: 12px;
+    background: var(--sub-alt-color);
+    border-radius: 15px;
     box-shadow: var(--primary-box-shadow-color);
+    box-sizing: content-box;
+    overflow: hidden;
     cursor: pointer;
+    
+    max-width: 600px;
+    min-width: 500px;
+
+    padding: 0;
+    transition: all 0.2s;
 
     &:hover {
         transition: all 0.2s;
@@ -63,4 +71,13 @@
 .owner {
     font-size: 0.95em;
     font-weight: 300;
+}
+
+.process {
+    height: fit-content;
+    background: rgba(44, 46, 49, 0.9);
+    border-radius: 30px;
+    padding: 10px 10px 10px 20px;
+    box-shadow: var(--primary-box-shadow-color);
+    align-items: end;
 }
