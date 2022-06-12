@@ -73,41 +73,6 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             justifyContent='space-between'
                             paddingEnd='20px'
                         >
-                        {/*
-                            <HStack className={classes.card_tag}>
-                                {(
-                                    Date.now() < task.vestingEndTime && (
-                                        <>
-                                            <Text
-                                                fontSize="40px"
-                                                fontWeight="700"
-                                                lineHeight="48px"
-                                                textColor="var(--balloon-text-color)"
-                                            >
-                                                11    
-                                            </Text>
-                                            <Text
-                                                fontSize="14px"
-                                                lineHeight="17px"
-                                                fontWeight="500"
-                                                textColor="var(--balloon-text-color)"
-                                            >
-                                                days<br/>Next Interval
-                                            </Text>
-                                        </>
-                                    )) || (
-                                    Date.now() > task.vestingEndTime && (
-                                        <Text
-                                            fontSize="26px"
-                                            fontWeight="500"
-                                            textColor="var(--balloon-text-color)"
-                                        >
-                                            Complete    
-                                        </Text>
-                                    ))
-                                }
-                            </HStack>
-                            */}
                             <CardTag project={task}/>
                             
                             <Flex className={classes.process}>

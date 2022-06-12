@@ -7,13 +7,14 @@ import { ListTasks } from '../../components/listTasks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useInfiniteQuery } from 'react-query';
-import { filter } from '@chakra-ui/react';
+import { filter, Box, Flex, HStack, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { Optional } from '../../common';
 import {
     ProjectService,
     FETCH_PROJECTS_LIMIT,
 } from '../../services/projectService';
+import Image from 'next/image'
 
 export default function AccountPage() {
     const app = useSelector((state: RootState) => state.app);

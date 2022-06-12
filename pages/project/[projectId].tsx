@@ -11,10 +11,19 @@ import {
     Button,
     Flex,
     HStack,
+    VStack,
     Image,
     Progress,
     Text,
+    InputGroup,
+    Input,
+    InputLeftElement,
+    InputRightElement,
+    IconButton,
 } from '@chakra-ui/react';
+import {
+    AddIcon
+} from '@chakra-ui/icons';
 import {
     Project,
     ProjectDescription,
@@ -28,6 +37,7 @@ import { IPFSUtils } from '../../utils/ipfsUtils';
 import { db } from '../../db';
 import { ModalsController } from '../../utils/modalsController';
 import { BlockChainConnector } from '../../utils/blockchain';
+import classes from './project.module.less'
 
 export default function ProjectDetailsPage() {
     const router = useRouter();
@@ -99,24 +109,95 @@ export default function ProjectDetailsPage() {
                 <title>{data ? data.title : projectId}</title>
             </Header>
             <Layout>
+                <Flex
+                    w="100%"
+                    justify="space-around"
+                >
+                    <Box maxW="1200px" w='100%'>
+                        <Image
+                            src={
+                                'https://previews.123rf.com/images/bridddy/bridddy1912/bridddy191200005/138386777-horizontal-vector-frosted-glass-blue-and-white-background-frozen-window-illustration-abstract-3d-bg-.jpg'
+                            }
+                            objectFit="cover"
+                            maxW="1200px"
+                            w="100%"
+                            h="250px"
+                            marginTop="24px"
+                            borderRadius="8px"
+                        />
+                        <HStack
+                            spacing='20px'
+                            padding='0 50px'
+                            marginTop='-80px'
+                            align="end"
+                        >
+                            <Image 
+                                borderRadius='full'
+                                boxSize='160px'
+                                src="../default_avatar.jpg"
+                                objectFit='cover'
+                                border='5px solid var(--background-color)'
+                            />
+                            <HStack
+                                spacing="30px"
+                                justifyContent="space-between"
+                                h='80px'
+                                flex='1'
+                            >
+                                <VStack
+                                    alignItems='start'
+                                    spacing='0'
+                                    justify='center'
+                                >
+                                    <Text
+                                        fontSize="30px"
+                                        fontWeight="600"
+                                        textColor="white"
+                                    >
+                                        {data.title}
+                                    </Text>
+                                    <Text 
+                                        fontSize="22px" 
+                                        fontWeight="500"
+                                        textColor="var(--text-color)"
+                                    >
+                                        {data.accountId}
+                                    </Text>
+                                </VStack> 
+                                <HStack 
+                                    spacing='12px' 
+                                    padding='10px 20px' 
+                                    background='var(--sub-alt-color)' 
+                                    boxShadow='var(--primary-box-shadow-color)' 
+                                    borderRadius='10px'
+                                >
+                                    <Image 
+                                        borderRadius='full'
+                                        boxSize='35px'
+                                        src="../NearIcon.svg"/>
+                                    <Input 
+                                        type='number'
+                                        color='var(--text-color)'
+                                        variant='unstyled' 
+                                        placeholder='Support project'
+                                        _placeholder={{ color: 'var(--text-color)', opacity: 0.4 }}/>
+                                    <IconButton aria-label='Add to friends' icon={<AddIcon />} />
+                                </HStack>
+                            </HStack>
+                        </HStack>
+                        <HStack>
+                            <VStack w="100%" flex='1' background="#fff" height="10px">
+                            </VStack>
+                            <VStack w="100%" flex='1' background="#fff" height="10px">
+                            </VStack>
+                        </HStack>
+                    </Box>
+                </Flex>
                 <Box
                     maxW="var(--max-width)"
                     margin="auto"
                     padding="0 94px 60px"
                 >
-                    <Box>
-                        <Image
-                            src={
-                                description?.thumbnail ??
-                                'https://previews.123rf.com/images/bridddy/bridddy1912/bridddy191200005/138386777-horizontal-vector-frosted-glass-blue-and-white-background-frozen-window-illustration-abstract-3d-bg-.jpg'
-                            }
-                            objectFit="cover"
-                            w="100%"
-                            h="134px"
-                            marginTop="24px"
-                            borderRadius="8px"
-                        />
-                    </Box>
                     {projectInfoQuery.data?.forceStopTs && (
                         <Box p="15px">
                             <Alert status="error" fontWeight="600">
@@ -127,14 +208,6 @@ export default function ProjectDetailsPage() {
                     )}
                     <Box p="15px">
                         <HStack justifyContent="space-between">
-                            <Text
-                                fontSize="28px"
-                                fontWeight="700"
-                                textColor="white"
-                                mb="15px"
-                            >
-                                {data.title}
-                            </Text>
                             {data.accountId !==
                                 BlockChainConnector.instance.account
                                     .accountId &&
@@ -222,17 +295,6 @@ export default function ProjectDetailsPage() {
                             spacing="30px"
                             justifyContent="space-between"
                         >
-                            <HStack>
-                                <Avatar
-                                    name={data.accountId}
-                                    round
-                                    size="30"
-                                    textSizeRatio={1.75}
-                                />
-                                <Text fontSize="16px" textColor="#6ba5c1">
-                                    {data.accountId}
-                                </Text>
-                            </HStack>
                             {!!projectInfoQuery.data && (
                                 <Flex
                                     w="100%"

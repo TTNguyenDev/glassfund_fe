@@ -10,7 +10,6 @@ import { RootState } from '../store';
 import { background, Box, Heading } from '@chakra-ui/react';
 import {TaskFilter} from '../components/tasksFilter';
 import { filter } from 'lodash';
-import Image from 'next/image';
 
 export default function Home() {
     const {
@@ -53,7 +52,7 @@ export default function Home() {
                                 <TaskFilter
                                     filter={'All'}
                                     setTaskFilter={filter}
-                                    applyTaskFilter={filter}
+                                    applyTaskFilter={() => {}}
                                 />
                             </div>
                             <div className={classes.main}>
