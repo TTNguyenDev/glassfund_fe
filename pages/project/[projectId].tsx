@@ -112,31 +112,35 @@ export default function ProjectDetailsPage() {
                 <Flex
                     w="100%"
                     justify="space-around"
+                    mb="40px"
                 >
                     <Box maxW="1200px" w='100%'>
                         <Image
                             src={
+                                description?.thumbnail ??
                                 'https://previews.123rf.com/images/bridddy/bridddy1912/bridddy191200005/138386777-horizontal-vector-frosted-glass-blue-and-white-background-frozen-window-illustration-abstract-3d-bg-.jpg'
                             }
                             objectFit="cover"
                             maxW="1200px"
                             w="100%"
-                            h="250px"
+                            h="240px"
                             marginTop="24px"
                             borderRadius="8px"
+                            boxShadow='var(--primary-box-shadow-color)'
                         />
                         <HStack
                             spacing='20px'
                             padding='0 50px'
                             marginTop='-80px'
                             align="end"
+                            mb='68px'
                         >
                             <Image 
                                 borderRadius='full'
                                 boxSize='160px'
                                 src="../default_avatar.jpg"
                                 objectFit='cover'
-                                border='5px solid var(--background-color)'
+                                border='6px solid var(--background-color)'
                             />
                             <HStack
                                 spacing="30px"
@@ -150,14 +154,14 @@ export default function ProjectDetailsPage() {
                                     justify='center'
                                 >
                                     <Text
-                                        fontSize="30px"
+                                        fontSize="28px"
                                         fontWeight="600"
                                         textColor="white"
                                     >
                                         {data.title}
                                     </Text>
                                     <Text 
-                                        fontSize="22px" 
+                                        fontSize="20px" 
                                         fontWeight="500"
                                         textColor="var(--text-color)"
                                     >
@@ -166,33 +170,243 @@ export default function ProjectDetailsPage() {
                                 </VStack> 
                                 <HStack 
                                     spacing='12px' 
-                                    padding='10px 20px' 
+                                    padding='10px 15px' 
                                     background='var(--sub-alt-color)' 
                                     boxShadow='var(--primary-box-shadow-color)' 
                                     borderRadius='10px'
+                                    maxW='220px'
+                                    h='fit-content'
                                 >
                                     <Image 
                                         borderRadius='full'
-                                        boxSize='35px'
+                                        boxSize='30px'
                                         src="../NearIcon.svg"/>
                                     <Input 
                                         type='number'
                                         color='var(--text-color)'
                                         variant='unstyled' 
-                                        placeholder='Support project'
+                                        placeholder='Support'
+                                        borderRadius='0'
                                         _placeholder={{ color: 'var(--text-color)', opacity: 0.4 }}/>
-                                    <IconButton aria-label='Add to friends' icon={<AddIcon />} />
+                                    <IconButton aria-label='Add to friends' w='30px' h='30px' icon={<AddIcon />} />
                                 </HStack>
                             </HStack>
                         </HStack>
-                        <HStack>
-                            <VStack w="100%" flex='1' background="#fff" height="10px">
+                        <HStack 
+                            borderRadius='5px' 
+                            padding='10px 0'
+                            background='var(--sub-alt-color)'
+                            boxShadow='var(--primary-box-shadow-color)'
+                            mb="20px"
+                        >
+                            <VStack alignItems='center' flex='1' spacing='10px'>
+                                <Text
+                                    fontSize="14px"
+                                    fontWeight="400"
+                                    textColor="var(--text-color)"
+                                >
+                                    Funded
+                                </Text>
+                                <HStack
+                                    justifyContent="space-between"
+                                    alignItems='end'
+                                    w='fit-content'
+                                    h='fit-content'
+                                    spacing='0'
+                                >
+                                    <Text 
+                                        fontSize="40px" 
+                                        lineHeight='40px'
+                                        fontWeight="700"
+                                        textColor="var(--main-color)"
+                                        height='fit-content'
+                                    >
+                                        {data.funded}
+                                    </Text>
+                                    <Text 
+                                        fontSize="20px" 
+                                        fontWeight="400"
+                                        textColor="var(--main-color)"
+                                    >
+                                        /{data.target}
+                                    </Text>
+                                </HStack>
                             </VStack>
-                            <VStack w="100%" flex='1' background="#fff" height="10px">
+                            <VStack alignItems='center' flex='1' spacing='10px'>
+                                <Text
+                                    fontSize="14px"
+                                    fontWeight="400"
+                                    textColor="var(--text-color)"
+                                >
+                                    Force stop
+                                </Text>
+                                <HStack
+                                    justifyContent="space-between"
+                                    alignItems='end'
+                                    w='fit-content'
+                                    h='fit-content'
+                                    spacing='0'
+                                >
+                                    <Text 
+                                        fontSize="40px" 
+                                        lineHeight='40px'
+                                        fontWeight="700"
+                                        textColor="var(--error-color)"
+                                        height='fit-content'
+                                    >
+                                        0
+                                    </Text>
+                                    <Text 
+                                        fontSize="20px" 
+                                        fontWeight="400"
+                                        textColor="var(--error-color)"
+                                    >
+                                        /185
+                                    </Text>
+                                </HStack>
+                            </VStack>
+                            <VStack alignItems='center' flex='1' spacing='10px'>
+                                <Text
+                                    fontSize="14px"
+                                    fontWeight="400"
+                                    textColor="var(--text-color)"
+                                >
+                                    Supporters
+                                </Text>
+                                <HStack
+                                    justifyContent="space-between"
+                                    alignItems='end'
+                                    w='fit-content'
+                                    h='fit-content'
+                                    spacing='0'
+                                >
+                                    <Text 
+                                        fontSize="40px" 
+                                        lineHeight='40px'
+                                        fontWeight="700"
+                                        textColor="var(--balloon-text-color)"
+                                        height='fit-content'
+                                    >
+                                        185
+                                    </Text>
+                                </HStack>
+                            </VStack>
+                            <VStack alignItems='center' flex='1' spacing='10px'>
+                                <Text
+                                    fontSize="14px"
+                                    fontWeight="400"
+                                    textColor="var(--text-color)"
+                                >
+                                    Your support
+                                </Text>
+                                <HStack
+                                    justifyContent="space-between"
+                                    alignItems='end'
+                                    w='fit-content'
+                                    h='fit-content'
+                                    spacing='5px'
+                                >
+                                    <Text 
+                                        fontSize="40px" 
+                                        lineHeight='40px'
+                                        fontWeight="700"
+                                        textColor="var(--balloon-text-color)"
+                                        height='fit-content'
+                                    >
+                                        0
+                                    </Text>
+                                    <Text 
+                                        fontSize="18px" 
+                                        fontWeight="400"
+                                        textColor="var(--balloon-text-color)"
+                                    >
+                                        NEAR
+                                    </Text>
+                                </HStack>
+                            </VStack>
+                        </HStack>
+                        <HStack spacing='20px' align='start'>
+                            {/* Left column */}
+                            <VStack 
+                                maxW="800px" 
+                                minW="700px" 
+                                flex='1'
+                                spacing='20px'
+                            >
+                                <HStack 
+                                    w='100%'
+                                    borderRadius='5px' 
+                                    padding='12px 16px'
+                                    background='var(--sub-alt-color)'
+                                    boxShadow='var(--primary-box-shadow-color)'
+                                >
+                                    <VStack alignItems='start' flex='1' spacing='10px'>
+                                        <Text
+                                            fontSize="22px"
+                                            fontWeight="500"
+                                            textColor="var(--text-color)"
+                                        >
+                                            Progress
+                                        </Text>
+                                        <HStack
+                                            justifyContent="space-between"
+                                            alignItems='end'
+                                            w='100%'
+                                            h='fit-content'
+                                            spacing='0'
+                                        >
+                                        </HStack>
+                                    </VStack>
+                                </HStack>
+                                <HStack 
+                                    w='100%'
+                                    borderRadius='5px' 
+                                    padding='12px 16px'
+                                    background='var(--sub-alt-color)'
+                                    boxShadow='var(--primary-box-shadow-color)'
+                                >
+                                    <VStack alignItems='start' flex='1' spacing='10px'>
+                                        <Text
+                                            fontSize="22px"
+                                            fontWeight="500"
+                                            textColor="var(--text-color)"
+                                        >
+                                            Description
+                                        </Text>
+                                        <Box
+                                            fontSize="16px"
+                                            textColor="var(--balloon-text-color)"
+                                            w="100%"
+                                            dangerouslySetInnerHTML={{
+                                                __html: description?.body ?? '',
+                                            }}
+                                        />
+                                    </VStack>
+                                </HStack>
+                            </VStack>
+                            <VStack w="100%">
+                                <HStack 
+                                    w='100%'
+                                    borderRadius='5px' 
+                                    padding='12px 16px'
+                                    background='var(--sub-alt-color)'
+                                    boxShadow='var(--primary-box-shadow-color)'
+                                >
+                                    <VStack alignItems='start' flex='1' spacing='10px'>
+                                        <Text
+                                            fontSize="22px"
+                                            fontWeight="500"
+                                            textColor="var(--text-color)"
+                                        >
+                                            History
+                                        </Text>
+                                    </VStack>
+                                </HStack>
                             </VStack>
                         </HStack>
                     </Box>
                 </Flex>
+                {/*
                 <Box
                     maxW="var(--max-width)"
                     margin="auto"
@@ -290,6 +504,7 @@ export default function ProjectDetailsPage() {
                                     </HStack>
                                 )}
                         </HStack>
+                        
                         <HStack
                             mb="15px"
                             spacing="30px"
@@ -426,16 +641,9 @@ export default function ProjectDetailsPage() {
                             <Text>Claimed: </Text>
                             <Text>{projectInfoQuery.data?.claimed} Ⓝ</Text>
                         </HStack>
-                        <Box
-                            fontSize="16px"
-                            textColor="var(--text-color)"
-                            w="100%"
-                            dangerouslySetInnerHTML={{
-                                __html: description?.body ?? '',
-                            }}
-                        ></Box>
                     </Box>
                 </Box>
+                */}
             </Layout>
         </>
     );

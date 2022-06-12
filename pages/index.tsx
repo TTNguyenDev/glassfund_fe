@@ -31,10 +31,10 @@ export default function Home() {
             <Layout>
                 {app.data.cacheReady ? (
                     <Box
-                        maxW="1240px"
+                        maxW="1280px"
                         margin="auto"
                         marginTop="30px"
-                        padding="0 15px"
+                        padding="0"
                     >
                         <Heading
                             display="inline-block"
@@ -43,6 +43,7 @@ export default function Home() {
                             background="var(--balloon-text-color)"
                             backgroundClip="text"
                             mb="20px"
+                            ml="20px"
                         >
                             All projects
                         </Heading>

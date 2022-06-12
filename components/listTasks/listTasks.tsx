@@ -47,8 +47,8 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                 xs={gridBreakpoints?.xs ?? 24}
                                 colspan={24}
                                 style={{
-                                    padding: '0 10px',
-                                    marginBottom: 20,
+                                    padding: '0 20px',
+                                    marginBottom: 40,
                                 }}
                             >
                                 <CardCreateTask />
@@ -66,8 +66,8 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                     xs={gridBreakpoints?.xs ?? 24}
                                     colspan={24}
                                     style={{
-                                        padding: '0 10px',
-                                        marginBottom: 20,
+                                        padding: '0 20px',
+                                        marginBottom: 40,
                                     }}
                                 >
                                     <JobCard task={task} key={task.id} />
