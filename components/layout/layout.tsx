@@ -20,9 +20,9 @@ export const Layout: React.FunctionComponent<LayoutProps> = ({
             src='/bg.jpg'
             style={{
                 width: '100vw',
-                height: '100%vh',
+                height: '100vh',
                 position: 'fixed',
-                mixBlendMode: 'multiply'
+                mixBlendMode: 'multiply',
             }}
         />
         <div style={{ position: 'absolute', width: '100%' }}>

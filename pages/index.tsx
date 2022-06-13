@@ -31,10 +31,7 @@ export default function Home() {
             <Layout>
                 {app.data.cacheReady ? (
                     <Box
-                        maxW="1280px"
-                        margin="auto"
-                        marginTop="30px"
-                        padding="0"
+                        className={classes.container}
                     >
                         <Heading
                             display="inline-block"
