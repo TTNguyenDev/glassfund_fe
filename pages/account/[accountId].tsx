@@ -156,9 +156,20 @@ export default function AccountPage() {
                                                 </Text>
                                             </HStack>
                                         </VStack>
+                                        <VStack
+                                            className={[classes.wrapbox, classes.createButton].join(' ')}
+                                        >
+                                            <HStack>
+                                                <Text>
+                                                    Create a new project
+                                                </Text>
+                                            </HStack> 
+                                        </VStack>
                                     </VStack>
                                     <VStack
                                         flex='1'
+                                        maxW='600px'
+                                        minW='500px'
                                         gap='20px'
                                     >
                                         <VStack
@@ -168,7 +179,7 @@ export default function AccountPage() {
                                                 <Text>
                                                     Email
                                                 </Text>
-                                            </HStack>
+                                            </HStack> 
                                         </VStack>
                                         <TaskFilter
                                             filter={'All'}
