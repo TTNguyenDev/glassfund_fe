@@ -39,7 +39,7 @@ export default function Home() {
                             fontWeight="600"
                             background="var(--balloon-text-color)"
                             backgroundClip="text"
-                            mb="20px"
+                            mb="40px"
                             ml="20px"
                         >
                             All projects

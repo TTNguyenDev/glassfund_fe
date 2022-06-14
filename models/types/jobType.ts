@@ -25,4 +25,4 @@ export type Task = {
     createdAt: number;
 };
 
-export type TaskType = 'available' | 'processing' | 'completed' | 'pending';
+export type ProjectState = 'pending' | 'funding' | 'vesting' | 'completed' | 'force stop';

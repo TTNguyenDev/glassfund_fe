@@ -7,14 +7,15 @@ import { ListTasks } from '../../components/listTasks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useInfiniteQuery } from 'react-query';
-import { filter, Box, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Box, Flex, HStack, VStack, Text, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { Optional } from '../../common';
 import {
     ProjectService,
     FETCH_PROJECTS_LIMIT,
 } from '../../services/projectService';
-import Image from 'next/image'
+import { TaskFilter } from '../../components/tasksFilter';
+import { filter } from 'lodash';
 
 export default function AccountPage() {
     const app = useSelector((state: RootState) => state.app);
@@ -64,6 +65,17 @@ export default function AccountPage() {
             </Header>
             <Layout activeKey="one">
                 <Container className={classes.container}>
+                    <Heading
+                        display="inline-block"
+                        fontSize="54px"
+                        fontWeight="600"
+                        background="var(--balloon-text-color)"
+                        backgroundClip="text"
+                        mb="40px"
+                        ml="20px"
+                    >
+                       My profile 
+                    </Heading>
                     <Row gutter={30}>
                         {/*<Col
                             xs={24}
@@ -112,14 +124,58 @@ export default function AccountPage() {
                         </Col>*/}
                         <Col xs={24} sm={24} md={24}>
                             <div className={classes.wrapper}>
-                                {/*<div className={classes.top}>
-                                    <AccountTasksFilter
-                                        filterReady={filterReady}
-                                        filter={filter}
-                                        setTaskFilter={setTaskFilter}
-                                        applyTaskFilter={applyTaskFilter}
-                                    />
-                                </div>*/}
+                                <HStack
+                                    w='100%'
+                                    align='start'
+                                >
+                                    <VStack
+                                        flex='1'
+                                    >
+                                        <VStack
+                                            className={classes.wrapbox}
+                                        >
+                                            <HStack 
+                                                justify='space-between'
+                                                w='100%'
+                                            >
+                                                <Text>
+                                                    Email
+                                                </Text>
+                                                <Text>
+                                                    Hello
+                                                </Text>
+                                            </HStack>
+                                        </VStack>
+                                        <VStack
+                                            className={classes.wrapbox}
+                                        >
+                                            <HStack>
+                                                <Text>
+                                                    Email
+                                                </Text>
+                                            </HStack>
+                                        </VStack>
+                                    </VStack>
+                                    <VStack
+                                        flex='1'
+                                    >
+                                        <VStack
+                                            className={classes.wrapbox}
+                                        >
+                                            <HStack>
+                                                <Text>
+                                                    Email
+                                                </Text>
+                                            </HStack>
+                                        </VStack>
+                                        <TaskFilter
+                                            filter={'All'}
+                                            setTaskFilter={filter}
+                                            applyTaskFilter={() => {}}
+                                        />
+                                        {/* LIST TASK as switch (own/supported) */}
+                                    </VStack>
+                                </HStack>
                                 <div className={classes.main}>
                                     <ListTasks
                                         isCreatable={isOwner}

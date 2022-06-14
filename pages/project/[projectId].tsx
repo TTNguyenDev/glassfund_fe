@@ -168,28 +168,35 @@ export default function ProjectDetailsPage() {
                                         {data.accountId}
                                     </Text>
                                 </VStack> 
-                                <HStack 
-                                    spacing='12px' 
-                                    padding='10px 15px' 
-                                    background='var(--sub-alt-color)' 
-                                    boxShadow='var(--primary-box-shadow-color)' 
-                                    borderRadius='10px'
-                                    maxW='220px'
-                                    h='fit-content'
-                                >
-                                    <Image 
-                                        borderRadius='full'
-                                        boxSize='30px'
-                                        src="../NearIcon.svg"/>
-                                    <Input 
-                                        type='number'
-                                        color='var(--text-color)'
-                                        variant='unstyled' 
-                                        placeholder='Support'
-                                        borderRadius='0'
-                                        _placeholder={{ color: 'var(--text-color)', opacity: 0.4 }}/>
-                                    <IconButton aria-label='Add to friends' w='30px' h='30px' icon={<AddIcon />} />
-                                </HStack>
+                                {data.accountId !==
+                                    BlockChainConnector.instance.account
+                                        .accountId &&
+                                    Date.now() >= data.startedAt &&
+                                    Date.now() <= data.endedAt && (
+                                    /* Support Frame */
+                                    <HStack 
+                                        spacing='12px' 
+                                        padding='10px 15px' 
+                                        background='var(--sub-alt-color)' 
+                                        boxShadow='var(--primary-box-shadow-color)' 
+                                        borderRadius='10px'
+                                        maxW='220px'
+                                        h='fit-content'
+                                    >
+                                        <Image 
+                                            borderRadius='full'
+                                            boxSize='30px'
+                                            src="../NearIcon.svg"/>
+                                        <Input 
+                                            type='number'
+                                            color='var(--text-color)'
+                                            variant='unstyled' 
+                                            placeholder='Support'
+                                            borderRadius='0'
+                                            _placeholder={{ color: 'var(--text-color)', opacity: 0.4 }}/>
+                                        <IconButton aria-label='Add to friends' w='30px' h='30px' icon={<AddIcon />} />
+                                    </HStack>
+                                )}
                             </HStack>
                         </HStack>
                         <HStack 
@@ -384,6 +391,7 @@ export default function ProjectDetailsPage() {
                                     </VStack>
                                 </HStack>
                             </VStack>
+                            {/* Right Column */}
                             <VStack w="100%">
                                 <HStack 
                                     w='100%'

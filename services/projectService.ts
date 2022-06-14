@@ -3,6 +3,7 @@ import { BlockChainConnector } from '../utils/blockchain';
 import { utils } from 'near-api-js';
 import { db } from '../db';
 import { batchTransactions } from '../utils/serviceUtils';
+import moment from 'moment';
 
 export const FETCH_PROJECTS_LIMIT = 20;
 export const CREATE_PROJECT_FEE = '1';
