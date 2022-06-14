@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { Table, Button, Stack } from 'rsuite';
-import { Task, TaskType } from '../../models/types/jobType';
+import { Task, ProjectState } from '../../models/types/jobType';
 import { MdDone } from 'react-icons/md';
 import { BlockChainConnector } from '../../utils/blockchain';
 import { useMarkATaskAsCompleted } from '../../hooks/useMarkATaskAsCompleted';
 import { useRouter } from 'next/router';
 
 interface TasksTableProps {
-    type: TaskType;
+    type: ProjectState;
     tasks: Task[];
     loading: boolean;
 }
