@@ -127,6 +127,7 @@ export default function AccountPage() {
                                 <HStack
                                     w='100%'
                                     align='start'
+                                    gap='20px'
                                 >
                                     <VStack
                                         flex='1'
@@ -158,6 +159,7 @@ export default function AccountPage() {
                                     </VStack>
                                     <VStack
                                         flex='1'
+                                        gap='20px'
                                     >
                                         <VStack
                                             className={classes.wrapbox}
@@ -174,24 +176,23 @@ export default function AccountPage() {
                                             applyTaskFilter={() => {}}
                                         />
                                         {/* LIST TASK as switch (own/supported) */}
+                                        <ListTasks
+                                            isCreatable={isOwner}
+                                            tasks={jobs}
+                                            isLoading={isLoading}
+                                            gridBreakpoints={{
+                                                lg: 24,
+                                                md: 24,
+                                                sm: 24,
+                                                xs: 24,
+                                            }}
+                                            isPadding={false}
+                                            fetchNextPage={fetchNextPage}
+                                            isFetchingNextPage={isFetchingNextPage}
+                                            hasNextPage={hasNextPage}
+                                        />
                                     </VStack>
                                 </HStack>
-                                <div className={classes.main}>
-                                    <ListTasks
-                                        isCreatable={isOwner}
-                                        tasks={jobs}
-                                        isLoading={isLoading}
-                                        gridBreakpoints={{
-                                            lg: 12,
-                                            md: 12,
-                                            sm: 24,
-                                            xs: 24,
-                                        }}
-                                        fetchNextPage={fetchNextPage}
-                                        isFetchingNextPage={isFetchingNextPage}
-                                        hasNextPage={hasNextPage}
-                                    />
-                                </div>
                             </div>
                         </Col>
                     </Row>

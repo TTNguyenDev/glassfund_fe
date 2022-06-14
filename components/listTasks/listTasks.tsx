@@ -13,6 +13,7 @@ type ListTasksProps = {
     isLoading: boolean;
     isCreatable?: boolean;
     gridBreakpoints?: Record<string, number>;
+    isPadding?: boolean;
     fetchNextPage: any;
     isFetchingNextPage: boolean;
     hasNextPage: Optional<boolean>;
@@ -23,6 +24,7 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
     isLoading,
     isCreatable,
     gridBreakpoints,
+    isPadding,
 
     fetchNextPage,
     isFetchingNextPage,
@@ -47,7 +49,7 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                 xs={gridBreakpoints?.xs ?? 24}
                                 colspan={24}
                                 style={{
-                                    padding: '0 20px',
+                                    padding: isPadding ?? true ? '0 20px' : '0',
                                     marginBottom: 40,
                                 }}
                             >
@@ -66,7 +68,7 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                     xs={gridBreakpoints?.xs ?? 24}
                                     colspan={24}
                                     style={{
-                                        padding: '0 20px',
+                                        padding: isPadding ?? true ? '0 20px' : '0',
                                         marginBottom: 40,
                                     }}
                                 >
