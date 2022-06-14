@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Divider, Drawer, Grid, Panel, Row, Stack } from 'rsuite';
-import { TaskType } from '../../models/types/jobType';
+import { ProjectState } from '../../models/types/jobType';
 import { BlockChainConnector } from '../../utils/blockchain';
 import { useMarkATaskAsCompleted } from '../../hooks/useMarkATaskAsCompleted';
 import Avatar from 'react-avatar';
@@ -12,7 +12,7 @@ import { ProposalItem } from '../proposalItem';
 import { SubmitWorkButton } from '../submitWorkButton';
 interface TaskDetailsDrawerProps {
     taskId?: string;
-    type?: TaskType;
+    type?: ProjectState;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
