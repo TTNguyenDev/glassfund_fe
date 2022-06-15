@@ -68,7 +68,8 @@ export const ListTasks: React.FunctionComponent<ListTasksProps> = ({
                                     xs={gridBreakpoints?.xs ?? 24}
                                     colspan={24}
                                     style={{
-                                        padding: isPadding ?? true ? '0 20px' : '0',
+                                        padding:
+                                            isPadding ?? true ? '0 20px' : '0',
                                         marginBottom: 40,
                                     }}
                                 >
