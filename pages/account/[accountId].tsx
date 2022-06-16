@@ -2,7 +2,7 @@ import React from 'react';
 import Header from 'next/head';
 import { Layout } from '../../components/layout';
 import classes from './account.module.less';
-import { ListTasks } from '../../components/listTasks';
+import { ListProjects } from '../../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useInfiniteQuery } from 'react-query';
@@ -123,8 +123,8 @@ export default function AccountPage() {
                                 setTaskFilter={filter}
                                 applyTaskFilter={() => {}}
                             />
-                            <ListTasks
-                                tasks={jobs}
+                            <ListProjects
+                                projects={jobs}
                                 isLoading={isLoading}
                                 gridBreakpoints={{
                                     lg: 24,
