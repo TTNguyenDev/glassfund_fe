@@ -1,13 +1,12 @@
 import React from 'react';
 import Header from 'next/head';
 import { Layout } from '../components/layout';
-import classes from './index.module.less';
 import { useHomePage } from '../hooks/useHomePage';
 import { Loader } from '../components/loader';
 import { ListProjects } from '../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { TaskFilter } from '../components/tasksFilter';
 import { filter } from 'lodash';
 
@@ -22,7 +21,7 @@ export default function Home() {
     } = useHomePage();
 
     const app = useSelector((state: RootState) => state.app);
-    console.log(jobs);
+
     return (
         <>
             <Header>

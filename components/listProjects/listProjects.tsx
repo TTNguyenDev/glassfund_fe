@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from './listProjects.module.less';
 import { ProjectCard } from '../projectCard';
 import { Loader } from '../loader';
 import { Optional } from '../../common';
@@ -24,11 +23,18 @@ export const ListProjects: React.FC<ListProjectsProps> = ({
     hasNextPage,
 }) => {
     return (
-        <Box>
+        <Box w="100%">
             {isLoading || !projects ? (
                 <Loader />
             ) : (
-                <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} gap="40px">
+                <SimpleGrid
+                    columns={
+                        gridBreakpoints
+                            ? gridBreakpoints
+                            : { base: 1, md: 2, xl: 3 }
+                    }
+                    gap="40px"
+                >
                     {projects &&
                         !!projects.length &&
                         projects.map((project: Project) => (

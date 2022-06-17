@@ -32,6 +32,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             enabled: !!project.projectId,
         }
     );
+
     const projectDescriptionQuery = useQuery<string>(
         ['project_description', project.projectId],
         () => IPFSUtils.getDataByCID(project.description) as any,
@@ -39,6 +40,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             enabled: !!project.description,
         }
     );
+
     const description: Nullable<ProjectDescription> = React.useMemo(
         () =>
             projectDescriptionQuery.data
@@ -47,11 +49,34 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         [projectDescriptionQuery.data]
     );
 
+    const projectSupportersQuery = useQuery<any>(
+        ['project_supporters', project.projectId],
+        () => ProjectService.getSupporters(project.projectId),
+        {
+            enabled: !!project.projectId,
+        }
+    );
+
+    const totalSupporters = React.useMemo(
+        () => projectSupportersQuery.data?.length ?? 0,
+        [projectSupportersQuery.data]
+    );
+
+    const totalForceStop = React.useMemo(
+        () => projectInfoQuery.data?.forceStop?.length ?? 0,
+        [projectInfoQuery.data?.forceStop]
+    );
+
     return (
         <Link href={`/project/${project.projectId}`}>
             <Box
                 layerStyle="cardPrimary"
+                cursor="pointer"
+                transition="all 0.2s"
                 opacity={Date.now() > project.vestingEndTime ? 0.45 : 1}
+                _hover={{
+                    transform: 'translateY(-5px)',
+                }}
             >
                 <Box h="200px" pos="relative">
                     <Image
@@ -75,7 +100,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                             paddingEnd="20px"
                         >
                             <CardTag project={project} />
-
                             <Flex className={classes.process}>
                                 <Text
                                     fontSize="18px"
@@ -97,7 +121,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                                     borderRadius="full"
                                     boxSize="22px"
                                     marginLeft="5px"
-                                    src="NearIcon.svg"
+                                    src="/NearIcon.svg"
                                 />
                             </Flex>
                         </HStack>
@@ -121,7 +145,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                         <Image
                             borderRadius="full"
                             boxSize="80px"
-                            src="default_avatar.jpg"
+                            src="/default_avatar.jpg"
                             objectFit="cover"
                             border="2px solid var(--main-color)"
                         />
@@ -167,7 +191,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                                 h="fit-content"
                                 spacing="0"
                             >
-                                {console.log(project)}
                                 <Text
                                     fontSize="40px"
                                     lineHeight="40px"
@@ -175,14 +198,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                                     textColor="var(--error-color)"
                                     height="fit-content"
                                 >
-                                    0
+                                    {totalForceStop}
                                 </Text>
                                 <Text
                                     fontSize="20px"
                                     fontWeight="400"
                                     textColor="var(--error-color)"
                                 >
-                                    /185
+                                    /{totalSupporters}
                                 </Text>
                             </HStack>
                         </VStack>
@@ -208,7 +231,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                                     textColor="var(--balloon-text-color)"
                                     height="fit-content"
                                 >
-                                    185
+                                    {projectSupportersQuery.data?.length ?? 0}
                                 </Text>
                             </HStack>
                         </VStack>

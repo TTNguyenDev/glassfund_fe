@@ -15,10 +15,12 @@ export const layerStyles = {
         boxShadow: 'primary',
         borderRadius: '15px',
         overflow: 'hidden',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        _hover: {
-            transform: 'translateY(-5px)',
-        },
+    },
+    cardSecondary: {
+        bg: 'secondary',
+        boxShadow: 'secondary',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        padding: '8px 16px',
     },
 };

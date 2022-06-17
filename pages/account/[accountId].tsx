@@ -10,7 +10,6 @@ import {
     HStack,
     VStack,
     Text,
-    Heading,
     Button,
     SimpleGrid,
     Box,
@@ -62,7 +61,7 @@ export default function AccountPage() {
         }
     );
 
-    const jobs = data
+    const projects = data
         ? data.pages.reduce((prev, current) => [...prev, ...current], [])
         : undefined;
 
@@ -73,28 +72,118 @@ export default function AccountPage() {
             </Header>
             <Layout activeKey="one">
                 <Box maxW="1600px" margin="auto" padding="0 20px">
-                    <Heading
-                        mt="15px"
-                        mb="15px"
-                        fontSize="54px"
-                        fontWeight="600"
-                        color="#fff"
-                    >
-                        My profile
-                    </Heading>
+                    <Text layerStyle="headingPage">My profile</Text>
                     <SimpleGrid columns={2} spacing={10}>
-                        <VStack>
-                            <VStack className={classes.wrapbox}>
-                                <HStack justify="space-between" w="100%">
-                                    <Text>Email</Text>
-                                    <Text>Hello</Text>
-                                </HStack>
-                            </VStack>
-                            <VStack className={classes.wrapbox}>
-                                <HStack>
-                                    <Text>Email</Text>
-                                </HStack>
-                            </VStack>
+                        <VStack align="stretch" spacing="20px">
+                            <Box layerStyle="cardPrimary">
+                                <Box p="30px">
+                                    <Text
+                                        color="textPrimary"
+                                        fontSize="26px"
+                                        fontWeight="600"
+                                        mb="15px"
+                                    >
+                                        Summary
+                                    </Text>
+                                    <Text
+                                        color="textSecondary"
+                                        fontSize="20px"
+                                        textAlign="center"
+                                    >
+                                        Number of Own Projects
+                                    </Text>
+                                    <Text
+                                        color="textYellow"
+                                        fontSize="54px"
+                                        fontWeight="700"
+                                        textAlign="center"
+                                    >
+                                        5
+                                    </Text>
+                                    <SimpleGrid
+                                        columns={5}
+                                        border="2px solid #414346"
+                                        borderRadius="5px"
+                                        padding="10px 0"
+                                    >
+                                        <Box textAlign="center">
+                                            <Text
+                                                color="textSecondary"
+                                                fontSize="14px"
+                                            >
+                                                Pending
+                                            </Text>
+                                            <Text
+                                                color="textYellow"
+                                                fontSize="40px"
+                                                fontWeight="700"
+                                            >
+                                                1
+                                            </Text>
+                                        </Box>
+                                        <Box textAlign="center">
+                                            <Text
+                                                color="textSecondary"
+                                                fontSize="14px"
+                                            >
+                                                Funding
+                                            </Text>
+                                            <Text
+                                                color="textPrimary"
+                                                fontSize="40px"
+                                                fontWeight="700"
+                                            >
+                                                2
+                                            </Text>
+                                        </Box>
+                                        <Box textAlign="center">
+                                            <Text
+                                                color="textSecondary"
+                                                fontSize="14px"
+                                            >
+                                                Vesting
+                                            </Text>
+                                            <Text
+                                                color="textPrimary"
+                                                fontSize="40px"
+                                                fontWeight="700"
+                                            >
+                                                1
+                                            </Text>
+                                        </Box>
+                                        <Box textAlign="center">
+                                            <Text
+                                                color="textSecondary"
+                                                fontSize="14px"
+                                            >
+                                                Forced stop
+                                            </Text>
+                                            <Text
+                                                color="textRed"
+                                                fontSize="40px"
+                                                fontWeight="700"
+                                            >
+                                                1
+                                            </Text>
+                                        </Box>
+                                        <Box textAlign="center">
+                                            <Text
+                                                color="textSecondary"
+                                                fontSize="14px"
+                                            >
+                                                Done
+                                            </Text>
+                                            <Text
+                                                color="textGreen"
+                                                fontSize="40px"
+                                                fontWeight="700"
+                                            >
+                                                0
+                                            </Text>
+                                        </Box>
+                                    </SimpleGrid>
+                                </Box>
+                            </Box>
                             <Button
                                 color="#E2B714"
                                 fontSize="26px"
@@ -112,27 +201,16 @@ export default function AccountPage() {
                                 Create a new project
                             </Button>
                         </VStack>
-                        <VStack>
-                            <VStack className={classes.wrapbox}>
-                                <HStack>
-                                    <Text>Email</Text>
-                                </HStack>
-                            </VStack>
+                        <VStack spacing="20px">
                             <TaskFilter
                                 filter={'All'}
                                 setTaskFilter={filter}
                                 applyTaskFilter={() => {}}
                             />
                             <ListProjects
-                                projects={jobs}
+                                projects={projects}
                                 isLoading={isLoading}
-                                gridBreakpoints={{
-                                    lg: 24,
-                                    md: 24,
-                                    sm: 24,
-                                    xs: 24,
-                                }}
-                                isPadding={false}
+                                gridBreakpoints={{ base: 1 }}
                                 fetchNextPage={fetchNextPage}
                                 isFetchingNextPage={isFetchingNextPage}
                                 hasNextPage={hasNextPage}

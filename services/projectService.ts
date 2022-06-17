@@ -63,7 +63,6 @@ export type ProjectDescription = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
-        console.log(raw);
         const index = raw.id?.lastIndexOf('_');
         let accountId = '';
         let id = '';
