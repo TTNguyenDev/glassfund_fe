@@ -191,6 +191,21 @@ export class ProjectService {
 
         if (filter) {
             const { accountId, title } = filter;
+            if (accountId && title !== undefined)
+                return table
+                    .orderBy('id')
+                    .reverse()
+                    .filter(
+                        (item) =>
+                            item.accountId === accountId &&
+                            item.title
+                                .toLocaleLowerCase()
+                                .includes(title.toLocaleLowerCase())
+                    )
+                    .offset(offset)
+                    .limit(limit)
+                    .toArray();
+
             if (accountId)
                 return table
                     .orderBy('id')
@@ -199,6 +214,7 @@ export class ProjectService {
                     .offset(offset)
                     .limit(limit)
                     .toArray();
+
             if (title)
                 return table
                     .orderBy('id')
@@ -235,7 +251,6 @@ export class ProjectService {
         const res = await BlockChainConnector.instance.contract.get_supporters({
             project_id: projectId,
         });
-        console.log(res);
         return res;
     }
 

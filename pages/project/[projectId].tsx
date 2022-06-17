@@ -18,6 +18,9 @@ import {
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInputStepper,
+    Alert,
+    AlertIcon,
+    Button,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import {
@@ -105,8 +108,6 @@ export default function ProjectDetailsPage() {
     );
 
     const amountRef = React.useRef<any>();
-
-    console.log(projectInfoQuery.data?.minimumDeposit);
 
     if (!data) return null;
 
@@ -219,6 +220,73 @@ export default function ProjectDetailsPage() {
                                                     </NumberInputStepper>
                                                 </NumberInput>
                                             )}
+                                            {data.accountId !==
+                                                BlockChainConnector.instance
+                                                    .account.accountId &&
+                                                Date.now() >=
+                                                    data.vestingStartTime &&
+                                                Date.now() <=
+                                                    data.vestingEndTime &&
+                                                projectSupportersQuery.data &&
+                                                projectForceStopAccountsQuery.data &&
+                                                !!projectSupportersQuery.data.find(
+                                                    (i: any) =>
+                                                        i[0] ===
+                                                        BlockChainConnector
+                                                            .instance.account
+                                                            .accountId
+                                                ) &&
+                                                !projectForceStopAccountsQuery.data.includes(
+                                                    BlockChainConnector.instance
+                                                        .account.accountId
+                                                ) && (
+                                                    <Button
+                                                        onClick={() => {
+                                                            ModalsController.controller.setDataForceStopProjectModal(
+                                                                {
+                                                                    projectId,
+                                                                }
+                                                            );
+                                                            ModalsController.controller.openForceStopProjectModal();
+                                                        }}
+                                                        colorScheme="red"
+                                                    >
+                                                        Force Stop
+                                                    </Button>
+                                                )}
+                                            {data.accountId ===
+                                                BlockChainConnector.instance
+                                                    .account.accountId &&
+                                                projectClaimableAmountQuery.data !==
+                                                    undefined &&
+                                                Date.now() >=
+                                                    data.vestingStartTime && (
+                                                    <HStack>
+                                                        <Text
+                                                            textColor="white"
+                                                            fontSize="18px"
+                                                        >
+                                                            {`Claimable Amount: ${projectClaimableAmountQuery.data} Ⓝ`}
+                                                        </Text>
+                                                        {!!Number(
+                                                            projectClaimableAmountQuery.data
+                                                        ) && (
+                                                            <Button
+                                                                onClick={() => {
+                                                                    ModalsController.controller.setDataClaimRewardProjectModal(
+                                                                        {
+                                                                            projectId,
+                                                                        }
+                                                                    );
+                                                                    ModalsController.controller.openClaimRewardProjectModal();
+                                                                }}
+                                                            >
+                                                                Claim
+                                                            </Button>
+                                                        )}
+                                                    </HStack>
+                                                )}
+
                                             <IconButton
                                                 aria-label="Add to friends"
                                                 w="40px"
@@ -245,6 +313,14 @@ export default function ProjectDetailsPage() {
                                     )}
                             </HStack>
                         </HStack>
+                        {projectInfoQuery.data?.forceStopTs && (
+                            <Box p="15px">
+                                <Alert status="error" fontWeight="600">
+                                    <AlertIcon />
+                                    This project forced stop by the community!
+                                </Alert>
+                            </Box>
+                        )}
                         <HStack
                             borderRadius="5px"
                             padding="10px 0"
@@ -443,7 +519,7 @@ export default function ProjectDetailsPage() {
                                     </VStack>
                                 </HStack>
                             </VStack>
-                            <VStack w="100%">
+                            <VStack w="100%" spacing="20px">
                                 <Box layerStyle="cardSecondary" w="100%">
                                     <Text
                                         color="textSecondary"

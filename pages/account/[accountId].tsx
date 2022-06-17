@@ -1,18 +1,17 @@
 import React from 'react';
 import Header from 'next/head';
 import { Layout } from '../../components/layout';
-import classes from './account.module.less';
 import { ListProjects } from '../../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useInfiniteQuery } from 'react-query';
 import {
-    HStack,
     VStack,
     Text,
     Button,
     SimpleGrid,
     Box,
+    HStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { Optional } from '../../common';
@@ -20,9 +19,9 @@ import {
     ProjectService,
     FETCH_PROJECTS_LIMIT,
 } from '../../services/projectService';
-import { TaskFilter } from '../../components/tasksFilter';
-import { filter } from 'lodash';
+import { ProjectFilter } from '../../components/tasksFilter';
 import { ModalsController } from '../../utils/modalsController';
+import { set } from 'date-fns';
 
 export default function AccountPage() {
     const app = useSelector((state: RootState) => state.app);
@@ -33,6 +32,30 @@ export default function AccountPage() {
         return accountId === auth.data.userId;
     }, [auth.data.userId, accountId]);
 
+    const [filter, setFilter] = React.useState<Record<string, any>>({});
+    const filterRef = React.useRef({});
+    const setProjectFilter = React.useCallback(
+        (records: Record<string, any>) => {
+            filterRef.current = {
+                ...filterRef.current,
+                ...records,
+            };
+        },
+        [filter]
+    );
+    const applyProjectFilter = React.useCallback(() => {
+        setFilter({ ...filterRef.current });
+    }, []);
+
+    React.useEffect(() => {
+        if (accountId) {
+            filterRef.current = {
+                accountId,
+            };
+            applyProjectFilter();
+        }
+    }, [accountId]);
+
     const {
         data,
         error,
@@ -42,13 +65,11 @@ export default function AccountPage() {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery(
-        ['acount_projects'],
+        ['acount_projects', filter],
         ({ pageParam: { offset } = {} }) =>
             ProjectService.getListProjects({
                 offset,
-                filter: {
-                    accountId,
-                },
+                filter,
             }),
         {
             getNextPageParam: (lastPage, pages) => {
@@ -201,11 +222,62 @@ export default function AccountPage() {
                                 Create a new project
                             </Button>
                         </VStack>
-                        <VStack spacing="20px">
-                            <TaskFilter
-                                filter={'All'}
-                                setTaskFilter={filter}
-                                applyTaskFilter={() => {}}
+                        <VStack spacing="20px" align="stretch">
+                            <HStack
+                                spacing="5px"
+                                layerStyle="cardSecondary"
+                                padding="5px"
+                            >
+                                <Box
+                                    flex="1"
+                                    textAlign="center"
+                                    textColor="textPrimary"
+                                    fontSize="18px"
+                                    cursor="pointer"
+                                    p="5px"
+                                    borderRadius="12px"
+                                    bg={
+                                        !filter.accountId
+                                            ? undefined
+                                            : 'tertiary'
+                                    }
+                                    onClick={() => {
+                                        setProjectFilter({
+                                            accountId,
+                                        });
+                                        applyProjectFilter();
+                                    }}
+                                >
+                                    Own
+                                </Box>
+                                <Box
+                                    flex="1"
+                                    textAlign="center"
+                                    textColor="textPrimary"
+                                    fontSize="18px"
+                                    cursor="pointer"
+                                    p="5px"
+                                    borderRadius="12px"
+                                    bg={
+                                        !filter.accountId
+                                            ? 'tertiary'
+                                            : undefined
+                                    }
+                                    onClick={() => {
+                                        setProjectFilter({
+                                            accountId: undefined,
+                                            supported: true,
+                                        });
+                                        applyProjectFilter();
+                                    }}
+                                >
+                                    Supported
+                                </Box>
+                            </HStack>
+                            <ProjectFilter
+                                filter={filter}
+                                setProjectFilter={setProjectFilter}
+                                applyProjectFilter={applyProjectFilter}
                             />
                             <ListProjects
                                 projects={projects}

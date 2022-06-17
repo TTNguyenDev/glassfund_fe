@@ -7,7 +7,7 @@ import { ListProjects } from '../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Box, Text } from '@chakra-ui/react';
-import { TaskFilter } from '../components/tasksFilter';
+import { ProjectFilter } from '../components/tasksFilter';
 import { filter } from 'lodash';
 
 export default function Home() {
@@ -35,10 +35,10 @@ export default function Home() {
                         </Text>
                         {authLoading && <Loader />}
                         <Box mb="30px">
-                            <TaskFilter
+                            <ProjectFilter
                                 filter={'All'}
-                                setTaskFilter={filter}
-                                applyTaskFilter={() => {}}
+                                setProjectFilter={filter}
+                                applyProjectFilter={() => {}}
                             />
                         </Box>
                         <Box>
