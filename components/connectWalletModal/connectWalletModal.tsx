@@ -1,5 +1,6 @@
+import { Button } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import { Modal, Button } from 'rsuite';
+import { Modal } from 'rsuite';
 import { useLogin } from '../../hooks/useLogin';
 import { ModalsController } from '../../utils/modalsController';
 
@@ -32,15 +33,13 @@ export const ConnectWalletModal: React.FunctionComponent<
             <Modal.Body></Modal.Body>
             <Modal.Footer>
                 <Button
-                    loading={loading}
+                    isLoading={loading}
                     onClick={requestLogin}
-                    appearance="primary"
+                    colorScheme="purple"
                 >
                     Connect now
                 </Button>
-                <Button onClick={handleClose} appearance="subtle">
-                    Cancel
-                </Button>
+                <Button onClick={handleClose}>Cancel</Button>
             </Modal.Footer>
         </Modal>
     );

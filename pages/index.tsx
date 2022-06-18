@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Box, Text } from '@chakra-ui/react';
 import { ProjectFilter } from '../components/tasksFilter';
-import { filter } from 'lodash';
 
 export default function Home() {
     const {
@@ -18,6 +17,9 @@ export default function Home() {
         fetchNextPage,
         isFetchingNextPage,
         hasNextPage,
+        filter,
+        setProjectFilter,
+        applyProjectFilter,
     } = useHomePage();
 
     const app = useSelector((state: RootState) => state.app);
@@ -36,9 +38,9 @@ export default function Home() {
                         {authLoading && <Loader />}
                         <Box mb="30px">
                             <ProjectFilter
-                                filter={'All'}
-                                setProjectFilter={filter}
-                                applyProjectFilter={() => {}}
+                                filter={filter}
+                                setProjectFilter={setProjectFilter}
+                                applyProjectFilter={applyProjectFilter}
                             />
                         </Box>
                         <Box>

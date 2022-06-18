@@ -3,7 +3,7 @@ import { utils } from 'near-api-js';
 import { db } from '../db';
 import { batchTransactions } from '../utils/serviceUtils';
 
-export const FETCH_PROJECTS_LIMIT = 20;
+export const FETCH_PROJECTS_LIMIT = 12;
 export const CREATE_PROJECT_FEE = '1';
 
 export type CreateProjectInput = {
@@ -54,6 +54,7 @@ export type Project = {
     claimed: string;
     forceStop: string[];
     forceStopTs?: number;
+    supported?: boolean;
 };
 
 export type ProjectDescription = {
@@ -99,6 +100,7 @@ export class ProjectService {
             claimed: utils.format.formatNearAmount(raw.claimed),
             forceStop: raw.force_stop,
             forceStopTs: raw.force_stop_ts,
+            supported: false,
         };
     }
 
@@ -178,6 +180,8 @@ export class ProjectService {
         filter?: {
             accountId?: string;
             title?: string;
+            supported?: boolean;
+            status?: 'pending' | 'funding' | 'vesting' | 'done';
         };
     } = {}): Promise<Project[]> {
         const table = db.projects;
@@ -190,43 +194,57 @@ export class ProjectService {
             .toArray();
 
         if (filter) {
-            const { accountId, title } = filter;
-            if (accountId && title !== undefined)
-                return table
-                    .orderBy('id')
-                    .reverse()
-                    .filter(
-                        (item) =>
-                            item.accountId === accountId &&
-                            item.title
-                                .toLocaleLowerCase()
-                                .includes(title.toLocaleLowerCase())
-                    )
-                    .offset(offset)
-                    .limit(limit)
-                    .toArray();
-
-            if (accountId)
-                return table
-                    .orderBy('id')
-                    .reverse()
-                    .filter((item) => item.accountId === accountId)
-                    .offset(offset)
-                    .limit(limit)
-                    .toArray();
-
-            if (title)
-                return table
-                    .orderBy('id')
-                    .reverse()
-                    .filter((item) =>
-                        item.title
+            const { accountId, title, supported, status } = filter;
+            return table
+                .orderBy('id')
+                .reverse()
+                .filter((item) => {
+                    if (accountId !== undefined && item.accountId !== accountId)
+                        return false;
+                    if (
+                        title !== undefined &&
+                        !item.title
                             .toLocaleLowerCase()
                             .includes(title.toLocaleLowerCase())
                     )
-                    .offset(offset)
-                    .limit(limit)
-                    .toArray();
+                        return false;
+
+                    if (supported !== undefined && item.supported !== supported)
+                        return false;
+
+                    if (status !== undefined) {
+                        if (status === 'pending') {
+                            if (!(item.startedAt > Date.now())) return false;
+                        }
+                        if (status === 'funding') {
+                            if (
+                                !(
+                                    item.startedAt < Date.now() &&
+                                    item.endedAt > Date.now()
+                                )
+                            )
+                                return false;
+                        }
+                        if (status === 'vesting') {
+                            if (
+                                !(
+                                    item.vestingStartTime < Date.now() &&
+                                    item.vestingEndTime > Date.now()
+                                )
+                            )
+                                return false;
+                        }
+                        if (status === 'done') {
+                            if (!(item.vestingEndTime <= Date.now()))
+                                return false;
+                        }
+                    }
+
+                    return true;
+                })
+                .offset(offset)
+                .limit(limit)
+                .toArray();
         }
         return query;
     }
@@ -315,6 +333,55 @@ export class ProjectService {
                 console.error('Fetch and cache projects', err);
                 isCompleted = true;
             }
+        }
+    }
+
+    static async fetchSupportedProjects(): Promise<void> {
+        const fetchMyProjects =
+            BlockChainConnector.instance.contract.get_my_projects;
+        const table = db.projects;
+
+        const LIMIT = 500;
+        let currentIndex = 0;
+        let isCompleted = false;
+        let supportedProjectIds: string[] = [];
+
+        while (!isCompleted) {
+            try {
+                const res = await fetchMyProjects({
+                    account_id: BlockChainConnector.instance.account.accountId,
+                    from_index: currentIndex,
+                    limit: LIMIT,
+                });
+
+                console.log('MY PROJECTS', res);
+
+                if (res.length === 0) {
+                    isCompleted = true;
+                    break;
+                }
+
+                supportedProjectIds = [
+                    ...supportedProjectIds,
+                    ...res.map((item: any) => item[0]),
+                ];
+
+                currentIndex += LIMIT;
+            } catch (err) {
+                console.error('Fetch my projects', err);
+                isCompleted = true;
+            }
+        }
+
+        if (supportedProjectIds.length) {
+            console.log(
+                await table
+                    .where('projectId')
+                    .anyOf(supportedProjectIds)
+                    .modify({
+                        supported: true,
+                    })
+            );
         }
     }
 }

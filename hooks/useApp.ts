@@ -6,6 +6,7 @@ import { CONTRACT_NAME } from '../constants';
 import { db } from '../db';
 import { AppModel } from '../models/appModel';
 import { AuthModel } from '../models/authModel';
+import { ProjectService } from '../services/projectService';
 import { RootState } from '../store';
 
 export const useApp = () => {
@@ -46,6 +47,9 @@ export const useApp = () => {
 
     useEffect(() => {
         if (!auth.data.logged) return;
+        (async () => {
+            await ProjectService.fetchSupportedProjects();
+        })();
     }, [auth.data.logged]);
 
     useEffect(() => {

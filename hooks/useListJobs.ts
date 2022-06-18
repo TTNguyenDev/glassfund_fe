@@ -6,13 +6,13 @@ import {
     ProjectService,
 } from '../services/projectService';
 import { RootState } from '../store';
-import { TaskFilterInput, useTaskFilter } from './useTaskFilter';
+import { ProjectFilterInput, useProjectFilter } from './useProjectFilter';
 
-export type UseListJobsInput = TaskFilterInput;
+export type UseListJobsInput = ProjectFilterInput;
 
 export const useListJobs = (payload?: UseListJobsInput) => {
-    const { filterReady, filter, setTaskFilter, applyTaskFilter } =
-        useTaskFilter(payload);
+    const { filter, setProjectFilter, applyProjectFilter } =
+        useProjectFilter(payload);
 
     const app = useSelector((state: RootState) => state.app);
 
@@ -61,9 +61,8 @@ export const useListJobs = (payload?: UseListJobsInput) => {
         isFetchingNextPage,
         fetchNextPage,
         hasNextPage,
-        filterReady,
         filter,
-        setTaskFilter,
-        applyTaskFilter,
+        setProjectFilter,
+        applyProjectFilter,
     };
 };

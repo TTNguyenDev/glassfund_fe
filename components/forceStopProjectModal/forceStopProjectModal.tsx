@@ -142,12 +142,7 @@ export const ForceStopProjectModal = () => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Box mb="20px" mt="20px">
-                            <Text
-                                fontFamily="Exo"
-                                fontSize="20px"
-                                fontWeight="700"
-                                mb="15px"
-                            >
+                            <Text fontSize="20px" fontWeight="700" mb="15px">
                                 Force Stop Project
                             </Text>
                             <Box
@@ -179,6 +174,7 @@ export const ForceStopProjectModal = () => {
                             type="submit"
                             isLoading={forceStopProjectMutation.isLoading}
                             onClick={handleBtnSentClick}
+                            colorScheme="red"
                         >
                             OK
                         </Button>

@@ -10,7 +10,6 @@ import {
     VStack,
     Image,
     Text,
-    Input,
     IconButton,
     Avatar,
     NumberInput,
@@ -21,8 +20,9 @@ import {
     Alert,
     AlertIcon,
     Button,
+    Progress,
 } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, DownloadIcon } from '@chakra-ui/icons';
 import {
     Project,
     ProjectDescription,
@@ -34,6 +34,8 @@ import { db } from '../../db';
 import { BlockChainConnector } from '../../utils/blockchain';
 import { ModalsController } from '../../utils/modalsController';
 import { CardTag } from '../../components/cardTag';
+import ClaimIcon from '../../assets/claim-icon.svg';
+import ClaimedIcon from '../../assets/claimed-icon.svg';
 
 export default function ProjectDetailsPage() {
     const router = useRouter();
@@ -108,6 +110,12 @@ export default function ProjectDetailsPage() {
     );
 
     const amountRef = React.useRef<any>();
+
+    const progress = React.useMemo(() => {
+        const data = projectInfoQuery.data;
+        if (!data) return 0;
+        if (data.vestingStartTime < Date.now()) return 0;
+    }, [projectInfoQuery.data]);
 
     if (!data) return null;
 
@@ -220,75 +228,8 @@ export default function ProjectDetailsPage() {
                                                     </NumberInputStepper>
                                                 </NumberInput>
                                             )}
-                                            {data.accountId !==
-                                                BlockChainConnector.instance
-                                                    .account.accountId &&
-                                                Date.now() >=
-                                                    data.vestingStartTime &&
-                                                Date.now() <=
-                                                    data.vestingEndTime &&
-                                                projectSupportersQuery.data &&
-                                                projectForceStopAccountsQuery.data &&
-                                                !!projectSupportersQuery.data.find(
-                                                    (i: any) =>
-                                                        i[0] ===
-                                                        BlockChainConnector
-                                                            .instance.account
-                                                            .accountId
-                                                ) &&
-                                                !projectForceStopAccountsQuery.data.includes(
-                                                    BlockChainConnector.instance
-                                                        .account.accountId
-                                                ) && (
-                                                    <Button
-                                                        onClick={() => {
-                                                            ModalsController.controller.setDataForceStopProjectModal(
-                                                                {
-                                                                    projectId,
-                                                                }
-                                                            );
-                                                            ModalsController.controller.openForceStopProjectModal();
-                                                        }}
-                                                        colorScheme="red"
-                                                    >
-                                                        Force Stop
-                                                    </Button>
-                                                )}
-                                            {data.accountId ===
-                                                BlockChainConnector.instance
-                                                    .account.accountId &&
-                                                projectClaimableAmountQuery.data !==
-                                                    undefined &&
-                                                Date.now() >=
-                                                    data.vestingStartTime && (
-                                                    <HStack>
-                                                        <Text
-                                                            textColor="white"
-                                                            fontSize="18px"
-                                                        >
-                                                            {`Claimable Amount: ${projectClaimableAmountQuery.data} Ⓝ`}
-                                                        </Text>
-                                                        {!!Number(
-                                                            projectClaimableAmountQuery.data
-                                                        ) && (
-                                                            <Button
-                                                                onClick={() => {
-                                                                    ModalsController.controller.setDataClaimRewardProjectModal(
-                                                                        {
-                                                                            projectId,
-                                                                        }
-                                                                    );
-                                                                    ModalsController.controller.openClaimRewardProjectModal();
-                                                                }}
-                                                            >
-                                                                Claim
-                                                            </Button>
-                                                        )}
-                                                    </HStack>
-                                                )}
-
                                             <IconButton
-                                                aria-label="Add to friends"
+                                                aria-label="Support"
                                                 w="40px"
                                                 h="40px"
                                                 icon={<AddIcon />}
@@ -311,11 +252,95 @@ export default function ProjectDetailsPage() {
                                             />
                                         </HStack>
                                     )}
+                                {data.accountId !==
+                                    BlockChainConnector.instance.account
+                                        .accountId &&
+                                    Date.now() >= data.vestingStartTime &&
+                                    Date.now() <= data.vestingEndTime &&
+                                    projectSupportersQuery.data &&
+                                    projectForceStopAccountsQuery.data &&
+                                    !!projectSupportersQuery.data.find(
+                                        (i: any) =>
+                                            i[0] ===
+                                            BlockChainConnector.instance.account
+                                                .accountId
+                                    ) &&
+                                    !projectForceStopAccountsQuery.data.includes(
+                                        BlockChainConnector.instance.account
+                                            .accountId
+                                    ) && (
+                                        <Button
+                                            onClick={() => {
+                                                ModalsController.controller.setDataForceStopProjectModal(
+                                                    {
+                                                        projectId,
+                                                    }
+                                                );
+                                                ModalsController.controller.openForceStopProjectModal();
+                                            }}
+                                            colorScheme="red"
+                                            size="lg"
+                                        >
+                                            Force Stop
+                                        </Button>
+                                    )}
+                                {data.accountId ===
+                                    BlockChainConnector.instance.account
+                                        .accountId &&
+                                    projectClaimableAmountQuery.data !==
+                                        undefined &&
+                                    Date.now() >= data.vestingStartTime && (
+                                        <HStack
+                                            spacing="12px"
+                                            padding="10px 15px"
+                                            background="var(--sub-alt-color)"
+                                            boxShadow="var(--primary-box-shadow-color)"
+                                            borderRadius="10px"
+                                            maxW="250px"
+                                            h="fit-content"
+                                        >
+                                            <Image
+                                                borderRadius="full"
+                                                boxSize="30px"
+                                                src="/NearIcon.svg"
+                                            />
+                                            <Text
+                                                color="textPrimary"
+                                                fontSize="20px"
+                                            >
+                                                {
+                                                    projectClaimableAmountQuery.data
+                                                }
+                                            </Text>
+
+                                            <IconButton
+                                                aria-label="Claim"
+                                                w="40px"
+                                                h="40px"
+                                                icon={<DownloadIcon />}
+                                                isDisabled={
+                                                    projectClaimableAmountQuery.data
+                                                }
+                                                onClick={() => {
+                                                    ModalsController.controller.setDataClaimRewardProjectModal(
+                                                        {
+                                                            projectId,
+                                                        }
+                                                    );
+                                                    ModalsController.controller.openClaimRewardProjectModal();
+                                                }}
+                                            />
+                                        </HStack>
+                                    )}
                             </HStack>
                         </HStack>
                         {projectInfoQuery.data?.forceStopTs && (
-                            <Box p="15px">
-                                <Alert status="error" fontWeight="600">
+                            <Box mb="20px">
+                                <Alert
+                                    status="error"
+                                    fontSize="20px"
+                                    fontWeight="600"
+                                >
                                     <AlertIcon />
                                     This project forced stop by the community!
                                 </Alert>
@@ -460,35 +485,25 @@ export default function ProjectDetailsPage() {
                                 minW="700px"
                                 flex="1"
                                 spacing="20px"
+                                align="stretch"
                             >
-                                <HStack
-                                    w="100%"
-                                    borderRadius="5px"
-                                    padding="12px 16px"
-                                    background="var(--sub-alt-color)"
-                                    boxShadow="var(--primary-box-shadow-color)"
-                                >
-                                    <VStack
-                                        alignItems="start"
-                                        flex="1"
-                                        spacing="10px"
+                                <Box layerStyle="cardSecondary" p="12px 16px">
+                                    <Text
+                                        fontSize="22px"
+                                        fontWeight="500"
+                                        textColor="textPrimary"
+                                        mb="15px"
                                     >
-                                        <Text
-                                            fontSize="22px"
-                                            fontWeight="500"
-                                            textColor="var(--text-color)"
-                                        >
-                                            Progress
-                                        </Text>
-                                        <HStack
-                                            justifyContent="space-between"
-                                            alignItems="end"
-                                            w="100%"
-                                            h="fit-content"
-                                            spacing="0"
-                                        ></HStack>
-                                    </VStack>
-                                </HStack>
+                                        Progress
+                                    </Text>
+                                    <Box>
+                                        <Progress
+                                            value={progress}
+                                            size="xs"
+                                            colorScheme="green"
+                                        />
+                                    </Box>
+                                </Box>
                                 <HStack
                                     w="100%"
                                     borderRadius="5px"

@@ -142,12 +142,7 @@ export const ClaimRewardProjectModal = () => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Box mb="20px" mt="20px">
-                            <Text
-                                fontFamily="Exo"
-                                fontSize="20px"
-                                fontWeight="700"
-                                mb="15px"
-                            >
+                            <Text fontSize="20px" fontWeight="700" mb="15px">
                                 Claim Reward Project
                             </Text>
                             <Box
@@ -179,6 +174,7 @@ export const ClaimRewardProjectModal = () => {
                             type="submit"
                             isLoading={claimRewardProjectMutation.isLoading}
                             onClick={handleBtnSentClick}
+                            colorScheme="purple"
                         >
                             Claim reward
                         </Button>

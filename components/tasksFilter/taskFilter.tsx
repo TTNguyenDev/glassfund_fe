@@ -12,7 +12,7 @@ type TaskFilterProps = {
 export const SORT_SELECT_OPTIONS = [
     {
         label: 'All',
-        value: 'all',
+        value: undefined,
     },
     {
         label: 'Pending',
@@ -112,6 +112,12 @@ export const ProjectFilter: React.FC<TaskFilterProps> = ({
                             ...base,
                             padding: 0,
                         }),
+                    }}
+                    onChange={(option) => {
+                        setProjectFilter({
+                            type: option.value,
+                        });
+                        applyProjectFilter();
                     }}
                 />
             </div>
