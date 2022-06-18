@@ -29,9 +29,7 @@ export const ListProjects: React.FC<ListProjectsProps> = ({
             ) : (
                 <SimpleGrid
                     columns={
-                        gridBreakpoints
-                            ? gridBreakpoints
-                            : { base: 1, md: 2, xl: 3 }
+                        gridBreakpoints ? gridBreakpoints : { base: 1, md: 2 }
                     }
                     gap="40px"
                 >

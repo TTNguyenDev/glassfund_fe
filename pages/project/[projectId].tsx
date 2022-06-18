@@ -34,8 +34,87 @@ import { db } from '../../db';
 import { BlockChainConnector } from '../../utils/blockchain';
 import { ModalsController } from '../../utils/modalsController';
 import { CardTag } from '../../components/cardTag';
-import ClaimIcon from '../../assets/claim-icon.svg';
-import ClaimedIcon from '../../assets/claimed-icon.svg';
+import ImageNext from 'next/image';
+import ClaimIconSvg from '../../assets/claim-icon.svg';
+import ClaimedIconSvg from '../../assets/claimed-icon.svg';
+
+export const CheckedIcon = () => (
+    <Flex
+        borderRadius="full"
+        minW="40px"
+        minH="40px"
+        justifyContent="center"
+        alignItems="center"
+        bg="green"
+        position="absolute"
+        left="0"
+        top="50%"
+        transform="translate(-50%, -50%)"
+    >
+        <CheckIcon color="black" fontSize="20px" />
+    </Flex>
+);
+
+export const ClaimIcon = ({
+    position,
+    done,
+    stop,
+    currentClaimed,
+    numberOfClaims,
+}: {
+    position: number;
+    done?: boolean;
+    stop?: boolean;
+    currentClaimed: number;
+    numberOfClaims: number;
+}) => (
+    <Flex
+        borderRadius="full"
+        minW="40px"
+        minH="40px"
+        justifyContent="center"
+        alignItems="center"
+        bg={done ? 'green' : stop ? 'red' : 'white'}
+        position="absolute"
+        left={`${position}%`}
+        top="50%"
+        transform="translate(-50%, -50%)"
+    >
+        <Box
+            position="absolute"
+            top="-25px"
+            color="textPrimary"
+            fontWeight="600"
+        >
+            <Text>{`${currentClaimed}/${numberOfClaims}`}</Text>
+        </Box>
+        <ImageNext src={ClaimIconSvg} />
+    </Flex>
+);
+
+export const ClaimedIcon = ({
+    position,
+    stop,
+}: {
+    position: number;
+    active?: boolean;
+    stop?: boolean;
+}) => (
+    <Flex
+        borderRadius="full"
+        minW="40px"
+        minH="40px"
+        justifyContent="center"
+        alignItems="center"
+        bg={stop ? 'red' : 'green'}
+        position="absolute"
+        left={`${position}%`}
+        top="50%"
+        transform="translate(-50%, -50%)"
+    >
+        <ImageNext src={ClaimedIconSvg} />
+    </Flex>
+);
 
 export default function ProjectDetailsPage() {
     const router = useRouter();
@@ -111,11 +190,62 @@ export default function ProjectDetailsPage() {
 
     const amountRef = React.useRef<any>();
 
-    const progress = React.useMemo(() => {
+    const progressData = React.useMemo(() => {
         const data = projectInfoQuery.data;
-        if (!data) return 0;
-        if (data.vestingStartTime < Date.now()) return 0;
+
+        if (!data || data.vestingStartTime > Date.now()) return null;
+
+        const fullTime = data.vestingEndTime - data.startedAt;
+
+        const fundingPercent = Math.floor(
+            ((data.endedAt - data.startedAt) * 100) / fullTime
+        );
+
+        const vestingPercent = Math.floor(100 - fundingPercent);
+
+        const currentPercent = Math.floor(
+            (((Date.now() > data.vestingEndTime
+                ? data.vestingEndTime
+                : Date.now()) -
+                data.startedAt) *
+                100) /
+                fullTime
+        );
+
+        const numberOfClaims = Math.floor(
+            (data.vestingEndTime - data.vestingStartTime) / data.vestingInterval
+        );
+
+        const currentClaim = Math.floor(
+            ((Date.now() > data.vestingEndTime
+                ? data.vestingEndTime
+                : Date.now()) -
+                data.vestingStartTime) /
+                data.vestingInterval
+        );
+
+        const currentClaimed = Number(data.funded)
+            ? Math.floor(
+                  (Number(data.claimed) * numberOfClaims) / Number(data.funded)
+              )
+            : 0;
+
+        const stopAtFundingEnd =
+            !Number(data.funded) && Date.now() >= data.endedAt;
+
+        return {
+            funded: Number(data.funded),
+            fundingPercent,
+            vestingPercent,
+            currentPercent,
+            numberOfClaims,
+            currentClaim,
+            currentClaimed,
+            stopAtFundingEnd,
+        };
     }, [projectInfoQuery.data]);
+
+    console.log('PROGRESS DATA', progressData);
 
     if (!data) return null;
 
@@ -287,6 +417,13 @@ export default function ProjectDetailsPage() {
                                 {data.accountId !==
                                     BlockChainConnector.instance.account
                                         .accountId &&
+                                    projectSupportersQuery.data &&
+                                    !!projectSupportersQuery.data.find(
+                                        (i: any) =>
+                                            i[0] ===
+                                            BlockChainConnector.instance.account
+                                                .accountId
+                                    ) &&
                                     projectForceStopAccountsQuery.data &&
                                     !projectForceStopAccountsQuery.data.includes(
                                         BlockChainConnector.instance.account
@@ -518,25 +655,77 @@ export default function ProjectDetailsPage() {
                                     >
                                         Progress
                                     </Text>
-                                    <HStack>
+                                    <Box padding="20px">
                                         <Flex
-                                            borderRadius="full"
-                                            minW="40px"
-                                            minH="40px"
-                                            justifyContent="center"
                                             alignItems="center"
-                                            bg="green"
-                                        >
-                                            <CheckIcon color="black" />
-                                        </Flex>
-                                        <Progress
+                                            position="relative"
                                             w="100%"
-                                            value={progress}
-                                            size="sm"
-                                            borderRadius="10px"
-                                            colorScheme="green"
-                                        />
-                                    </HStack>
+                                        >
+                                            {progressData && (
+                                                <>
+                                                    <Progress
+                                                        w="100%"
+                                                        value={
+                                                            progressData.currentPercent
+                                                        }
+                                                        size="xs"
+                                                        colorScheme="green"
+                                                        hasStripe
+                                                    />
+                                                    <CheckedIcon />
+                                                    <ClaimedIcon
+                                                        position={
+                                                            progressData.fundingPercent
+                                                        }
+                                                        stop={
+                                                            progressData.stopAtFundingEnd
+                                                        }
+                                                    />
+                                                    {/*{Array.from(
+                                                        Array(
+                                                            progressData.currentClaimed
+                                                        )
+                                                    ).map((_, index) => (
+                                                        <ClaimIcon
+                                                            position={
+                                                                progressData.fundingPercent +
+                                                                ((index + 1) *
+                                                                    100 *
+                                                                    progressData.vestingPercent) /
+                                                                    100 /
+                                                                    progressData.numberOfClaims
+                                                            }
+                                                            active
+                                                        />
+                                                    ))}*/}
+                                                    {!!progressData.funded && (
+                                                        <ClaimIcon
+                                                            position={
+                                                                progressData.fundingPercent +
+                                                                ((progressData.currentClaimed +
+                                                                    1) *
+                                                                    100 *
+                                                                    progressData.vestingPercent) /
+                                                                    100 /
+                                                                    progressData.numberOfClaims
+                                                            }
+                                                            stop={
+                                                                !!projectInfoQuery
+                                                                    .data
+                                                                    ?.forceStopTs
+                                                            }
+                                                            currentClaimed={
+                                                                progressData.currentClaimed
+                                                            }
+                                                            numberOfClaims={
+                                                                progressData.numberOfClaims
+                                                            }
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
+                                        </Flex>
+                                    </Box>
                                 </Box>
                                 <HStack
                                     w="100%"
