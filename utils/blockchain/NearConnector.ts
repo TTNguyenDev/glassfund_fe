@@ -28,6 +28,7 @@ const ChangeMethods: string[] = [
     'claim_reward',
     'support_project',
     'force_stop',
+    'drawdown',
 ];
 
 type ContractMethodType<K = any> = (...args: any) => K;
@@ -63,6 +64,7 @@ type ContractMethodsType = {
     claim_reward: ContractMethodType;
     support_project: ContractMethodType;
     force_stop: ContractMethodType;
+    drawdown: ContractMethodType;
 };
 
 export class NearConnector {

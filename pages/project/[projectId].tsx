@@ -284,6 +284,29 @@ export default function ProjectDetailsPage() {
                                             Force Stop
                                         </Button>
                                     )}
+                                {data.accountId !==
+                                    BlockChainConnector.instance.account
+                                        .accountId &&
+                                    projectForceStopAccountsQuery.data &&
+                                    !projectForceStopAccountsQuery.data.includes(
+                                        BlockChainConnector.instance.account
+                                            .accountId
+                                    ) && (
+                                        <Button
+                                            onClick={() => {
+                                                ModalsController.controller.setDataDrawdownProjectModal(
+                                                    {
+                                                        projectId,
+                                                    }
+                                                );
+                                                ModalsController.controller.openDrawdownProjectModal();
+                                            }}
+                                            colorScheme="green"
+                                            size="lg"
+                                        >
+                                            Drawdown
+                                        </Button>
+                                    )}
                                 {data.accountId ===
                                     BlockChainConnector.instance.account
                                         .accountId &&
@@ -312,14 +335,13 @@ export default function ProjectDetailsPage() {
                                                     projectClaimableAmountQuery.data
                                                 }
                                             </Text>
-
                                             <IconButton
                                                 aria-label="Claim"
                                                 w="40px"
                                                 h="40px"
                                                 icon={<DownloadIcon />}
                                                 isDisabled={
-                                                    projectClaimableAmountQuery.data
+                                                    !!projectClaimableAmountQuery.data
                                                 }
                                                 onClick={() => {
                                                     ModalsController.controller.setDataClaimRewardProjectModal(
