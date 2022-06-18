@@ -37,12 +37,13 @@ import { CardTag } from '../../components/cardTag';
 import ImageNext from 'next/image';
 import ClaimIconSvg from '../../assets/claim-icon.svg';
 import ClaimedIconSvg from '../../assets/claimed-icon.svg';
+import { utils } from 'near-api-js';
 
 export const CheckedIcon = () => (
     <Flex
         borderRadius="full"
-        minW="40px"
-        minH="40px"
+        minW="30px"
+        minH="30px"
         justifyContent="center"
         alignItems="center"
         bg="green"
@@ -70,8 +71,8 @@ export const ClaimIcon = ({
 }) => (
     <Flex
         borderRadius="full"
-        minW="40px"
-        minH="40px"
+        minW="30px"
+        minH="30px"
         justifyContent="center"
         alignItems="center"
         bg={done ? 'green' : stop ? 'red' : 'white'}
@@ -88,7 +89,7 @@ export const ClaimIcon = ({
         >
             <Text>{`${currentClaimed}/${numberOfClaims}`}</Text>
         </Box>
-        <ImageNext src={ClaimIconSvg} />
+        <ImageNext src={ClaimIconSvg} width="20px" />
     </Flex>
 );
 
@@ -102,8 +103,8 @@ export const ClaimedIcon = ({
 }) => (
     <Flex
         borderRadius="full"
-        minW="40px"
-        minH="40px"
+        minW="30px"
+        minH="30px"
         justifyContent="center"
         alignItems="center"
         bg={stop ? 'red' : 'green'}
@@ -112,7 +113,7 @@ export const ClaimedIcon = ({
         top="50%"
         transform="translate(-50%, -50%)"
     >
-        <ImageNext src={ClaimedIconSvg} />
+        <ImageNext src={ClaimedIconSvg} width="20px" />
     </Flex>
 );
 
@@ -169,6 +170,14 @@ export default function ProjectDetailsPage() {
             enabled: !!data,
         }
     );
+    const canDrawdownQuery = useQuery<any>(
+        ['can_drawdown', projectId],
+        () => ProjectService.canDrawdown(projectId),
+        {
+            enabled: !!projectId,
+        }
+    );
+    console.log('CAN DRAWDOWN', canDrawdownQuery.data);
 
     const totalSupporters = React.useMemo(
         () => projectSupportersQuery.data?.length ?? 0,
@@ -193,7 +202,7 @@ export default function ProjectDetailsPage() {
     const progressData = React.useMemo(() => {
         const data = projectInfoQuery.data;
 
-        if (!data || data.vestingStartTime > Date.now()) return null;
+        if (!data) return null;
 
         const fullTime = data.vestingEndTime - data.startedAt;
 
@@ -417,18 +426,15 @@ export default function ProjectDetailsPage() {
                                 {data.accountId !==
                                     BlockChainConnector.instance.account
                                         .accountId &&
-                                    projectSupportersQuery.data &&
+                                    !!projectInfoQuery.data?.forceStopTs &&
+                                    !!projectSupportersQuery.data &&
                                     !!projectSupportersQuery.data.find(
                                         (i: any) =>
                                             i[0] ===
                                             BlockChainConnector.instance.account
                                                 .accountId
                                     ) &&
-                                    projectForceStopAccountsQuery.data &&
-                                    !projectForceStopAccountsQuery.data.includes(
-                                        BlockChainConnector.instance.account
-                                            .accountId
-                                    ) && (
+                                    canDrawdownQuery.data && (
                                         <Button
                                             onClick={() => {
                                                 ModalsController.controller.setDataDrawdownProjectModal(
@@ -693,7 +699,7 @@ export default function ProjectDetailsPage() {
                                                                     100 *
                                                                     progressData.vestingPercent) /
                                                                     100 /
-                                                                    progressData.numberOfClaims
+8pxprogressData.numberOfClaims
                                                             }
                                                             active
                                                         />
@@ -828,7 +834,7 @@ export default function ProjectDetailsPage() {
                                                 </Text>
                                             </HStack>
                                             <HStack
-                                                spacing="5px"
+                                                spacing="8px"
                                                 alignItems="end"
                                                 justifyContent="center"
                                             >
@@ -843,9 +849,11 @@ export default function ProjectDetailsPage() {
                                                     color="textGreen"
                                                     fontSize="48px"
                                                     fontWeight="600"
-                                                    lineHeight="1.1"
+                                                    lineHeight="1.05"
                                                 >
-                                                    {item[1]}
+                                                    {utils.format.formatNearAmount(
+                                                        item[1]
+                                                    )}
                                                 </Text>
                                                 <Text
                                                     color="textGreen"

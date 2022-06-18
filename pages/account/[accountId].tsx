@@ -322,6 +322,7 @@ export default function AccountPage() {
                                     onClick={() => {
                                         setProjectFilter({
                                             accountId,
+                                            supported: undefined,
                                         });
                                         applyProjectFilter();
                                     }}
