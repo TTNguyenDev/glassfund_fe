@@ -3,41 +3,37 @@ import Header from 'next/head';
 import { Layout } from '../../components/layout';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import moment from 'moment';
 import {
-    Alert,
-    AlertIcon,
     Box,
-    Button,
     Flex,
     HStack,
     VStack,
     Image,
-    Progress,
     Text,
-    InputGroup,
     Input,
-    InputLeftElement,
-    InputRightElement,
     IconButton,
+    Avatar,
+    NumberInput,
+    NumberInputField,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInputStepper,
+    Alert,
+    AlertIcon,
+    Button,
 } from '@chakra-ui/react';
-import {
-    AddIcon
-} from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {
     Project,
     ProjectDescription,
     ProjectService,
 } from '../../services/projectService';
-import { BsClock } from 'react-icons/bs';
-import { MdOutlineDoubleArrow } from 'react-icons/md';
-import Avatar from 'react-avatar';
 import { Nullable } from '../../common';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { db } from '../../db';
-import { ModalsController } from '../../utils/modalsController';
 import { BlockChainConnector } from '../../utils/blockchain';
-import classes from './project.module.less'
+import { ModalsController } from '../../utils/modalsController';
+import { CardTag } from '../../components/cardTag';
 
 export default function ProjectDetailsPage() {
     const router = useRouter();
@@ -93,6 +89,16 @@ export default function ProjectDetailsPage() {
         }
     );
 
+    const totalSupporters = React.useMemo(
+        () => projectSupportersQuery.data?.length ?? 0,
+        [projectSupportersQuery.data]
+    );
+
+    const totalForceStop = React.useMemo(
+        () => projectInfoQuery.data?.forceStop?.length ?? 0,
+        [projectInfoQuery.data?.forceStop]
+    );
+
     const description: Nullable<ProjectDescription> = React.useMemo(
         () =>
             projectDescriptionQuery.data
@@ -100,6 +106,8 @@ export default function ProjectDetailsPage() {
                 : null,
         [projectDescriptionQuery.data]
     );
+
+    const amountRef = React.useRef<any>();
 
     if (!data) return null;
 
@@ -109,12 +117,13 @@ export default function ProjectDetailsPage() {
                 <title>{data ? data.title : projectId}</title>
             </Header>
             <Layout>
-                <Flex
-                    w="100%"
-                    justify="space-around"
-                    mb="40px"
-                >
-                    <Box maxW="1200px" w='100%'>
+                <Flex w="100%" justify="space-around" mb="40px">
+                    <Box maxW="1200px" w="100%">
+                        {projectInfoQuery.data && (
+                            <Box mt="50px" position="absolute">
+                                <CardTag project={projectInfoQuery.data} />
+                            </Box>
+                        )}
                         <Image
                             src={
                                 description?.thumbnail ??
@@ -126,32 +135,32 @@ export default function ProjectDetailsPage() {
                             h="240px"
                             marginTop="24px"
                             borderRadius="8px"
-                            boxShadow='var(--primary-box-shadow-color)'
+                            boxShadow="var(--primary-box-shadow-color)"
                         />
                         <HStack
-                            spacing='20px'
-                            padding='0 50px'
-                            marginTop='-80px'
+                            spacing="20px"
+                            padding="0 50px"
+                            marginTop="-80px"
                             align="end"
-                            mb='68px'
+                            mb="68px"
                         >
-                            <Image 
-                                borderRadius='full'
-                                boxSize='160px'
-                                src="../default_avatar.jpg"
-                                objectFit='cover'
-                                border='6px solid var(--background-color)'
+                            <Image
+                                borderRadius="full"
+                                boxSize="160px"
+                                src="/default_avatar.jpg"
+                                objectFit="cover"
+                                border="6px solid var(--background-color)"
                             />
                             <HStack
                                 spacing="30px"
                                 justifyContent="space-between"
-                                h='80px'
-                                flex='1'
+                                h="80px"
+                                flex="1"
                             >
                                 <VStack
-                                    alignItems='start'
-                                    spacing='0'
-                                    justify='center'
+                                    alignItems="start"
+                                    spacing="0"
+                                    justify="center"
                                 >
                                     <Text
                                         fontSize="28px"
@@ -160,53 +169,166 @@ export default function ProjectDetailsPage() {
                                     >
                                         {data.title}
                                     </Text>
-                                    <Text 
-                                        fontSize="20px" 
+                                    <Text
+                                        fontSize="20px"
                                         fontWeight="500"
                                         textColor="var(--text-color)"
                                     >
                                         {data.accountId}
                                     </Text>
-                                </VStack> 
+                                </VStack>
                                 {data.accountId !==
                                     BlockChainConnector.instance.account
                                         .accountId &&
                                     Date.now() >= data.startedAt &&
                                     Date.now() <= data.endedAt && (
-                                    /* Support Frame */
-                                    <HStack 
-                                        spacing='12px' 
-                                        padding='10px 15px' 
-                                        background='var(--sub-alt-color)' 
-                                        boxShadow='var(--primary-box-shadow-color)' 
-                                        borderRadius='10px'
-                                        maxW='220px'
-                                        h='fit-content'
-                                    >
-                                        <Image 
-                                            borderRadius='full'
-                                            boxSize='30px'
-                                            src="../NearIcon.svg"/>
-                                        <Input 
-                                            type='number'
-                                            color='var(--text-color)'
-                                            variant='unstyled' 
-                                            placeholder='Support'
-                                            borderRadius='0'
-                                            _placeholder={{ color: 'var(--text-color)', opacity: 0.4 }}/>
-                                        <IconButton aria-label='Add to friends' w='30px' h='30px' icon={<AddIcon />} />
-                                    </HStack>
-                                )}
+                                        <HStack
+                                            spacing="12px"
+                                            padding="10px 15px"
+                                            background="var(--sub-alt-color)"
+                                            boxShadow="var(--primary-box-shadow-color)"
+                                            borderRadius="10px"
+                                            maxW="250px"
+                                            h="fit-content"
+                                        >
+                                            <Image
+                                                borderRadius="full"
+                                                boxSize="30px"
+                                                src="/NearIcon.svg"
+                                            />
+                                            {projectInfoQuery.data && (
+                                                <NumberInput
+                                                    min={Number(
+                                                        projectInfoQuery.data
+                                                            .minimumDeposit
+                                                    )}
+                                                    defaultValue={Number(
+                                                        projectInfoQuery.data
+                                                            .minimumDeposit
+                                                    )}
+                                                    precision={2}
+                                                    w="100%"
+                                                    color="textPrimary"
+                                                >
+                                                    <NumberInputField
+                                                        placeholder="Support"
+                                                        ref={amountRef}
+                                                    />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            )}
+                                            {data.accountId !==
+                                                BlockChainConnector.instance
+                                                    .account.accountId &&
+                                                Date.now() >=
+                                                    data.vestingStartTime &&
+                                                Date.now() <=
+                                                    data.vestingEndTime &&
+                                                projectSupportersQuery.data &&
+                                                projectForceStopAccountsQuery.data &&
+                                                !!projectSupportersQuery.data.find(
+                                                    (i: any) =>
+                                                        i[0] ===
+                                                        BlockChainConnector
+                                                            .instance.account
+                                                            .accountId
+                                                ) &&
+                                                !projectForceStopAccountsQuery.data.includes(
+                                                    BlockChainConnector.instance
+                                                        .account.accountId
+                                                ) && (
+                                                    <Button
+                                                        onClick={() => {
+                                                            ModalsController.controller.setDataForceStopProjectModal(
+                                                                {
+                                                                    projectId,
+                                                                }
+                                                            );
+                                                            ModalsController.controller.openForceStopProjectModal();
+                                                        }}
+                                                        colorScheme="red"
+                                                    >
+                                                        Force Stop
+                                                    </Button>
+                                                )}
+                                            {data.accountId ===
+                                                BlockChainConnector.instance
+                                                    .account.accountId &&
+                                                projectClaimableAmountQuery.data !==
+                                                    undefined &&
+                                                Date.now() >=
+                                                    data.vestingStartTime && (
+                                                    <HStack>
+                                                        <Text
+                                                            textColor="white"
+                                                            fontSize="18px"
+                                                        >
+                                                            {`Claimable Amount: ${projectClaimableAmountQuery.data} Ⓝ`}
+                                                        </Text>
+                                                        {!!Number(
+                                                            projectClaimableAmountQuery.data
+                                                        ) && (
+                                                            <Button
+                                                                onClick={() => {
+                                                                    ModalsController.controller.setDataClaimRewardProjectModal(
+                                                                        {
+                                                                            projectId,
+                                                                        }
+                                                                    );
+                                                                    ModalsController.controller.openClaimRewardProjectModal();
+                                                                }}
+                                                            >
+                                                                Claim
+                                                            </Button>
+                                                        )}
+                                                    </HStack>
+                                                )}
+
+                                            <IconButton
+                                                aria-label="Add to friends"
+                                                w="40px"
+                                                h="40px"
+                                                icon={<AddIcon />}
+                                                onClick={() => {
+                                                    ModalsController.controller.setDataSupportProjectModal(
+                                                        {
+                                                            projectId,
+                                                            projectName:
+                                                                data.title,
+                                                            amount: amountRef
+                                                                .current.value,
+                                                            projectMinimumDeposit:
+                                                                Number.parseInt(
+                                                                    data.minimumDeposit
+                                                                ),
+                                                        }
+                                                    );
+                                                    ModalsController.controller.openSupportProjectModal();
+                                                }}
+                                            />
+                                        </HStack>
+                                    )}
                             </HStack>
                         </HStack>
-                        <HStack 
-                            borderRadius='5px' 
-                            padding='10px 0'
-                            background='var(--sub-alt-color)'
-                            boxShadow='var(--primary-box-shadow-color)'
+                        {projectInfoQuery.data?.forceStopTs && (
+                            <Box p="15px">
+                                <Alert status="error" fontWeight="600">
+                                    <AlertIcon />
+                                    This project forced stop by the community!
+                                </Alert>
+                            </Box>
+                        )}
+                        <HStack
+                            borderRadius="5px"
+                            padding="10px 0"
+                            background="var(--sub-alt-color)"
+                            boxShadow="var(--primary-box-shadow-color)"
                             mb="20px"
                         >
-                            <VStack alignItems='center' flex='1' spacing='10px'>
+                            <VStack alignItems="center" flex="1" spacing="10px">
                                 <Text
                                     fontSize="14px"
                                     fontWeight="400"
@@ -216,22 +338,22 @@ export default function ProjectDetailsPage() {
                                 </Text>
                                 <HStack
                                     justifyContent="space-between"
-                                    alignItems='end'
-                                    w='fit-content'
-                                    h='fit-content'
-                                    spacing='0'
+                                    alignItems="end"
+                                    w="fit-content"
+                                    h="fit-content"
+                                    spacing="0"
                                 >
-                                    <Text 
-                                        fontSize="40px" 
-                                        lineHeight='40px'
+                                    <Text
+                                        fontSize="40px"
+                                        lineHeight="40px"
                                         fontWeight="700"
                                         textColor="var(--main-color)"
-                                        height='fit-content'
+                                        height="fit-content"
                                     >
-                                        {data.funded}
+                                        {projectInfoQuery.data?.funded}
                                     </Text>
-                                    <Text 
-                                        fontSize="20px" 
+                                    <Text
+                                        fontSize="20px"
                                         fontWeight="400"
                                         textColor="var(--main-color)"
                                     >
@@ -239,7 +361,7 @@ export default function ProjectDetailsPage() {
                                     </Text>
                                 </HStack>
                             </VStack>
-                            <VStack alignItems='center' flex='1' spacing='10px'>
+                            <VStack alignItems="center" flex="1" spacing="10px">
                                 <Text
                                     fontSize="14px"
                                     fontWeight="400"
@@ -249,30 +371,30 @@ export default function ProjectDetailsPage() {
                                 </Text>
                                 <HStack
                                     justifyContent="space-between"
-                                    alignItems='end'
-                                    w='fit-content'
-                                    h='fit-content'
-                                    spacing='0'
+                                    alignItems="end"
+                                    w="fit-content"
+                                    h="fit-content"
+                                    spacing="0"
                                 >
-                                    <Text 
-                                        fontSize="40px" 
-                                        lineHeight='40px'
+                                    <Text
+                                        fontSize="40px"
+                                        lineHeight="40px"
                                         fontWeight="700"
                                         textColor="var(--error-color)"
-                                        height='fit-content'
+                                        height="fit-content"
                                     >
-                                        0
+                                        {totalForceStop}
                                     </Text>
-                                    <Text 
-                                        fontSize="20px" 
+                                    <Text
+                                        fontSize="20px"
                                         fontWeight="400"
                                         textColor="var(--error-color)"
                                     >
-                                        /185
+                                        /{totalSupporters}
                                     </Text>
                                 </HStack>
                             </VStack>
-                            <VStack alignItems='center' flex='1' spacing='10px'>
+                            <VStack alignItems="center" flex="1" spacing="10px">
                                 <Text
                                     fontSize="14px"
                                     fontWeight="400"
@@ -282,23 +404,23 @@ export default function ProjectDetailsPage() {
                                 </Text>
                                 <HStack
                                     justifyContent="space-between"
-                                    alignItems='end'
-                                    w='fit-content'
-                                    h='fit-content'
-                                    spacing='0'
+                                    alignItems="end"
+                                    w="fit-content"
+                                    h="fit-content"
+                                    spacing="0"
                                 >
-                                    <Text 
-                                        fontSize="40px" 
-                                        lineHeight='40px'
+                                    <Text
+                                        fontSize="40px"
+                                        lineHeight="40px"
                                         fontWeight="700"
                                         textColor="var(--balloon-text-color)"
-                                        height='fit-content'
+                                        height="fit-content"
                                     >
-                                        185
+                                        {totalSupporters}
                                     </Text>
                                 </HStack>
                             </VStack>
-                            <VStack alignItems='center' flex='1' spacing='10px'>
+                            <VStack alignItems="center" flex="1" spacing="10px">
                                 <Text
                                     fontSize="14px"
                                     fontWeight="400"
@@ -308,22 +430,22 @@ export default function ProjectDetailsPage() {
                                 </Text>
                                 <HStack
                                     justifyContent="space-between"
-                                    alignItems='end'
-                                    w='fit-content'
-                                    h='fit-content'
-                                    spacing='5px'
+                                    alignItems="end"
+                                    w="fit-content"
+                                    h="fit-content"
+                                    spacing="5px"
                                 >
-                                    <Text 
-                                        fontSize="40px" 
-                                        lineHeight='40px'
+                                    <Text
+                                        fontSize="40px"
+                                        lineHeight="40px"
                                         fontWeight="700"
                                         textColor="var(--balloon-text-color)"
-                                        height='fit-content'
+                                        height="fit-content"
                                     >
                                         0
                                     </Text>
-                                    <Text 
-                                        fontSize="18px" 
+                                    <Text
+                                        fontSize="18px"
                                         fontWeight="400"
                                         textColor="var(--balloon-text-color)"
                                     >
@@ -332,22 +454,25 @@ export default function ProjectDetailsPage() {
                                 </HStack>
                             </VStack>
                         </HStack>
-                        <HStack spacing='20px' align='start'>
-                            {/* Left column */}
-                            <VStack 
-                                maxW="800px" 
-                                minW="700px" 
-                                flex='1'
-                                spacing='20px'
+                        <HStack spacing="20px" align="start">
+                            <VStack
+                                maxW="800px"
+                                minW="700px"
+                                flex="1"
+                                spacing="20px"
                             >
-                                <HStack 
-                                    w='100%'
-                                    borderRadius='5px' 
-                                    padding='12px 16px'
-                                    background='var(--sub-alt-color)'
-                                    boxShadow='var(--primary-box-shadow-color)'
+                                <HStack
+                                    w="100%"
+                                    borderRadius="5px"
+                                    padding="12px 16px"
+                                    background="var(--sub-alt-color)"
+                                    boxShadow="var(--primary-box-shadow-color)"
                                 >
-                                    <VStack alignItems='start' flex='1' spacing='10px'>
+                                    <VStack
+                                        alignItems="start"
+                                        flex="1"
+                                        spacing="10px"
+                                    >
                                         <Text
                                             fontSize="22px"
                                             fontWeight="500"
@@ -357,22 +482,25 @@ export default function ProjectDetailsPage() {
                                         </Text>
                                         <HStack
                                             justifyContent="space-between"
-                                            alignItems='end'
-                                            w='100%'
-                                            h='fit-content'
-                                            spacing='0'
-                                        >
-                                        </HStack>
+                                            alignItems="end"
+                                            w="100%"
+                                            h="fit-content"
+                                            spacing="0"
+                                        ></HStack>
                                     </VStack>
                                 </HStack>
-                                <HStack 
-                                    w='100%'
-                                    borderRadius='5px' 
-                                    padding='12px 16px'
-                                    background='var(--sub-alt-color)'
-                                    boxShadow='var(--primary-box-shadow-color)'
+                                <HStack
+                                    w="100%"
+                                    borderRadius="5px"
+                                    padding="12px 16px"
+                                    background="var(--sub-alt-color)"
+                                    boxShadow="var(--primary-box-shadow-color)"
                                 >
-                                    <VStack alignItems='start' flex='1' spacing='10px'>
+                                    <VStack
+                                        alignItems="start"
+                                        flex="1"
+                                        spacing="10px"
+                                    >
                                         <Text
                                             fontSize="22px"
                                             fontWeight="500"
@@ -391,25 +519,107 @@ export default function ProjectDetailsPage() {
                                     </VStack>
                                 </HStack>
                             </VStack>
-                            {/* Right Column */}
-                            <VStack w="100%">
-                                <HStack 
-                                    w='100%'
-                                    borderRadius='5px' 
-                                    padding='12px 16px'
-                                    background='var(--sub-alt-color)'
-                                    boxShadow='var(--primary-box-shadow-color)'
-                                >
-                                    <VStack alignItems='start' flex='1' spacing='10px'>
-                                        <Text
-                                            fontSize="22px"
-                                            fontWeight="500"
-                                            textColor="var(--text-color)"
+                            <VStack w="100%" spacing="20px">
+                                <Box layerStyle="cardSecondary" w="100%">
+                                    <Text
+                                        color="textSecondary"
+                                        fontSize="22px"
+                                        fontWeight="500"
+                                    >
+                                        History
+                                    </Text>
+                                </Box>
+                                {projectForceStopAccountsQuery.data?.map(
+                                    (item: any, index: number) => (
+                                        <Box
+                                            key={index}
+                                            layerStyle="cardSecondary"
+                                            w="100%"
+                                            p="8px 16px"
                                         >
-                                            History
-                                        </Text>
-                                    </VStack>
-                                </HStack>
+                                            <HStack>
+                                                <Avatar
+                                                    name={item[0]}
+                                                    borderWidth="1px"
+                                                    borderColor="primary"
+                                                />
+                                                <Text
+                                                    color="textPrimary"
+                                                    fontSize="18px"
+                                                    fontWeight="400"
+                                                >
+                                                    {item[0]}
+                                                </Text>
+                                            </HStack>
+                                            <HStack
+                                                spacing="5px"
+                                                alignItems="end"
+                                                justifyContent="center"
+                                            >
+                                                <Text
+                                                    color="textRed"
+                                                    fontSize="48px"
+                                                    fontWeight="600"
+                                                >
+                                                    Force Stop
+                                                </Text>
+                                            </HStack>
+                                        </Box>
+                                    )
+                                )}
+                                {projectSupportersQuery.data?.map(
+                                    (item: any, index: number) => (
+                                        <Box
+                                            key={index}
+                                            layerStyle="cardSecondary"
+                                            w="100%"
+                                            p="8px 16px"
+                                        >
+                                            <HStack>
+                                                <Avatar
+                                                    name={item[0]}
+                                                    borderWidth="1px"
+                                                    borderColor="primary"
+                                                />
+                                                <Text
+                                                    color="textPrimary"
+                                                    fontSize="18px"
+                                                    fontWeight="400"
+                                                >
+                                                    {item[0]}
+                                                </Text>
+                                            </HStack>
+                                            <HStack
+                                                spacing="5px"
+                                                alignItems="end"
+                                                justifyContent="center"
+                                            >
+                                                <Text
+                                                    color="textGreen"
+                                                    fontSize="24px"
+                                                    fontWeight="600"
+                                                >
+                                                    Supported
+                                                </Text>
+                                                <Text
+                                                    color="textGreen"
+                                                    fontSize="48px"
+                                                    fontWeight="600"
+                                                    lineHeight="1.1"
+                                                >
+                                                    {item[1]}
+                                                </Text>
+                                                <Text
+                                                    color="textGreen"
+                                                    fontSize="24px"
+                                                    fontWeight="600"
+                                                >
+                                                    NEAR
+                                                </Text>
+                                            </HStack>
+                                        </Box>
+                                    )
+                                )}
                             </VStack>
                         </HStack>
                     </Box>

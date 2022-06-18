@@ -1,14 +1,13 @@
 import React from 'react';
 import Header from 'next/head';
 import { Layout } from '../components/layout';
-import classes from './index.module.less';
 import { useHomePage } from '../hooks/useHomePage';
 import { Loader } from '../components/loader';
-import { ListTasks } from '../components/listTasks';
+import { ListProjects } from '../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { background, Box, Heading } from '@chakra-ui/react';
-import {TaskFilter} from '../components/tasksFilter';
+import { Box, Text } from '@chakra-ui/react';
+import { ProjectFilter } from '../components/tasksFilter';
 import { filter } from 'lodash';
 
 export default function Home() {
@@ -22,7 +21,7 @@ export default function Home() {
     } = useHomePage();
 
     const app = useSelector((state: RootState) => state.app);
-    console.log(jobs);
+
     return (
         <>
             <Header>
@@ -30,40 +29,27 @@ export default function Home() {
             </Header>
             <Layout>
                 {app.data.cacheReady ? (
-                    <Box
-                        className={classes.container}
-                    >
-                        <Heading
-                            display="inline-block"
-                            fontSize="54px"
-                            fontWeight="600"
-                            background="var(--balloon-text-color)"
-                            backgroundClip="text"
-                            mb="40px"
-                            ml="20px"
-                        >
+                    <Box layerStyle="wrapper">
+                        <Text as="h2" layerStyle="headingPage">
                             All projects
-                        </Heading>
+                        </Text>
                         {authLoading && <Loader />}
-                        <div className={classes.wrapper}>
-                            <div className={classes.top}>
-                                <TaskFilter
-                                    filter={'All'}
-                                    setTaskFilter={filter}
-                                    applyTaskFilter={() => {}}
-                                />
-                            </div>
-                            <div className={classes.main}>
-                                <ListTasks
-                                    tasks={jobs}
-                                    isLoading={listJobsLoading}
-                                    fetchNextPage={fetchNextPage}
-                                    isFetchingNextPage={isFetchingNextPage}
-                                    hasNextPage={hasNextPage}
-                                />
-                            </div>
-                        </div>
-                        <div style={{ marginBottom: 50 }} />
+                        <Box mb="30px">
+                            <ProjectFilter
+                                filter={'All'}
+                                setProjectFilter={filter}
+                                applyProjectFilter={() => {}}
+                            />
+                        </Box>
+                        <Box>
+                            <ListProjects
+                                projects={jobs}
+                                isLoading={listJobsLoading}
+                                fetchNextPage={fetchNextPage}
+                                isFetchingNextPage={isFetchingNextPage}
+                                hasNextPage={hasNextPage}
+                            />
+                        </Box>
                     </Box>
                 ) : (
                     <Loader />

@@ -5,36 +5,42 @@ import {
     ProjectDescription,
     ProjectService,
 } from '../../services/projectService';
-import { Box, Flex, HStack, VStack, Image, Progress, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    HStack,
+    VStack,
+    Image,
+    Progress,
+    Text,
+} from '@chakra-ui/react';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { Nullable } from '../../common';
-import Avatar from 'react-avatar';
-import moment from 'moment';
-import { BsClock } from 'react-icons/bs';
-import { MdOutlineDoubleArrow } from 'react-icons/md';
 import Link from 'next/link';
-import classes from './jobCard.module.less';
-import {CardTag} from '../cardTag'
+import classes from './projectCard.module.less';
+import { CardTag } from '../cardTag';
 
-interface JobCardProps {
-    task: Project;
+interface ProjectCardProps {
+    project: Project;
 }
 
-export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     const projectInfoQuery = useQuery<Project>(
-        ['project_info', task.projectId],
-        () => ProjectService.getProject(task.projectId),
+        ['project_info', project.projectId],
+        () => ProjectService.getProject(project.projectId),
         {
-            enabled: !!task.projectId,
+            enabled: !!project.projectId,
         }
     );
+
     const projectDescriptionQuery = useQuery<string>(
-        ['project_description', task.projectId],
-        () => IPFSUtils.getDataByCID(task.description) as any,
+        ['project_description', project.projectId],
+        () => IPFSUtils.getDataByCID(project.description) as any,
         {
-            enabled: !!task.description,
+            enabled: !!project.description,
         }
     );
+
     const description: Nullable<ProjectDescription> = React.useMemo(
         () =>
             projectDescriptionQuery.data
@@ -43,15 +49,35 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
         [projectDescriptionQuery.data]
     );
 
+    const projectSupportersQuery = useQuery<any>(
+        ['project_supporters', project.projectId],
+        () => ProjectService.getSupporters(project.projectId),
+        {
+            enabled: !!project.projectId,
+        }
+    );
+
+    const totalSupporters = React.useMemo(
+        () => projectSupportersQuery.data?.length ?? 0,
+        [projectSupportersQuery.data]
+    );
+
+    const totalForceStop = React.useMemo(
+        () => projectInfoQuery.data?.forceStop?.length ?? 0,
+        [projectInfoQuery.data?.forceStop]
+    );
+
     return (
-        <Link href={`/project/${task.projectId}`}>
+        <Link href={`/project/${project.projectId}`}>
             <Box
-                className={classes.root}
-                opacity={Date.now() > task.vestingEndTime ? 0.45 : 1}
+                layerStyle="cardPrimary"
+                cursor="pointer"
+                transition="all 0.2s"
+                opacity={Date.now() > project.vestingEndTime ? 0.45 : 1}
+                _hover={{
+                    transform: 'translateY(-5px)',
+                }}
             >
-                {/*  
-                    Header card
-                */}
                 <Box h="200px" pos="relative">
                     <Image
                         src={
@@ -68,13 +94,12 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             height="200px"
                             pos="absolute"
                             alignItems="top"
-                            top='20px'
-                            left='0'
-                            justifyContent='space-between'
-                            paddingEnd='20px'
+                            top="20px"
+                            left="0"
+                            justifyContent="space-between"
+                            paddingEnd="20px"
                         >
-                            <CardTag project={task}/>
-                            
+                            <CardTag project={project} />
                             <Flex className={classes.process}>
                                 <Text
                                     fontSize="18px"
@@ -90,26 +115,23 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                                     textColor="var(--text-color)"
                                     margin="0"
                                 >
-                                    {`/${task.target}`}  
+                                    {`/${project.target}`}
                                 </Text>
-                                <Image 
-                                    borderRadius='full'
-                                    boxSize='22px'
-                                    marginLeft='5px'
-                                    src="NearIcon.svg"/>
+                                <Image
+                                    borderRadius="full"
+                                    boxSize="22px"
+                                    marginLeft="5px"
+                                    src="/NearIcon.svg"
+                                />
                             </Flex>
                         </HStack>
                     )}
                 </Box>
                 {!!projectInfoQuery.data && (
-                    <Flex
-                        w="100%"
-                        alignItems="end"
-                        flexDir="column"
-                    > 
+                    <Flex w="100%" alignItems="end" flexDir="column">
                         <Progress
                             value={Number(projectInfoQuery.data.funded)}
-                            max={Number(task.target)}
+                            max={Number(project.target)}
                             size="sm"
                             colorScheme="yellow"
                             height="7px"
@@ -119,44 +141,42 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                     </Flex>
                 )}
                 <Box p="20px 30px">
-                    <HStack
-                        spacing='20px'
-                        mb='20px'
-                    >
-                        <Image 
-                            borderRadius='full'
-                            boxSize='80px'
-                            src="default_avatar.jpg"
-                            objectFit='cover'
-                            border='2px solid var(--main-color)'
+                    <HStack spacing="20px" mb="20px">
+                        <Image
+                            borderRadius="full"
+                            boxSize="80px"
+                            src="/default_avatar.jpg"
+                            objectFit="cover"
+                            border="2px solid var(--main-color)"
                         />
-                        <VStack
-                            alignItems='start'
-                            spacing='0'
-                        >
+                        <VStack alignItems="start" spacing="0">
                             <Text
                                 fontSize="26px"
                                 fontWeight="700"
                                 textColor="white"
                             >
-                                {task.title}
+                                {project.title}
                             </Text>
                             <HStack
                                 spacing="30px"
                                 justifyContent="space-between"
                             >
-                                <Text 
-                                    fontSize="18px" 
+                                <Text
+                                    fontSize="18px"
                                     fontWeight="400"
                                     textColor="var(--text-color)"
                                 >
-                                    {task.accountId}
+                                    {project.accountId}
                                 </Text>
                             </HStack>
                         </VStack>
                     </HStack>
-                    <HStack border='2px solid var(--sub-color)' borderRadius='5px' padding='10px 0'>
-                        <VStack alignItems='center' flex='1' spacing='10px'>
+                    <HStack
+                        border="2px solid var(--sub-color)"
+                        borderRadius="5px"
+                        padding="10px 0"
+                    >
+                        <VStack alignItems="center" flex="1" spacing="10px">
                             <Text
                                 fontSize="14px"
                                 fontWeight="400"
@@ -166,32 +186,30 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             </Text>
                             <HStack
                                 justifyContent="space-between"
-                                alignItems='end'
-                                w='fit-content'
-                                h='fit-content'
-                                spacing='0'
-                            >{
-                            console.log(task)
-                            }
-                                <Text 
-                                    fontSize="40px" 
-                                    lineHeight='40px'
+                                alignItems="end"
+                                w="fit-content"
+                                h="fit-content"
+                                spacing="0"
+                            >
+                                <Text
+                                    fontSize="40px"
+                                    lineHeight="40px"
                                     fontWeight="700"
                                     textColor="var(--error-color)"
-                                    height='fit-content'
+                                    height="fit-content"
                                 >
-                                    0
+                                    {totalForceStop}
                                 </Text>
-                                <Text 
-                                    fontSize="20px" 
+                                <Text
+                                    fontSize="20px"
                                     fontWeight="400"
                                     textColor="var(--error-color)"
                                 >
-                                    /185
+                                    /{totalSupporters}
                                 </Text>
                             </HStack>
                         </VStack>
-                        <VStack alignItems='center' flex='1' spacing='10px'>
+                        <VStack alignItems="center" flex="1" spacing="10px">
                             <Text
                                 fontSize="14px"
                                 fontWeight="400"
@@ -201,23 +219,23 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             </Text>
                             <HStack
                                 justifyContent="space-between"
-                                alignItems='end'
-                                w='fit-content'
-                                h='fit-content'
-                                spacing='0'
+                                alignItems="end"
+                                w="fit-content"
+                                h="fit-content"
+                                spacing="0"
                             >
-                                <Text 
-                                    fontSize="40px" 
-                                    lineHeight='40px'
+                                <Text
+                                    fontSize="40px"
+                                    lineHeight="40px"
                                     fontWeight="700"
                                     textColor="var(--balloon-text-color)"
-                                    height='fit-content'
+                                    height="fit-content"
                                 >
-                                    185
+                                    {projectSupportersQuery.data?.length ?? 0}
                                 </Text>
                             </HStack>
                         </VStack>
-                        <VStack alignItems='center' flex='1' spacing='10px'>
+                        <VStack alignItems="center" flex="1" spacing="10px">
                             <Text
                                 fontSize="14px"
                                 fontWeight="400"
@@ -227,22 +245,22 @@ export const JobCard: React.FunctionComponent<JobCardProps> = ({ task }) => {
                             </Text>
                             <HStack
                                 justifyContent="space-between"
-                                alignItems='end'
-                                w='fit-content'
-                                h='fit-content'
-                                spacing='5px'
+                                alignItems="end"
+                                w="fit-content"
+                                h="fit-content"
+                                spacing="5px"
                             >
-                                <Text 
-                                    fontSize="40px" 
-                                    lineHeight='40px'
+                                <Text
+                                    fontSize="40px"
+                                    lineHeight="40px"
                                     fontWeight="700"
                                     textColor="var(--balloon-text-color)"
-                                    height='fit-content'
+                                    height="fit-content"
                                 >
                                     0
                                 </Text>
-                                <Text 
-                                    fontSize="18px" 
+                                <Text
+                                    fontSize="18px"
                                     fontWeight="400"
                                     textColor="var(--balloon-text-color)"
                                 >

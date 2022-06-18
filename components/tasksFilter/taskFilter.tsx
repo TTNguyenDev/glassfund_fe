@@ -1,24 +1,12 @@
-import React, { useCallback, useRef } from 'react';
-import { BsFilter, BsSearch } from 'react-icons/bs';
-import {
-    Animation,
-    Button,
-    Col,
-    FlexboxGrid,
-    Input,
-    InputGroup,
-    Stack,
-} from 'rsuite';
+import React, { useCallback } from 'react';
+import { Button, Input } from 'rsuite';
 import classes from './taskFilter.module.less';
 import Select from 'react-select';
-import { CategoriesListBadge } from '../categoriesListBadge';
-import { Wrapper } from '../wrapper';
-import { getFontDefinitionFromNetwork } from 'next/dist/server/font-utils';
 
 type TaskFilterProps = {
     filter: any;
-    setTaskFilter: (payload: Record<string, any>) => void;
-    applyTaskFilter: () => void;
+    setProjectFilter: (payload: Record<string, any>) => void;
+    applyProjectFilter: () => void;
 };
 
 export const SORT_SELECT_OPTIONS = [
@@ -44,27 +32,21 @@ export const SORT_SELECT_OPTIONS = [
     },
 ];
 
-export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
+export const ProjectFilter: React.FC<TaskFilterProps> = ({
     filter,
-    setTaskFilter,
-    applyTaskFilter,
+    setProjectFilter,
+    applyProjectFilter,
 }) => {
-    const [show, setShow] = React.useState(false);
-    const handleToggle = () => setShow(!show);
+    const searchInputRef = React.useRef<any>();
 
-    const setCategoryActive = (categoryId: string) => {
-        setTaskFilter({ categories: [categoryId] });
-        applyTaskFilter();
-    };
-
-    const handleSortSelectChange = useCallback(({ value }) => {
-        setTaskFilter({ sort: value });
-        applyTaskFilter();
+    const handleBtnSearchClick = useCallback(() => {
+        setProjectFilter({ title: searchInputRef.current.value });
+        applyProjectFilter();
     }, []);
 
     return (
         <div className={classes.root}>
-            <div style={{height: '100%', margin: 0}}>
+            <div style={{ height: '100%', margin: 0 }}>
                 <Select
                     className={classes.sellect}
                     options={SORT_SELECT_OPTIONS}
@@ -81,8 +63,8 @@ export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
                     }}
                     styles={{
                         container: (base) => ({
-                        ...base,
-                        height: '100%',
+                            ...base,
+                            height: '100%',
                         }),
                         singleValue: (base) => ({
                             ...base,
@@ -106,7 +88,7 @@ export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
                         }),
                         valueContainer: (base) => ({
                             ...base,
-                            padding: '0 0 0 20px'
+                            padding: '0 0 0 20px',
                         }),
                         menu: (base) => ({
                             ...base,
@@ -117,53 +99,41 @@ export const TaskFilter: React.FunctionComponent<TaskFilterProps> = ({
                         }),
                         option: (base, state) => ({
                             ...base,
-                            background: state.isSelected 
-                                ? 'var(--sub-color)' 
-                                : (state.isFocused 
-                                    ? 'var(--background-color)' 
-                                    : 'var(--sub-alt-color)'),
+                            background: state.isSelected
+                                ? 'var(--sub-color)'
+                                : state.isFocused
+                                ? 'var(--background-color)'
+                                : 'var(--sub-alt-color)',
                             color: 'var(--text-color)',
                             fontWeight: state.isSelected ? 600 : 500,
                             fontSize: '16px',
                         }),
                         menuList: (base) => ({
                             ...base,
-                            padding: 0
-                        })
+                            padding: 0,
+                        }),
                     }}
-                    onChange={handleSortSelectChange}
                 />
             </div>
             <Input
                 placeholder="Search..."
                 className={classes.search_text_field}
+                ref={searchInputRef}
             />
             <div style={{ height: '100%' }}>
                 <Button
-                    style={{ 
+                    style={{
                         padding: '0 20px',
                         height: '100%',
-                        fontWeight: 500, 
+                        fontWeight: 500,
                         fontSize: 18,
-                        background: 'var(--sub-alt-color)', 
+                        background: 'var(--sub-alt-color)',
                         boxShadow: 'var(--primary-box-shadow-color)',
                         color: 'var(--text-color)',
                     }}
-                    onClick={handleToggle}
+                    onClick={handleBtnSearchClick}
                 >
-                    <Stack spacing={10}>
-                        {/*
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <BsFilter size={20} />
-                        </div>
-                        */}
-                        <div>Search</div>
-                    </Stack>
+                    Search
                 </Button>
             </div>
         </div>

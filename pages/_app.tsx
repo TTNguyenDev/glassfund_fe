@@ -12,6 +12,7 @@ import { SupportProjectModal } from '../components/supportProjectModal';
 import { useApp } from '../hooks/useApp';
 import { store } from '../store';
 import '../styles/global.less';
+import { theme } from '../theme';
 
 const Init = () => {
     useApp();
@@ -24,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>
             <Provider store={store}>
-                <ChakraProvider>
+                <ChakraProvider theme={theme}>
                     <Init />
                     <ToastContainer />
                     <ConnectWalletModal />

@@ -34,6 +34,8 @@ export type SupportProjectFormInput = {
 
 export type SupportProjectModalDataType = {
     projectId: string;
+    projectName: string;
+    amount: number;
     projectMinimumDeposit: number;
 };
 
@@ -124,7 +126,7 @@ export const SupportProjectModal = () => {
     useEffect(() => {
         if (data) {
             supportProjectForm.setValue('projectId', data.projectId);
-            supportProjectForm.setValue('amount', data.projectMinimumDeposit);
+            supportProjectForm.setValue('amount', data.amount);
         } else {
             supportProjectForm.setValue('projectId', '');
             supportProjectForm.setValue('amount', 0);
@@ -139,12 +141,7 @@ export const SupportProjectModal = () => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Box mb="20px" mt="20px">
-                            <Text
-                                fontFamily="Exo"
-                                fontSize="20px"
-                                fontWeight="700"
-                                mb="15px"
-                            >
+                            <Text fontSize="20px" fontWeight="700" mb="15px">
                                 Support Project
                             </Text>
                             <Box
@@ -165,30 +162,27 @@ export const SupportProjectModal = () => {
                                         }
                                     )}
                                     readOnly={!!data?.projectId}
-                                    autoFocus={!data?.projectId}
                                 />
                             </FormControl>
                             <FormControl>
-                                <NumberInput
-                                    min={data.projectMinimumDeposit}
-                                    precision={0}
-                                >
-                                    <NumberInputField
-                                        {...supportProjectForm.register(
-                                            'amount',
-                                            {
-                                                required: true,
-                                            }
-                                        )}
-                                        autoFocus={!!data?.projectId}
-                                        placeholder="Enter amount"
-                                    />
-
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+                                <Input
+                                    id="name"
+                                    placeholder="Name"
+                                    readOnly={!!data?.projectId}
+                                    value={data?.projectName}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <Input
+                                    id="projectId"
+                                    placeholder="Project ID"
+                                    {...supportProjectForm.register('amount', {
+                                        required: true,
+                                    })}
+                                    readOnly={!!data?.projectId}
+                                    autoFocus={!data?.projectId}
+                                    fontWeight="700"
+                                />
                             </FormControl>
                         </VStack>
                     </ModalBody>
@@ -196,6 +190,7 @@ export const SupportProjectModal = () => {
                         <Button
                             w="150px"
                             type="submit"
+                            colorScheme="purple"
                             isLoading={supportProjectMutation.isLoading}
                             onClick={handleBtnSentClick}
                         >

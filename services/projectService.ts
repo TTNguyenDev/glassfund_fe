@@ -1,9 +1,7 @@
-import { Task, TaskStatus } from '../models/types/jobType';
 import { BlockChainConnector } from '../utils/blockchain';
 import { utils } from 'near-api-js';
 import { db } from '../db';
 import { batchTransactions } from '../utils/serviceUtils';
-import moment from 'moment';
 
 export const FETCH_PROJECTS_LIMIT = 20;
 export const CREATE_PROJECT_FEE = '1';
@@ -65,7 +63,6 @@ export type ProjectDescription = {
 
 export class ProjectService {
     private static mapToProject(raw: any): Project {
-        console.log(raw);
         const index = raw.id?.lastIndexOf('_');
         let accountId = '';
         let id = '';
@@ -194,6 +191,21 @@ export class ProjectService {
 
         if (filter) {
             const { accountId, title } = filter;
+            if (accountId && title !== undefined)
+                return table
+                    .orderBy('id')
+                    .reverse()
+                    .filter(
+                        (item) =>
+                            item.accountId === accountId &&
+                            item.title
+                                .toLocaleLowerCase()
+                                .includes(title.toLocaleLowerCase())
+                    )
+                    .offset(offset)
+                    .limit(limit)
+                    .toArray();
+
             if (accountId)
                 return table
                     .orderBy('id')
@@ -202,6 +214,7 @@ export class ProjectService {
                     .offset(offset)
                     .limit(limit)
                     .toArray();
+
             if (title)
                 return table
                     .orderBy('id')
@@ -238,7 +251,6 @@ export class ProjectService {
         const res = await BlockChainConnector.instance.contract.get_supporters({
             project_id: projectId,
         });
-        console.log(res);
         return res;
     }
 
