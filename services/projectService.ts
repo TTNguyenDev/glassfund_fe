@@ -120,7 +120,7 @@ export class ProjectService {
                     started_at: payload.startedAt * 1000000,
                     ended_at: payload.endedAt * 1000000,
                     funded: '0',
-                    vesting_start_time: payload.vestingStartTime * 1000000,
+                    vesting_start_time: payload.endedAt * 1000000,
                     vesting_end_time: payload.vestingEndTime * 1000000,
                     vesting_interval: payload.vestingInterval * 60000000000,
                     claimed: '0',

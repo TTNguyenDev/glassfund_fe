@@ -484,7 +484,9 @@ export default function ProjectDetailsPage() {
                                                 h="40px"
                                                 icon={<DownloadIcon />}
                                                 isDisabled={
-                                                    !!projectClaimableAmountQuery.data
+                                                    !Number(
+                                                        projectClaimableAmountQuery.data
+                                                    )
                                                 }
                                                 onClick={() => {
                                                     ModalsController.controller.setDataClaimRewardProjectModal(
