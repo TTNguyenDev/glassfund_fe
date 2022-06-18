@@ -1,4 +1,5 @@
 import { ClaimRewardProjectModalDataType } from '../components/claimRewardProjectModal';
+import { DrawdownProjectModalDataType } from '../components/drawdownProjectModal';
 import { ForceStopProjectModalDataType } from '../components/forceStopProjectModal';
 import { SupportProjectModalDataType } from '../components/supportProjectModal';
 
