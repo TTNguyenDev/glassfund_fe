@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { ClaimRewardProjectModal } from '../components/claimRewardProjectModal';
 import { ConnectWalletModal } from '../components/connectWalletModal';
 import { CreateProjectModal } from '../components/createProjectModal';
+import { DrawdownProjectModal } from '../components/drawdownProjectModal';
 import { ForceStopProjectModal } from '../components/forceStopProjectModal';
 import { SupportProjectModal } from '../components/supportProjectModal';
 import { useApp } from '../hooks/useApp';
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <SupportProjectModal />
                     <ClaimRewardProjectModal />
                     <ForceStopProjectModal />
+                    <DrawdownProjectModal />
                     <Component {...pageProps} />
                 </ChakraProvider>
             </Provider>

@@ -159,6 +159,17 @@ export class ProjectService {
         ]);
     }
 
+    static async drawdown(projectId: string): Promise<boolean> {
+        return batchTransactions([
+            {
+                methodName: 'drawdown',
+                body: {
+                    project_id: projectId,
+                },
+            },
+        ]);
+    }
+
     static async claimReward(projectId: string): Promise<boolean> {
         return batchTransactions([
             {

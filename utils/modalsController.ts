@@ -29,6 +29,11 @@ export type ModalsControllerType = {
     setDataForceStopProjectModal: (
         payload: ForceStopProjectModalDataType
     ) => void;
+    openDrawdownProjectModal: () => void;
+    closeDrawdownProjectModal: () => void;
+    setDataDrawdownProjectModal: (
+        payload: DrawdownProjectModalDataType
+    ) => void;
 };
 
 export class ModalsController {
