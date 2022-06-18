@@ -115,7 +115,7 @@ export const ProjectFilter: React.FC<TaskFilterProps> = ({
                     }}
                     onChange={(option) => {
                         setProjectFilter({
-                            type: option.value,
+                            type: option?.value,
                         });
                         applyProjectFilter();
                     }}
