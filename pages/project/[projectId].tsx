@@ -22,7 +22,7 @@ import {
     Button,
     Progress,
 } from '@chakra-ui/react';
-import { AddIcon, DownloadIcon } from '@chakra-ui/icons';
+import { AddIcon, CheckIcon, DownloadIcon } from '@chakra-ui/icons';
 import {
     Project,
     ProjectDescription,
@@ -518,13 +518,25 @@ export default function ProjectDetailsPage() {
                                     >
                                         Progress
                                     </Text>
-                                    <Box>
+                                    <HStack>
+                                        <Flex
+                                            borderRadius="full"
+                                            minW="40px"
+                                            minH="40px"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            bg="green"
+                                        >
+                                            <CheckIcon color="black" />
+                                        </Flex>
                                         <Progress
+                                            w="100%"
                                             value={progress}
-                                            size="xs"
+                                            size="sm"
+                                            borderRadius="10px"
                                             colorScheme="green"
                                         />
-                                    </Box>
+                                    </HStack>
                                 </Box>
                                 <HStack
                                     w="100%"
