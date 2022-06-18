@@ -292,6 +292,15 @@ export class ProjectService {
             );
         return res;
     }
+
+    static async canDrawdown(projectId: string): Promise<boolean> {
+        const res = await BlockChainConnector.instance.contract.can_drawdown({
+            account_id: BlockChainConnector.instance.account.accountId,
+            project_id: projectId,
+        });
+        return res;
+    }
+
     static async fetchAndCacheProjects(clear?: boolean): Promise<void> {
         const fetchPosts = BlockChainConnector.instance.contract.get_projects;
         const table = db.projects;
@@ -374,7 +383,11 @@ export class ProjectService {
 
                 supportedProjectIds = [
                     ...supportedProjectIds,
-                    ...res.map((item: any) => item[0]),
+                    ...res
+                        .filter(
+                            (item: any) => item.project_type.type === 'Support'
+                        )
+                        .map((item: any) => item.project_id),
                 ];
 
                 currentIndex += LIMIT;

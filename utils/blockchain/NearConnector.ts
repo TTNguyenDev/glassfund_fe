@@ -21,6 +21,7 @@ const ViewMethods: string[] = [
     'get_claimable_amount',
     'get_supporters',
     'get_force_stop_accounts',
+    'can_drawdown',
 ];
 
 const ChangeMethods: string[] = [
@@ -65,6 +66,7 @@ type ContractMethodsType = {
     support_project: ContractMethodType;
     force_stop: ContractMethodType;
     drawdown: ContractMethodType;
+    can_drawdown: ContractMethodType;
 };
 
 export class NearConnector {
