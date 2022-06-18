@@ -4,7 +4,7 @@ import { Layout } from '../../components/layout';
 import { ListProjects } from '../../components/listProjects';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import {
     VStack,
     Text,
@@ -21,37 +21,20 @@ import {
 } from '../../services/projectService';
 import { ProjectFilter } from '../../components/tasksFilter';
 import { ModalsController } from '../../utils/modalsController';
-import { set } from 'date-fns';
+import { useProjectFilter } from '../../hooks/useProjectFilter';
 
 export default function AccountPage() {
     const app = useSelector((state: RootState) => state.app);
-    const auth = useSelector((state: RootState) => state.auth);
     const router = useRouter();
     const accountId = router.query?.accountId as Optional<string>;
-    const isOwner = React.useMemo(() => {
-        return accountId === auth.data.userId;
-    }, [auth.data.userId, accountId]);
 
-    const [filter, setFilter] = React.useState<Record<string, any>>({});
-    const filterRef = React.useRef({});
-    const setProjectFilter = React.useCallback(
-        (records: Record<string, any>) => {
-            filterRef.current = {
-                ...filterRef.current,
-                ...records,
-            };
-        },
-        [filter]
-    );
-    const applyProjectFilter = React.useCallback(() => {
-        setFilter({ ...filterRef.current });
-    }, []);
+    const { filter, setProjectFilter, applyProjectFilter } = useProjectFilter();
 
     React.useEffect(() => {
         if (accountId) {
-            filterRef.current = {
+            setProjectFilter({
                 accountId,
-            };
+            });
             applyProjectFilter();
         }
     }, [accountId]);
@@ -82,9 +65,95 @@ export default function AccountPage() {
         }
     );
 
-    const projects = data
-        ? data.pages.reduce((prev, current) => [...prev, ...current], [])
-        : undefined;
+    const projects = React.useMemo(
+        () =>
+            data
+                ? data.pages.reduce(
+                      (prev, current) => [...prev, ...current],
+                      []
+                  )
+                : undefined,
+        [data?.pages]
+    );
+
+    const allProjectsQuery = useQuery(
+        ['all_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    accountId,
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
+
+    const pendingProjectsQuery = useQuery(
+        ['pending_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    accountId,
+                    status: 'pending',
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
+
+    const fundingProjectsQuery = useQuery(
+        ['funding_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    accountId,
+                    status: 'funding',
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
+
+    const vestingProjectsQuery = useQuery(
+        ['vesting_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    accountId,
+                    status: 'vesting',
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
+
+    const doneProjectsQuery = useQuery(
+        ['done_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    accountId,
+                    status: 'done',
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
 
     return (
         <>
@@ -119,7 +188,7 @@ export default function AccountPage() {
                                         fontWeight="700"
                                         textAlign="center"
                                     >
-                                        5
+                                        {allProjectsQuery.data?.length}
                                     </Text>
                                     <SimpleGrid
                                         columns={5}
@@ -139,7 +208,10 @@ export default function AccountPage() {
                                                 fontSize="40px"
                                                 fontWeight="700"
                                             >
-                                                1
+                                                {
+                                                    pendingProjectsQuery.data
+                                                        ?.length
+                                                }
                                             </Text>
                                         </Box>
                                         <Box textAlign="center">
@@ -154,7 +226,10 @@ export default function AccountPage() {
                                                 fontSize="40px"
                                                 fontWeight="700"
                                             >
-                                                2
+                                                {
+                                                    fundingProjectsQuery.data
+                                                        ?.length
+                                                }
                                             </Text>
                                         </Box>
                                         <Box textAlign="center">
@@ -169,7 +244,10 @@ export default function AccountPage() {
                                                 fontSize="40px"
                                                 fontWeight="700"
                                             >
-                                                1
+                                                {
+                                                    vestingProjectsQuery.data
+                                                        ?.length
+                                                }
                                             </Text>
                                         </Box>
                                         <Box textAlign="center">
@@ -184,7 +262,7 @@ export default function AccountPage() {
                                                 fontSize="40px"
                                                 fontWeight="700"
                                             >
-                                                1
+                                                0
                                             </Text>
                                         </Box>
                                         <Box textAlign="center">
@@ -199,7 +277,7 @@ export default function AccountPage() {
                                                 fontSize="40px"
                                                 fontWeight="700"
                                             >
-                                                0
+                                                {doneProjectsQuery.data?.length}
                                             </Text>
                                         </Box>
                                     </SimpleGrid>

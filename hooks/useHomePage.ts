@@ -12,8 +12,8 @@ export const useHomePage = () => {
         hasNextPage,
         isFetchingNextPage,
         filter,
-        setTaskFilter,
-        applyTaskFilter,
+        setProjectFilter,
+        applyProjectFilter,
     } = useListJobs();
 
     return {
@@ -26,7 +26,7 @@ export const useHomePage = () => {
         hasNextPage,
         fetchNextPage,
         filter,
-        setTaskFilter,
-        applyTaskFilter,
+        setProjectFilter,
+        applyProjectFilter,
     };
 };
