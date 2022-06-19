@@ -38,6 +38,7 @@ import ImageNext from 'next/image';
 import ClaimIconSvg from '../../assets/claim-icon.svg';
 import ClaimedIconSvg from '../../assets/claimed-icon.svg';
 import { utils } from 'near-api-js';
+import { IoMdLogIn } from 'react-icons/io';
 
 export const CheckedIcon = () => (
     <Flex
@@ -370,18 +371,29 @@ export default function ProjectDetailsPage() {
                                                     <NumberInputField
                                                         placeholder="Support"
                                                         ref={amountRef}
+                                                        border="none"
                                                     />
                                                     <NumberInputStepper>
-                                                        <NumberIncrementStepper />
-                                                        <NumberDecrementStepper />
+                                                        <NumberIncrementStepper border="none" />
+                                                        <NumberDecrementStepper border="none" />
                                                     </NumberInputStepper>
                                                 </NumberInput>
                                             )}
                                             <IconButton
                                                 aria-label="Support"
-                                                w="40px"
-                                                h="40px"
-                                                icon={<AddIcon />}
+                                                maxW="35px"
+                                                maxH="35px"
+                                                minW="35px"
+                                                minH="35px"
+                                                borderRadius="full"
+                                                bg="transparent"
+                                                transform="scale(-1)"
+                                                icon={
+                                                    <IoMdLogIn
+                                                        size="28"
+                                                        color="#fff"
+                                                    />
+                                                }
                                                 onClick={() => {
                                                     ModalsController.controller.setDataSupportProjectModal(
                                                         {
