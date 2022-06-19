@@ -31,6 +31,8 @@ import {
     useDisclosure,
     Grid,
     GridItem,
+    useRadio,
+    useRadioGroup,
 } from '@chakra-ui/react';
 import { Editor } from '../editor';
 import { IPFSUtils } from '../../utils/ipfsUtils';
@@ -83,6 +85,40 @@ export const CreateProjectModal: React.FunctionComponent<
     const openFileImport = useCallback(async () => {
         fileInputRef.current?.click();
     }, []);
+
+    const options = [
+        {
+            label: '1 min',
+            value: '1',
+        },
+        {
+            label: '5 mins',
+            value: '5',
+        },
+        {
+            label: '1 month',
+            value: '43200',
+        },
+        {
+            label: '2 months',
+            value: '86400',
+        },
+        {
+            label: '6 months',
+            value: '259200',
+        },
+    ];
+
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'vestingInterval',
+        defaultValue: '1',
+        onChange: (value: any) => {
+            createProjectForm.setValue('vestingInterval', value);
+            createProjectForm.trigger('vestingInterval');
+        },
+    });
+
+    const group = getRootProps();
 
     return (
         <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
@@ -509,9 +545,47 @@ export const CreateProjectModal: React.FunctionComponent<
                                         fontWeight="400"
                                         color="textSecondary"
                                     >
-                                        Vesting Interval (minute)
+                                        Vesting Interval
                                     </FormLabel>
-                                    <NumberInput
+                                    <Input
+                                        hidden
+                                        {...createProjectForm.register(
+                                            'vestingInterval',
+                                            {
+                                                required:
+                                                    'Vesting interval is a required field',
+                                                max: {
+                                                    value:
+                                                        (createProjectForm.watch(
+                                                            'vestingEndTime'
+                                                        ) -
+                                                            createProjectForm.watch(
+                                                                'endedAt'
+                                                            )) /
+                                                        60000,
+
+                                                    message:
+                                                        'Vesting interval must be less than vesting time',
+                                                },
+                                            }
+                                        )}
+                                    />
+                                    <HStack {...group}>
+                                        {options.map((option: any) => {
+                                            const radio = getRadioProps({
+                                                value: option.value,
+                                            });
+                                            return (
+                                                <RadioCard
+                                                    key={option.value}
+                                                    {...radio}
+                                                >
+                                                    {option.label}
+                                                </RadioCard>
+                                            );
+                                        })}
+                                    </HStack>
+                                    {/*<NumberInput
                                         defaultValue={1}
                                         min={1}
                                         precision={0}
@@ -552,7 +626,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                             <NumberIncrementStepper border="none" />
                                             <NumberDecrementStepper border="none" />
                                         </NumberInputStepper>
-                                    </NumberInput>
+                                    </NumberInput>*/}
                                     {createProjectForm.formState.errors
                                         .vestingInterval && (
                                         <FormErrorMessage>
@@ -712,3 +786,33 @@ export const CreateProjectModal: React.FunctionComponent<
         </Modal>
     );
 };
+
+function RadioCard(props: any) {
+    const { getInputProps, getCheckboxProps } = useRadio(props);
+
+    const input = getInputProps();
+    const checkbox = getCheckboxProps();
+    console.log(props);
+
+    return (
+        <Box as="label">
+            <input {...input} />
+            <Box
+                {...checkbox}
+                cursor="pointer"
+                borderRadius="12px"
+                bg="secondary"
+                p="10px 20px"
+                color="textSecondary"
+                fontSize="16px"
+                _checked={{
+                    color: 'textPrimary',
+                    borderWidth: '1px',
+                    borderColor: 'white',
+                }}
+            >
+                {props.children}
+            </Box>
+        </Box>
+    );
+}

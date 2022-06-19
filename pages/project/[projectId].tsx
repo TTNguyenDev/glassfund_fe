@@ -223,14 +223,17 @@ export default function ProjectDetailsPage() {
 
         const vestingPercent = Math.floor(100 - fundingPercent);
 
-        const currentPercent = Math.floor(
-            (((Date.now() > data.vestingEndTime
-                ? data.vestingEndTime
-                : Date.now()) -
-                data.startedAt) *
-                100) /
-                fullTime
-        );
+        const currentPercent =
+            data.startedAt > Date.now()
+                ? 0
+                : Math.floor(
+                      (((Date.now() > data.vestingEndTime
+                          ? data.vestingEndTime
+                          : Date.now()) -
+                          data.startedAt) *
+                          100) /
+                          fullTime
+                  );
 
         const numberOfClaims = Math.floor(
             (data.vestingEndTime - data.vestingStartTime) / data.vestingInterval
@@ -254,6 +257,7 @@ export default function ProjectDetailsPage() {
             !Number(data.funded) && Date.now() >= data.endedAt;
 
         return {
+            fullTime,
             funded: Number(data.funded),
             fundingPercent,
             vestingPercent,
