@@ -11,7 +11,7 @@ export const LoginButton: React.FunctionComponent<LoginButtonProps> = ({
     requestLogin,
 }) => {
     return (
-        <Button colorScheme="purple" isLoading={loading} onClick={requestLogin}>
+        <Button variant="primary" isLoading={loading} onClick={requestLogin}>
             Connect the wallet
         </Button>
     );
