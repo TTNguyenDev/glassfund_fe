@@ -93,7 +93,7 @@ export const ClaimIcon = ({
     </Flex>
 );
 
-export const ClaimedIcon = ({
+export const FundingIcon = ({
     position,
     stop,
 }: {
@@ -681,7 +681,7 @@ export default function ProjectDetailsPage() {
                                                         hasStripe
                                                     />
                                                     <CheckedIcon />
-                                                    <ClaimedIcon
+                                                    <FundingIcon
                                                         position={
                                                             progressData.fundingPercent
                                                         }
@@ -711,7 +711,10 @@ export default function ProjectDetailsPage() {
                                                             position={
                                                                 progressData.fundingPercent +
                                                                 ((progressData.currentClaimed +
-                                                                    1) *
+                                                                    (progressData.currentClaimed ===
+                                                                    progressData.numberOfClaims
+                                                                        ? 0
+                                                                        : 1)) *
                                                                     100 *
                                                                     progressData.vestingPercent) /
                                                                     100 /
