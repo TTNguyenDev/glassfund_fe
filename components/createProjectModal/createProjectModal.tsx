@@ -20,7 +20,6 @@ import {
     NumberInputField,
     NumberInputStepper,
     Stack,
-    VStack,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -38,6 +37,7 @@ import { Editor } from '../editor';
 import { IPFSUtils } from '../../utils/ipfsUtils';
 import { useMutation } from 'react-query';
 import moment from 'moment';
+import Quill from 'quill';
 
 type createProjectModalProps = {};
 
@@ -109,7 +109,7 @@ export const CreateProjectModal: React.FunctionComponent<
         },
     ];
 
-    const { getRootProps, getRadioProps } = useRadioGroup({
+    const { getRootProps, getRadioProps, setValue } = useRadioGroup({
         name: 'vestingInterval',
         defaultValue: '1',
         onChange: (value: any) => {
@@ -119,6 +119,14 @@ export const CreateProjectModal: React.FunctionComponent<
     });
 
     const group = getRootProps();
+
+    const refQuill = React.useRef<Quill>();
+
+    const handleClear = React.useCallback(() => {
+        createProjectForm.reset();
+        refQuill.current?.setText('');
+        setValue('1');
+    }, []);
 
     return (
         <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
@@ -218,6 +226,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                                         'Targe is a required field',
                                                 }
                                             )}
+                                            defaultValue={1}
                                             placeholder="ex: 10,000,000.00"
                                             bg="#2C2E31"
                                             borderRadius="10px"
@@ -273,6 +282,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                                         'Minimum deposit is a required field',
                                                 }
                                             )}
+                                            defaultValue={1}
                                             placeholder="ex: 1.00"
                                             bg="#2C2E31"
                                             borderRadius="10px"
@@ -754,6 +764,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                             padding: 0,
                                         }}
                                         placeholder="Description"
+                                        refQuill={refQuill}
                                     />
                                     {createProjectForm.formState.errors
                                         .body && (
@@ -776,6 +787,9 @@ export const CreateProjectModal: React.FunctionComponent<
                                 isLoading={createProjectLoading}
                             >
                                 Create
+                            </Button>
+                            <Button onClick={handleClear} variant="secondary">
+                                Clear
                             </Button>
                             <Button onClick={onClose} variant="secondary">
                                 Cancel

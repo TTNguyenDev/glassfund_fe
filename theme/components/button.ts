@@ -5,6 +5,7 @@ export const Button = {
             textColor: 'textYellow',
             borderColor: 'textYellow',
             borderWidth: '1px',
+            fontWeight: 400,
             _hover: {
                 bg: 'tertiary',
             },
@@ -20,6 +21,7 @@ export const Button = {
             textColor: 'textPrimary',
             borderColor: 'secondary',
             borderWidth: '1px',
+            fontWeight: 400,
             _hover: {
                 bg: 'tertiary',
             },
