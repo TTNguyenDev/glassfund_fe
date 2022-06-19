@@ -385,9 +385,10 @@ export class ProjectService {
                     ...supportedProjectIds,
                     ...res
                         .filter(
-                            (item: any) => item.project_type.type === 'Support'
+                            (item: any) =>
+                                item[0]?.project_type.type === 'Supported'
                         )
-                        .map((item: any) => item.project_id),
+                        .map((item: any) => item[0]?.project_id),
                 ];
 
                 currentIndex += LIMIT;

@@ -529,6 +529,7 @@ export default function ProjectDetailsPage() {
                                     status="error"
                                     fontSize="20px"
                                     fontWeight="600"
+                                    borderRadius="5px"
                                 >
                                     <AlertIcon />
                                     This project forced stop by the community!
