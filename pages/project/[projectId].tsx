@@ -93,7 +93,7 @@ export const ClaimIcon = ({
     </Flex>
 );
 
-export const ClaimedIcon = ({
+export const FundingIcon = ({
     position,
     stop,
 }: {
@@ -155,6 +155,16 @@ export default function ProjectDetailsPage() {
         }
     );
     console.log('SUPPORTERS', projectSupportersQuery.data);
+    const yourSupport = React.useMemo(() => {
+        const data = projectSupportersQuery.data?.find(
+            (item: any) =>
+                item[0] === BlockChainConnector.instance.account.accountId
+        );
+
+        if (data) return utils.format.formatNearAmount(data[1]);
+
+        return 0;
+    }, [projectSupportersQuery.data]);
     const projectForceStopAccountsQuery = useQuery<any>(
         ['project_force_stop_accounts', projectId],
         () => ProjectService.getForceStopAccounts(projectId),
@@ -634,7 +644,7 @@ export default function ProjectDetailsPage() {
                                         textColor="var(--balloon-text-color)"
                                         height="fit-content"
                                     >
-                                        0
+                                        {yourSupport}
                                     </Text>
                                     <Text
                                         fontSize="18px"
@@ -681,7 +691,7 @@ export default function ProjectDetailsPage() {
                                                         hasStripe
                                                     />
                                                     <CheckedIcon />
-                                                    <ClaimedIcon
+                                                    <FundingIcon
                                                         position={
                                                             progressData.fundingPercent
                                                         }
@@ -711,7 +721,10 @@ export default function ProjectDetailsPage() {
                                                             position={
                                                                 progressData.fundingPercent +
                                                                 ((progressData.currentClaimed +
-                                                                    1) *
+                                                                    (progressData.currentClaimed ===
+                                                                    progressData.numberOfClaims
+                                                                        ? 0
+                                                                        : 1)) *
                                                                     100 *
                                                                     progressData.vestingPercent) /
                                                                     100 /
@@ -721,6 +734,10 @@ export default function ProjectDetailsPage() {
                                                                 !!projectInfoQuery
                                                                     .data
                                                                     ?.forceStopTs
+                                                            }
+                                                            done={
+                                                                progressData.currentClaimed ===
+                                                                progressData.numberOfClaims
                                                             }
                                                             currentClaimed={
                                                                 progressData.currentClaimed
