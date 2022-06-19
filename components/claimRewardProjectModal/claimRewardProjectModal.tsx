@@ -138,7 +138,7 @@ export const ClaimRewardProjectModal = () => {
         <Modal isOpen={isOpen} onClose={handleClose} size="md" isCentered>
             <ModalOverlay />
             <form onSubmit={handleBtnSentClick}>
-                <ModalContent>
+                <ModalContent bg="#323437">
                     <ModalCloseButton />
                     <ModalBody>
                         <Box mb="20px" mt="20px">
@@ -170,11 +170,11 @@ export const ClaimRewardProjectModal = () => {
                     </ModalBody>
                     <ModalFooter>
                         <Button
+                            variant="primary"
                             w="150px"
                             type="submit"
                             isLoading={claimRewardProjectMutation.isLoading}
                             onClick={handleBtnSentClick}
-                            colorScheme="purple"
                         >
                             Claim reward
                         </Button>
