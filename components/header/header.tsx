@@ -45,9 +45,9 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
             return (
                 <Link key={title} href={href}>
                     <Button
-                        maxW='200px'
+                        maxW="200px"
                         h="100%"
-                        flex='1'
+                        flex="1"
                         borderRadius="none"
                         bg="transparent"
                         borderBottom="solid 3px var(--text-color)"
@@ -60,7 +60,7 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
                             bg: 'rgba(255, 255, 255, 0.06)',
                             borderImageSlice: 1,
                             borderImageSource: 'var(--primary-gradient)',
-                            borderBottom: "solid 5.5px rgba(231, 234, 246, 1)",
+                            borderBottom: 'solid 5.5px rgba(231, 234, 246, 1)',
                             backdropFilter: 'blur(16px)',
                         }}
                         isActive={isActive}
@@ -90,20 +90,22 @@ export const Header: React.FunctionComponent<HeaderProps> = () => {
     }, [menu, router.asPath]);
 
     return (
-        <div className={classes.root} 
+        <div
+            className={classes.root}
             style={{
-                position: 'sticky', 
-                top: 0, 
+                position: 'sticky',
+                top: 0,
                 width: '100%',
                 zIndex: 100,
-                background: 'rgba(32, 34, 37, 0.4)'
-            }}>
+                background: 'rgba(32, 34, 37, 0.4)',
+            }}
+        >
             <div className={classes.navbar}>
                 <div className={classes.navbar_header}>
                     <Brand />
                 </div>
                 {authLoading ? null : logged ? (
-                    <HStack h="100%" flex='1' justifyContent='end'>
+                    <HStack h="100%" flex="1" justifyContent="end">
                         {menuComp}
                         <HeaderAccount
                             accountType={accountType}
