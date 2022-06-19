@@ -687,8 +687,7 @@ export const CreateProjectModal: React.FunctionComponent<
                                         </Box>
                                         <HStack align="flex-start">
                                             <Button
-                                                colorScheme="purple"
-                                                borderColor="#FF4F5E"
+                                                variant="primary"
                                                 fontSize="12px"
                                                 onClick={openFileImport}
                                                 isLoading={
@@ -772,7 +771,7 @@ export const CreateProjectModal: React.FunctionComponent<
                     <ModalFooter>
                         <HStack justifyContent="end">
                             <Button
-                                colorScheme="purple"
+                                variant="primary"
                                 type="submit"
                                 isLoading={createProjectLoading}
                             >

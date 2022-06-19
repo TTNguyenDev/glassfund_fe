@@ -305,12 +305,9 @@ export default function AccountPage() {
                                 </Box>
                             </Box>
                             <Button
-                                color="#E2B714"
+                                variant="primary"
                                 fontSize="26px"
                                 fontWeight="600"
-                                borderWidth="1px"
-                                borderColor="#E2B714"
-                                bg="#2C2E31"
                                 w="100%"
                                 padding="30px 0"
                                 onClick={
