@@ -19,6 +19,8 @@ import { Nullable } from '../../common';
 import Link from 'next/link';
 import classes from './projectCard.module.less';
 import { CardTag } from '../cardTag';
+import { BlockChainConnector } from '../../utils/blockchain';
+import { utils } from 'near-api-js';
 
 interface ProjectCardProps {
     project: Project;
@@ -66,6 +68,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         () => projectInfoQuery.data?.forceStop?.length ?? 0,
         [projectInfoQuery.data?.forceStop]
     );
+
+    const yourSupport = React.useMemo(() => {
+        const data = projectSupportersQuery.data?.find(
+            (item: any) =>
+                item[0] === BlockChainConnector.instance.account.accountId
+        );
+
+        if (data) return utils.format.formatNearAmount(data[1]);
+
+        return 0;
+    }, [projectSupportersQuery.data]);
 
     return (
         <Link href={`/project/${project.projectId}`}>
@@ -257,7 +270,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                                     textColor="var(--balloon-text-color)"
                                     height="fit-content"
                                 >
-                                    0
+                                    {yourSupport}
                                 </Text>
                                 <Text
                                     fontSize="18px"

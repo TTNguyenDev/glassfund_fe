@@ -528,6 +528,19 @@ export const CreateProjectModal: React.FunctionComponent<
                                                 {
                                                     required:
                                                         'Vesting interval is a required field',
+                                                    max: {
+                                                        value:
+                                                            (createProjectForm.watch(
+                                                                'vestingEndTime'
+                                                            ) -
+                                                                createProjectForm.watch(
+                                                                    'endedAt'
+                                                                )) /
+                                                            60000,
+
+                                                        message:
+                                                            'Vesting interval must be less than vesting time',
+                                                    },
                                                 }
                                             )}
                                             bg="#2C2E31"
