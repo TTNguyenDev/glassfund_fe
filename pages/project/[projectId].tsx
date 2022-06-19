@@ -195,8 +195,8 @@ export default function ProjectDetailsPage() {
     );
 
     const totalForceStop = React.useMemo(
-        () => projectInfoQuery.data?.forceStop?.length ?? 0,
-        [projectInfoQuery.data?.forceStop]
+        () => projectForceStopAccountsQuery.data?.length ?? 0,
+        [projectForceStopAccountsQuery.data]
     );
 
     const description: Nullable<ProjectDescription> = React.useMemo(
@@ -802,7 +802,7 @@ export default function ProjectDetailsPage() {
                                         >
                                             <HStack>
                                                 <Avatar
-                                                    name={item[0]}
+                                                    name={item}
                                                     borderWidth="1px"
                                                     borderColor="primary"
                                                 />
@@ -811,7 +811,7 @@ export default function ProjectDetailsPage() {
                                                     fontSize="18px"
                                                     fontWeight="400"
                                                 >
-                                                    {item[0]}
+                                                    {item}
                                                 </Text>
                                             </HStack>
                                             <HStack

@@ -96,7 +96,10 @@ export const CardTag: React.FunctionComponent<CardTagProps> = ({ project }) => {
     }
 
     return (
-        <HStack className={classes.card_tag}>
+        <HStack
+            className={classes.card_tag}
+            bg={state === 'Force stop' ? '#CA4754' : 'initial'}
+        >
             {(state != 'Complete' && state != 'Force stop' && (
                 <>
                     <Text
