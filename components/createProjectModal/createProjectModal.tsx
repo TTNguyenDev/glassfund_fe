@@ -777,7 +777,9 @@ export const CreateProjectModal: React.FunctionComponent<
                             >
                                 Create
                             </Button>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <Button onClick={onClose} variant="secondary">
+                                Cancel
+                            </Button>
                         </HStack>
                     </ModalFooter>
                 </form>

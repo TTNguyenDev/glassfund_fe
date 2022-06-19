@@ -176,7 +176,7 @@ export default function AccountPage() {
                 <title>My Account</title>
             </Header>
             <Layout activeKey="one">
-                <Box maxW="1600px" margin="auto" padding="0 20px">
+                <Box maxW="1600px" margin="auto" padding="0 20px" mb="30px">
                     <Text layerStyle="headingPage">My profile</Text>
                     <SimpleGrid columns={2} spacing={10}>
                         <VStack align="stretch" spacing="20px">

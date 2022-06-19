@@ -15,5 +15,20 @@ export const Button = {
                 boxShadow: 'none',
             },
         }),
+        secondary: () => ({
+            bg: 'secondary',
+            textColor: 'textPrimary',
+            borderColor: 'secondary',
+            borderWidth: '1px',
+            _hover: {
+                bg: 'tertiary',
+            },
+            _active: {
+                boxShadow: 'none',
+            },
+            _focus: {
+                boxShadow: 'none',
+            },
+        }),
     },
 };
