@@ -91,6 +91,21 @@ export default function AccountPage() {
         }
     );
 
+    const allSupportedProjectsQuery = useQuery(
+        ['all_supported_projects', accountId],
+        () =>
+            ProjectService.getListProjects({
+                offset: 0,
+                limit: 10000,
+                filter: {
+                    supported: true,
+                },
+            }),
+        {
+            enabled: !!accountId,
+        }
+    );
+
     const pendingProjectsQuery = useQuery(
         ['pending_projects', accountId],
         () =>
@@ -180,7 +195,9 @@ export default function AccountPage() {
                                         fontSize="20px"
                                         textAlign="center"
                                     >
-                                        Number of Own Projects
+                                        {filter.accountId
+                                            ? 'Number of Own Projects'
+                                            : 'Number Supported Projects'}
                                     </Text>
                                     <Text
                                         color="textYellow"
@@ -188,7 +205,11 @@ export default function AccountPage() {
                                         fontWeight="700"
                                         textAlign="center"
                                     >
-                                        {allProjectsQuery.data?.length}
+                                        {filter.accountId
+                                            ? allProjectsQuery.data?.length
+                                            : allSupportedProjectsQuery.data
+                                                  ?.length}
+                                        {}
                                     </Text>
                                     <SimpleGrid
                                         columns={5}
@@ -296,6 +317,7 @@ export default function AccountPage() {
                                     ModalsController.controller
                                         .openCreateProjectModal
                                 }
+                                hidden={!filter.accountId}
                             >
                                 Create a new project
                             </Button>

@@ -1,20 +1,7 @@
 import React from 'react';
 import { Project } from '../../services/projectService';
-import { useQuery } from 'react-query';
-import {
-    Box,
-    Flex,
-    HStack,
-    VStack,
-    Image,
-    Progress,
-    Text,
-} from '@chakra-ui/react';
-import { IPFSUtils } from '../../utils/ipfsUtils';
-import { Nullable } from '../../common';
+import { HStack, Text } from '@chakra-ui/react';
 import moment from 'moment';
-import { BsClock } from 'react-icons/bs';
-import { MdOutlineDoubleArrow } from 'react-icons/md';
 import classes from './cardTag.module.less';
 
 interface CardTagProps {

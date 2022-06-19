@@ -59,14 +59,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         }
     );
 
+    const projectForceStopAccountsQuery = useQuery<any>(
+        ['project_force_stop_accounts', project.projectId],
+        () => ProjectService.getForceStopAccounts(project.projectId),
+        {
+            enabled: !!project.projectId,
+        }
+    );
+
     const totalSupporters = React.useMemo(
         () => projectSupportersQuery.data?.length ?? 0,
         [projectSupportersQuery.data]
     );
 
     const totalForceStop = React.useMemo(
-        () => projectInfoQuery.data?.forceStop?.length ?? 0,
-        [projectInfoQuery.data?.forceStop]
+        () => projectForceStopAccountsQuery.data?.length ?? 0,
+        [projectForceStopAccountsQuery.data]
     );
 
     const yourSupport = React.useMemo(() => {
@@ -112,7 +120,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                             justifyContent="space-between"
                             paddingEnd="20px"
                         >
-                            <CardTag project={project} />
+                            {projectInfoQuery.data && (
+                                <CardTag project={projectInfoQuery.data} />
+                            )}
                             <Flex className={classes.process}>
                                 <Text
                                     fontSize="18px"
